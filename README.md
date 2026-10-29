@@ -4,6 +4,8 @@
 
 ## 遊び方
 
+**▶ https://shotakos1202.github.io/kusamura-monster/**
+
 `index.html` をブラウザで開くだけ。スマホ・PCどちらでも遊べます。
 
 | 操作 | キーボード | 画面 / マウス |
