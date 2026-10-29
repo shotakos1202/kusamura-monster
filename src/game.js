@@ -942,7 +942,7 @@ const nm=m=>SP[m.id].name;
 /* ---------- input ---------- */
 const held={},pressed={},dirStack=[];
 const DIRS=['up','down','left','right'];
-function setKey(k,on){if(on){if(!held[k])pressed[k]=true;held[k]=true;if(DIRS.includes(k)){const i=dirStack.indexOf(k);if(i>=0)dirStack.splice(i,1);dirStack.push(k)}}
+function setKey(k,on){if(on){if(k==='a'&&!held.a&&gestureA()){held.a=true;return}if(!held[k])pressed[k]=true;held[k]=true;if(DIRS.includes(k)){const i=dirStack.indexOf(k);if(i>=0)dirStack.splice(i,1);dirStack.push(k)}}
  else{held[k]=false;const i=dirStack.indexOf(k);if(i>=0)dirStack.splice(i,1)}}
 const curDir=()=>{for(let i=dirStack.length-1;i>=0;i--)if(held[dirStack[i]])return dirStack[i];return null};
 const KEYS={KeyW:'up',KeyS:'down',KeyA:'left',KeyD:'right',ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Enter:'a',NumpadEnter:'a',Tab:'b'};
@@ -965,7 +965,7 @@ if(dp){dp.addEventListener('pointerdown',e=>{e.preventDefault();dpId=e.pointerId
 addEventListener('blur',()=>{for(const k in held)held[k]=false;dirStack.length=0;dpId=null;dpDir=null;document.querySelectorAll('.on').forEach(b=>b.classList.remove('on'))});
 const HITS=[];function hit(x,y,w,h,fn,q){HITS.push({x,y,w,h,fn,q})}
 c.canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;const r=c.canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;
- for(let i=HITS.length-1;i>=0;i--){const h=HITS[i];if(x>=h.x&&x<h.x+h.w&&y>=h.y&&y<h.y+h.h){if(Q.length&&!h.q)return;e.preventDefault();h.fn();pressed.a=true;return}}});
+ for(let i=HITS.length-1;i>=0;i--){const h=HITS[i];if(x>=h.x&&x<h.x+h.w&&y>=h.y&&y<h.y+h.h){if(Q.length&&!h.q)return;e.preventDefault();h.fn();if(!gestureA())pressed.a=true;return}}});
 const btnp=k=>{if(pressed[k]){pressed[k]=false;return true}return false};
 /* ---------- sound: tiny chiptune sequencer (square lead + triangle bass) ---------- */
 const NOTE={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
@@ -1073,6 +1073,7 @@ function stepQ(){let g=0;while(Q.length&&g++<300){const s=Q[0];
 /* ---------- state ---------- */
 const KEY='kusamura-monster-v2';
 let saved=false;try{saved=!!localStorage.getItem(KEY)}catch(e){}
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(p=>{if(!p)navigator.storage.persist()}).catch(()=>{})}catch(e){}
 let mode='title',frame=0,tsel=0,ssel=0,trans=0,fade=null,nameT=0;
 let S=null,P={x:4,y:4,dir:'down',mv:0,fx:4,fy:4},menu=null,shop=null,B=null;
 function save(){if(!S)return;S.pos={map:S.map,x:P.x,y:P.y,dir:P.dir};try{localStorage.setItem(KEY,JSON.stringify(S));saved=true}catch(e){}}
@@ -1081,12 +1082,49 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-function updTitle(){const opts=saved?2:1;
- if(btnp('up')||btnp('down'))tsel=(tsel+1)%opts;
- if(btnp('a')){
-  if(saved&&tsel===0){let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}
-   if(d&&d.party){S=d;S.flags=S.flags||{};loadMap(S.pos.map,S.pos.x,S.pos.y,S.pos.dir);mode='world';say('つづきから はじめよう！');return}}
-  newGame()}}
+let TT={pg:'main',i:0};
+const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
+const isWebHost=()=>{try{return /^https?:$/.test(location.protocol)&&window.top===window&&!/claude/.test(location.hostname)}catch(e){return false}};
+function contGame(){let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+ if(d&&d.party){S=d;S.flags=S.flags||{};loadMap(S.pos.map,S.pos.x,S.pos.y,S.pos.dir);mode='world';say('つづきから はじめよう！');return}
+ tmsg(['セーブデータが よみこめませんでした。'])}
+function tmsg(lines,after){TT={pg:'msg',lines,k:0,after:after||null,i:0}}
+function titleOpts(){
+ if(TT.pg==='move')return[{t:'かきだす',fn:exportSave,direct:true},{t:'よみこむ',fn:pickSave,direct:true},{t:'もどる',fn:()=>{TT={pg:'main',i:2}}}];
+ if(TT.pg==='new')return[{t:'はい',fn:()=>{TT={pg:'main',i:0};newGame()}},{t:'いいえ',fn:()=>{TT={pg:'main',i:1}}}];
+ if(TT.pg==='imp')return[{t:'はい',fn:()=>{try{localStorage.setItem(KEY,JSON.stringify(TT.data));saved=true;AU.jingle('item');tmsg(['セーブを よみこみました！','「つづきから」で あそべます。'])}catch(e){tmsg(['ほぞんに しっぱい しました。'])}}},{t:'いいえ',fn:()=>{TT={pg:'main',i:0}}}];
+ const o=saved?[{t:'つづきから',fn:contGame},{t:'はじめから',fn:()=>{TT={pg:'new',i:1}}},{t:'セーブを うつす',fn:()=>{TT={pg:'move',i:0}}}]
+  :[{t:'はじめから',fn:newGame},{t:'セーブを よみこむ',fn:pickSave,direct:true}];
+ if(isWebHost()&&!isStandalone())o.push({t:'ホームがめんに ついか',fn:showHomeHelp});
+ return o}
+function showHomeHelp(){const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ tmsg(ios?['iPhoneの ばあい：\nSafariで この ページを ひらく。','したの きょうゆうボタン（□に↑）を おして\n「ホームがめんに ついか」を えらぶ。','ホームがめんの アイコンから あそぶと\nセーブが きえにくく なるよ！']
+  :['Androidの ばあい：\nChromeで この ページを ひらく。','みぎうえの メニュー（︙）から\n「ホームがめんに ついか」を えらぶ。','「アプリを インストール」と でたら\nそれを えらんでも OK！','ホームがめんの アイコンから あそぶと\nオフラインでも あそべるよ！'])}
+function saveSummary(d){const m=d.party&&d.party[0];return `バッジ ${(d.badges||[]).length}こ　てもち ${(d.party||[]).length}ひき`+(m?`\nせんとう：${(SP[m.id]||{}).name||'？'} Lv${m.lv}`:'')}
+function exportSave(){let raw=null;try{raw=localStorage.getItem(KEY)}catch(e){}
+ if(!raw){tmsg(['かきだす セーブが ありません。']);return}
+ const d=new Date(),ymd=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+ const body=JSON.stringify({game:'kusamura-monster',v:2,at:d.toISOString(),data:JSON.parse(raw)});
+ const name=`kusamura-save-${ymd}.json`,blob=new Blob([body],{type:'application/json'});
+ const done=()=>tmsg(['セーブを かきだしました！','べつの たんまつの タイトルで\n「セーブを よみこむ」を えらんでね。']);
+ try{const f=new File([blob],name,{type:'application/json'});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'くさむらモンスター セーブ'}).then(done,e=>{if(e&&e.name!=='AbortError')dl()});return}}catch(e){}
+ dl();function dl(){try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);done()}catch(e){tmsg(['かきだしに しっぱい しました。'])}}}
+function pickSave(){const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json,text/plain';inp.style.display='none';document.body.appendChild(inp);
+ inp.onchange=()=>{const f=inp.files&&inp.files[0];inp.remove();if(!f)return;const r=new FileReader();
+  r.onload=()=>{let j=null;try{j=JSON.parse(r.result)}catch(e){}
+   const d=j&&(j.game==='kusamura-monster'?j.data:j);
+   if(!d||!Array.isArray(d.party)||!d.pos||!d.items){tmsg(['この ファイルは くさむらモンスターの\nセーブでは ないみたい。']);return}
+   TT={pg:'imp',i:1,data:d,lines:[(saved?'いまの セーブに うわがきして\n':'')+'よみこみますか？',saveSummary(d)]}};
+  r.readAsText(f)};
+ inp.click()}
+function gestureA(){if(mode!=='title'||TT.pg==='msg')return false;const o=titleOpts()[TT.i];if(o&&o.direct){AU.sfx&&AU.sfx('sel');o.fn();return true}return false}
+function updTitle(){
+ if(TT.pg==='msg'){if(btnp('a')||btnp('b')){TT.k++;if(TT.k>=TT.lines.length){const a=TT.after;TT={pg:'main',i:0};if(a)a()}}return}
+ const o=titleOpts(),n=o.length;if(TT.i>=n)TT.i=0;
+ if(btnp('up')){TT.i=(TT.i+n-1)%n;AU.sfx('cur')}if(btnp('down')){TT.i=(TT.i+1)%n;AU.sfx('cur')}
+ if(btnp('b')&&TT.pg!=='main'){TT={pg:'main',i:0};return}
+ if(btnp('a')){AU.sfx('sel');o[TT.i].fn()}}
 function newGame(){S={party:[],box:[],items:{ball:0,potion:2},money:1000,badges:[],seen:[],caught:[],flags:{},respawn:['home',4,5,'up'],map:'home'};
  loadMap('home',4,5,'up');mode='world';
  say('きょうは まちに まった\nたびだちの ひ！','ママ「おはよう！ ちょうろうさまが\nあなたを よんでいたわよ。」','ママ「ちょうろうさまの いえは\nむらの みぎがわの いえよ。」');save()}
@@ -1877,8 +1915,10 @@ function drawTitle(){skyBG(150);hills(104,150);R(0,150,W,H-150,'#a6da74');
  for(let i=0;i<10;i++)tile('G',i*32,166,i,30);
  logo('くさむら',W/2,18,40,'#6cc848','#173a18');logo('モンスター',W/2,64,30,'#ffa040','#4a1a0a');
  STARTERS.forEach((id,i)=>{const bob=Math.sin(frame/14+i*2)*3;c.globalAlpha=.25;ell(60+i*100,190,24,5,'#000');c.globalAlpha=1;drawMon(id,20+i*100,106+bob,false)});
- if(saved){box(76,214,168,66);['つづきから','はじめから'].forEach((s,i)=>{hit(76,220+i*26,168,26,()=>{tsel=i});txt(s,W/2+10,228+i*26,3,16,'center');if(i===tsel)txt('▶',W/2-62+((frame>>4)%2),228+i*26)})}
- else{hit(0,0,W,H,()=>{})}if(!saved&&(frame>>5)%2){box(60,226,200,44);txt('Aボタンで はじめる',W/2,240,3,16,'center')}}
+ if(TT.pg==='msg'){box(8,196,304,84);const L=String(TT.lines[TT.k]).split('\n');L.forEach((l,i)=>txt(l,22,212+i*28,3,14));if((frame>>4)%2)txt('▼',296,262,3,12,'right');hit(0,0,W,H,()=>{});return}
+ if(TT.pg==='imp'||TT.pg==='new'){box(8,196,190,84);const L=(TT.pg==='new'?'いまの セーブは きえて\nしまいます。 ほんとうに\nはじめから あそぶ？':TT.lines.join('\n')).split('\n');L.forEach((l,i)=>txt(l,18,206+i*18,3,11))}
+ const o=titleOpts(),rh=24,bw=TT.pg==='imp'||TT.pg==='new'?100:206,bh=14+o.length*rh,bx=TT.pg==='imp'||TT.pg==='new'?208:(W-bw)/2,by=H-8-bh;
+ box(bx,by,bw,bh);o.forEach((op,i)=>{const y=by+10+i*rh;hit(bx,y-4,bw,rh,()=>{TT.i=i});txt(op.t,bx+30,y,3,14);if(i===TT.i)txt('▶',bx+12+((frame>>4)%2),y,3,14)})}
 function drawStarter(){skyBG(120);hills(88,130);R(0,124,W,H-124,'#a6da74');
  box(10,8,300,36);txt('どの モンスターに するかね？',W/2,19,3,14,'center');
  STARTERS.forEach((id,i)=>{const x=20+i*100,sel=i===ssel;if(sconf===null)hit(x-10,56,100,110,()=>{ssel=i});ell(x+32,150,38,9,sel?'#7fc25c':'#93cc72');
