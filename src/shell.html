@@ -1,0 +1,80 @@
+<title>くさむらモンスター</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap">
+<style>
+/* Layout: one handheld console centered on the page — screen in a bezel, d-pad and A/B pads beneath */
+:root{
+  --bg:#111712; --shell:#2a3a2d; --shell-hi:#3b5040; --bezel:#0a0e0b;
+  --key:#17211a; --key-hi:#24332a; --ab:#93324d; --ab-lo:#4c1626; --ab-fg:#f6dbe3;
+  --fg:#d8e7c1; --muted:#8aa286;
+  --f-pix:"DotGothic16","Hiragino Kaku Gothic ProN","Meiryo",monospace;
+  --k:min(48px,12.5vw);
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-pix);box-sizing:border-box;
+  display:flex;justify-content:center;align-items:flex-start;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px;
+  -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.console{width:100%;max-width:440px;background:var(--shell);border-radius:14px 14px 52px 14px;padding:18px 18px 22px;box-sizing:border-box;
+  box-shadow:inset 0 2px 0 var(--shell-hi),0 12px 32px rgba(0,0,0,.45);display:flex;flex-direction:column;gap:20px}
+.bezel{background:var(--bezel);border-radius:8px 8px 30px 8px;padding:14px 14px 10px}
+canvas{display:block;width:100%;max-width:100%;aspect-ratio:320/288;image-rendering:pixelated;touch-action:none;background:#f8f8f0}
+.plate{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:11px;letter-spacing:.14em;color:var(--muted)}
+.snd{background:transparent;border:1px solid var(--muted);color:var(--fg);border-radius:999px;font:11px var(--f-pix);letter-spacing:.1em;padding:3px 10px;cursor:pointer}
+.snd[aria-pressed="false"]{color:var(--muted);border-style:dashed}
+.plate i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#c0405e;margin-right:6px;box-shadow:0 0 6px #c0405e}
+.pads{display:flex;justify-content:space-between;align-items:center;gap:8px;touch-action:none;padding-inline:4px}
+.dpad{display:grid;grid-template-columns:repeat(3,var(--k));grid-template-rows:repeat(3,var(--k))}
+.dpad button,.dpad span{background:var(--key);border:0;color:var(--muted);font-size:16px;font-family:var(--f-pix);padding:0;touch-action:none;box-shadow:0 3px 0 #050806}
+.dpad .u{grid-area:1/2;border-radius:6px 6px 0 0}
+.dpad .l{grid-area:2/1;border-radius:6px 0 0 6px}
+.dpad span{grid-area:2/2}
+.dpad .r{grid-area:2/3;border-radius:0 6px 6px 0}
+.dpad .d{grid-area:3/2;border-radius:0 0 6px 6px}
+.ab{display:flex;gap:16px;align-items:flex-start;transform:rotate(-22deg)}
+.ab button{width:calc(var(--k)*1.25);height:calc(var(--k)*1.25);border-radius:50%;border:0;background:var(--ab);color:var(--ab-fg);
+  font-family:var(--f-pix);font-size:20px;box-shadow:0 4px 0 var(--ab-lo);touch-action:none;padding:0}
+.ab .b{margin-top:calc(var(--k)*.7)}
+button.on,button:active{transform:translateY(2px);box-shadow:0 1px 0 #050806;background:var(--key-hi)}
+.ab button.on,.ab button:active{background:#a83c5a;box-shadow:0 2px 0 var(--ab-lo)}
+button:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.hint{font-size:12px;color:var(--muted);text-align:center;letter-spacing:.06em;line-height:1.7;text-wrap:balance}
+@media (prefers-reduced-motion:reduce){button.on,button:active{transform:none}}
+/* Desktop: wide handheld — d-pad left, big screen centre, A/B right; screen sized to the window height */
+@media (min-width:820px){
+  body{align-items:center;min-height:100%;padding-block:12px}
+  .console{--k:56px;max-width:none;width:auto;display:grid;grid-template-columns:auto auto auto;grid-template-areas:"dpad screen ab" ". hint .";
+    align-items:center;justify-content:center;column-gap:36px;row-gap:12px;padding:22px 34px 16px;border-radius:36px}
+  .bezel{grid-area:screen;border-radius:12px;padding:16px 16px 10px}
+  .pads{display:contents}
+  .dpad{grid-area:dpad}
+  .ab{grid-area:ab}
+  .hint{grid-area:hint}
+  canvas{width:min(calc((100vh - 166px) * 320 / 288),calc(100vw - 480px),1100px)}
+}
+</style>
+
+<div class="console">
+  <div class="bezel">
+    <canvas id="scr" width="320" height="288" aria-label="ゲーム画面"></canvas>
+    <div class="plate"><span><i></i>POWER</span><button id="snd" class="snd" type="button" aria-label="サウンドの切りかえ" aria-pressed="true">♪ ON</button><span>くさむらモンスター 試作版</span></div>
+  </div>
+  <div class="pads">
+    <div class="dpad">
+      <button class="u" data-k="up" aria-label="うえ">▲</button>
+      <button class="l" data-k="left" aria-label="ひだり">◀</button>
+      <span></span>
+      <button class="r" data-k="right" aria-label="みぎ">▶</button>
+      <button class="d" data-k="down" aria-label="した">▼</button>
+    </div>
+    <div class="ab">
+      <button class="b" data-k="b" aria-label="Bボタン">B</button>
+      <button class="a" data-k="a" aria-label="Aボタン">A</button>
+    </div>
+  </div>
+  <div class="hint">キーボード：WASDで移動　Enter＝A（しらべる・けってい）　Tab＝B（メニュー・もどる）</div>
+</div>
+
