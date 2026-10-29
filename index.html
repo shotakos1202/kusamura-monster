@@ -1013,7 +1013,8 @@ Object.assign(MAPS,{
    {x:2,y:12,dir:'right',spr:'boy',pal:['#f8d0a8','#40a070','#303030','#1c1820'],text:['ようこそ ミライジムへ！','ここは エスパータイプの ジム。\nでんきや ひこうの わざが よく きくよ！','ひかる パネルに のると\nワープ するんだ。']},
   ]},
 });
-{const t=MAPS.town3;delete t.locked;Object.assign(t.warps,{'3,12':['gym3',5,12,'up'],'4,12':['gym3',5,12,'up'],'25,14':['hill',1,7,'right'],'25,15':['hill',1,8,'right']});
+{const t=MAPS.town3;delete t.locked;t.rows[14]='vv'+t.rows[14].slice(2);t.rows[15]='vv'+t.rows[15].slice(2);
+ t.npcs.push({x:1,y:13,dir:'down',spr:'boy',pal:['#f8d0a8','#f0a020','#3a5a8a','#1c1820'],text:['こうじの ひと「この さきは\n5ばんどうろ……の よてい なんだ。」','こうじの ひと「いまは こうじちゅうで\nとおれないよ。 ごめんね！」','こうじの ひと「みちが できたら\nあたらしい まちへ いけるように なるぞ。」']});Object.assign(t.warps,{'3,12':['gym3',5,12,'up'],'4,12':['gym3',5,12,'up'],'25,14':['hill',1,7,'right'],'25,15':['hill',1,8,'right']});
  t.signs['2,13']=['ミライポートジム\nリーダー サトリ  みらいを よむ エスパー'];
  const gd=t.npcs.find(e=>e.x===5&&e.y===13);if(gd)gd.text=['ジムの リーダー サトリさんが\nたびから かえって きたよ！','ひがしの ミライの おかには\nエスパーの モンスターが いるんだ。'];
  MAPS.shop3.npcs[0].stock=['ball','ballplus','potion','superpotion'];
@@ -1182,7 +1183,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.10.29-2358';
+const BUILD='2026.10.30-0001';
 let TT={pg:'main',i:0};
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
 const isWebHost=()=>{try{return /^https?:$/.test(location.protocol)&&window.top===window&&!/claude/.test(location.hostname)}catch(e){return false}};
@@ -1736,6 +1737,8 @@ function shipT(g,fr){waterT(g,fr);const hull='#f4f4f4',sh='#a8b0bc';
  pr(g,2,3,12,13,hull);pr(g,3,1,10,2,hull);pr(g,5,0,6,1,hull);pr(g,2,3,1,13,sh);pr(g,13,3,1,13,sh);pr(g,3,15,10,1,sh);pr(g,2,12,12,2,'#e04848');
  pr(g,4,5,8,6,'#3a86e0');pr(g,5,6,6,4,'#cfe9ff');for(const x of[5,8,10])pr(g,x,7,1,2,'#3a86e0');pr(g,7,2,2,2,'#e8c040');pr(g,1,14,1,2,'#d8f0ff');pr(g,14,14,1,2,'#d8f0ff')}
 
+function barricadeT(g){asphaltT(g,0);pr(g,2,4,12,5,'#f4f4f4');for(let x=2;x<14;x+=4)pr(g,x,4,2,5,'#f08a20');pr(g,2,4,12,1,'#ffffff');pr(g,2,9,12,1,'#a0a0a8');
+ pr(g,3,9,1,6,'#5a5a64');pr(g,12,9,1,6,'#5a5a64');pr(g,2,14,3,1,'#3a3a44');pr(g,11,14,3,1,'#3a3a44');pp(g,7,2,'#ffd030');pp(g,8,2,'#ffd030');pp(g,7,3,'#e8a020');pp(g,8,3,'#e8a020')}
 function psyFloorT(g,v){pr(g,0,0,16,16,'#d8d0ec');pr(g,0,0,8,8,'#c8bce4');pr(g,8,8,8,8,'#c8bce4');pr(g,0,0,16,1,'#e8e2f6');pr(g,0,0,1,16,'#e8e2f6');pr(g,7,7,2,2,'#b0a0d8')}
 function padT(g,fr){psyFloorT(g,0);const cl=['#e050c0','#f070d8','#ff90e8','#f070d8'][fr];
  for(let y=0;y<16;y++)for(let x=0;x<16;x++){const d=Math.hypot(x-7.5,y-7.5);if(d<7&&d>=5.6)pp(g,x,y,'#6a3aa0');else if(d<5.6&&d>=4.2)pp(g,x,y,cl);else if(d<4.2&&d>=2.8)pp(g,x,y,'#ffe0fa');else if(d<2.8)pp(g,x,y,cl)}}
@@ -1763,6 +1766,7 @@ function tile(ch,x,y,gx,gy){const v=(((gx*7+gy*13)%4)+4)%4;let key=ch+v,fn;
   case 'k':key='k';fn=wallK;break;
   case 'f':fn=g=>floorT(g,v);break;
   case 'o':fn=g=>psyFloorT(g,v);break;
+  case 'v':key='v';fn=barricadeT;break;
   case 'x':{const fr=((frame>>3)%4+4)%4;key='x'+fr;fn=g=>padT(g,fr);break}
   case 'c':key='c';fn=counterT;break;
   case 'b':key='b';fn=shelfT;break;
