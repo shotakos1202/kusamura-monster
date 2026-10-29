@@ -1000,7 +1000,8 @@ const JINGLES={
 };
 const AU={ctx:null,master:null,on:true,song:null,i:0,next:0,hold:0,
  init(){if(this.ctx)return;try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return;this.ctx=new A();this.master=this.ctx.createGain();this.master.gain.value=this.on?.9:0;this.master.connect(this.ctx.destination);setInterval(()=>this.tick(),40)}catch(e){this.ctx=null}},
- resume(){try{if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume()}catch(e){}},
+ resume(){try{if(!this.ctx||document.hidden)return;if(this.ctx.state!=='running')this.ctx.resume().then(()=>{this.next=this.ctx.currentTime+.05}).catch(()=>{});
+  if(!this.unlocked){this.unlocked=true;const b=this.ctx.createBuffer(1,1,22050),src=this.ctx.createBufferSource();src.buffer=b;src.connect(this.ctx.destination);src.start(0)}}catch(e){}},
  setOn(v){this.on=v;if(this.master)this.master.gain.value=v?.9:0},
  ok(){return this.ctx&&this.ctx.state==='running'&&this.on},
  tone(f,t,d,type,v){const o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.006);g.gain.setValueAtTime(v,t+Math.max(.008,d-.03));g.gain.linearRampToValueAtTime(0,t+d);o.connect(g).connect(this.master);o.start(t);o.stop(t+d+.02)},
@@ -1048,7 +1049,8 @@ const sndBtn=document.getElementById('snd');
 const sndLabel=()=>{if(sndBtn){sndBtn.textContent=AU.on?'♪ ON':'♪ OFF';sndBtn.setAttribute('aria-pressed',AU.on?'true':'false')}};
 sndLabel();
 if(sndBtn)sndBtn.addEventListener('click',e=>{e.preventDefault();AU.init();AU.resume();AU.setOn(!AU.on);try{localStorage.setItem('kusamura-sound',AU.on?'1':'0')}catch(_){}sndLabel()});
-const wake=()=>{AU.init();AU.resume()};addEventListener('pointerdown',wake,true);addEventListener('keydown',wake,true);
+// iPhone only allows sound to start from touchend/click, so wake audio on every kind of first input.
+const wake=()=>{AU.init();AU.resume()};['pointerdown','pointerup','touchend','click','keydown'].forEach(t=>addEventListener(t,wake,true));
 // Pause all sound while the app/tab is in the background; resume when it comes back.
 const bgSound=hidden=>{try{if(!AU.ctx)return;if(hidden){if(AU.ctx.state==='running')AU.ctx.suspend()}else if(AU.ctx.state==='suspended')AU.ctx.resume().then(()=>{AU.next=AU.ctx.currentTime+.05}).catch(()=>{})}catch(e){}};
 document.addEventListener('visibilitychange',()=>bgSound(document.hidden));
