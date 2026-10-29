@@ -1049,6 +1049,10 @@ const sndLabel=()=>{if(sndBtn){sndBtn.textContent=AU.on?'♪ ON':'♪ OFF';sndBt
 sndLabel();
 if(sndBtn)sndBtn.addEventListener('click',e=>{e.preventDefault();AU.init();AU.resume();AU.setOn(!AU.on);try{localStorage.setItem('kusamura-sound',AU.on?'1':'0')}catch(_){}sndLabel()});
 const wake=()=>{AU.init();AU.resume()};addEventListener('pointerdown',wake,true);addEventListener('keydown',wake,true);
+// Pause all sound while the app/tab is in the background; resume when it comes back.
+const bgSound=hidden=>{try{if(!AU.ctx)return;if(hidden){if(AU.ctx.state==='running')AU.ctx.suspend()}else if(AU.ctx.state==='suspended')AU.ctx.resume().then(()=>{AU.next=AU.ctx.currentTime+.05}).catch(()=>{})}catch(e){}};
+document.addEventListener('visibilitychange',()=>bgSound(document.hidden));
+addEventListener('pagehide',()=>bgSound(true));addEventListener('pageshow',()=>bgSound(document.hidden));
 
 
 /* ---------- message queue ---------- */
