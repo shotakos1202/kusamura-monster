@@ -2,7 +2,7 @@
 
 Usage: python3 tools/build.py
 """
-import os
+import os, datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 src = lambda p: open(os.path.join(ROOT, 'src', p), encoding='utf-8').read()
 
@@ -29,6 +29,9 @@ EXPORT = ("window.__t={MAPS,WALK,mon,loadMap,update,draw,pressed,setKey,SP,ART,s
 
 def main():
     shell, game = src('shell.html'), src('game.js').rstrip()
+    # Version label shown on the title screen: build time in JST, e.g. 2026.10.29-2345
+    build = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime('%Y.%m.%d-%H%M')
+    game = game.replace("const BUILD='__BUILD__';", "const BUILD='%s';" % build)
     assert game.endswith('})();')
     # artifact.html: body fragment used for the claude.ai artifact (no doctype; host wraps it)
     os.makedirs(os.path.join(ROOT, 'dist'), exist_ok=True)

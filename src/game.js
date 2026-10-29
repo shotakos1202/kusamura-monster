@@ -1086,6 +1086,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
+const BUILD='__BUILD__';
 let TT={pg:'main',i:0};
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
 const isWebHost=()=>{try{return /^https?:$/.test(location.protocol)&&window.top===window&&!/claude/.test(location.hostname)}catch(e){return false}};
@@ -1923,6 +1924,7 @@ function drawTitle(){skyBG(150);hills(104,150);R(0,150,W,H-150,'#a6da74');
  for(let i=0;i<10;i++)tile('G',i*32,166,i,30);
  logo('くさむら',W/2,18,40,'#6cc848','#173a18');logo('モンスター',W/2,64,30,'#ffa040','#4a1a0a');
  {const up=TT.pg!=='msg'&&titleOpts().length>4?12:0;STARTERS.forEach((id,i)=>{const bob=Math.sin(frame/14+i*2)*3;c.globalAlpha=.25;ell(60+i*100,190-up,24,5,'#000');c.globalAlpha=1;drawMon(id,20+i*100,106-up+bob,false)})}
+ txt('ver '+BUILD,W-4,4,'#3a5a3a',9,'right');
  if(TT.pg==='msg'){box(8,196,304,84);const L=String(TT.lines[TT.k]).split('\n');L.forEach((l,i)=>txt(l,22,212+i*28,3,14));if((frame>>4)%2)txt('▼',296,262,3,12,'right');hit(0,0,W,H,()=>{});return}
  if(TT.pg==='imp'||TT.pg==='new'){box(8,196,190,84);const L=(TT.pg==='new'?'いまの セーブは きえて\nしまいます。 ほんとうに\nはじめから あそぶ？':TT.lines.join('\n')).split('\n');L.forEach((l,i)=>txt(l,18,206+i*18,3,11))}
  const o=titleOpts(),rh=o.length>4?21:24,bw=TT.pg==='imp'||TT.pg==='new'?100:206,bh=14+o.length*rh,bx=TT.pg==='imp'||TT.pg==='new'?208:(W-bw)/2,by=H-8-bh;
