@@ -1227,12 +1227,14 @@ function updShop(){const ST=shop.stock,n=ST.length+1,a=btnp('a'),b=btnp('b');
  if(btnp('up'))shop.i=(shop.i+n-1)%n;if(btnp('down'))shop.i=(shop.i+1)%n;
  if(b||(a&&shop.i===n-1)){shop=null;say('ありがとう ございました！');return}
  if(a){const k=ST[shop.i],it=IT[k];if(S.money<it.price)say('おかねが たりない ようです…');else{S.money-=it.price;S.items[k]=(S.items[k]||0)+1;AU.sfx('buy');say(`${it.n}を かった！`)}}}
-const ROOT=['てもち','どうぐ','ずかん','マップ','レポート','とじる'];
+const ROOT=['てもち','どうぐ','ずかん','マップ','レポート','タイトルへ','とじる'];
 function updMenu(){const m=menu;
  if(m.pg==='root'){const n=ROOT.length;if(btnp('up'))m.i=(m.i+n-1)%n;if(btnp('down'))m.i=(m.i+1)%n;
   if(btnp('b')){menu=null;return}
-  if(btnp('a')){if(m.i===0){if(!S.party.length){say('まだ モンスターを もっていない。');return}m.pg='party';m.j=0;m.use=null}else if(m.i===1){m.pg='items';m.k=0}else if(m.i===2)m.pg='dex';else if(m.i===3){m.pg='wmap';m.w=Math.max(0,WMAP.findIndex(n=>n.id===(REGION[S.map]||S.map)))}else if(m.i===4){save();say('レポートに しっかり かきこんだ！')}else menu=null}
+  if(btnp('a')){if(m.i===0){if(!S.party.length){say('まだ モンスターを もっていない。');return}m.pg='party';m.j=0;m.use=null}else if(m.i===1){m.pg='items';m.k=0}else if(m.i===2)m.pg='dex';else if(m.i===3){m.pg='wmap';m.w=Math.max(0,WMAP.findIndex(n=>n.id===(REGION[S.map]||S.map)))}else if(m.i===4){save();say('レポートに しっかり かきこんだ！')}else if(m.i===5){m.pg='quit';m.q=0}else menu=null}
   return}
+ if(m.pg==='quit'){if(btnp('up')||btnp('down'))m.q^=1;if(btnp('b')){m.pg='root';return}
+  if(btnp('a')){if(m.q===0){save();menu=null;shop=null;boxui=null;Q.length=0;mode='title';TT={pg:'main',i:0}}else m.pg='root'}return}
  if(m.pg==='dex'||m.pg==='dexd'){const n=DEX.length;m.dx=m.dx||0;if(btnp('up'))m.dx=(m.dx+n-1)%n;if(btnp('down'))m.dx=(m.dx+1)%n;
   if(btnp('b')){m.pg=m.pg==='dexd'?'dex':'root';return}
   if(m.pg==='dex'&&btnp('a')){if(S.seen.includes(DEX[m.dx]))m.pg='dexd';else AU.sfx('bump')}return}
@@ -1804,7 +1806,8 @@ function drawItems(sel,L=ITEMS,setSel){HITS.length=0;box(8,8,304,272);txt('ど�
 
 function drawRoot(){box(8,8,164,78);txt(`おかね ${S.money}えん`,22,22,3,14);txt(`バッジ ${S.badges.length}こ`,22,50,3,14);
  if(S.badges.length){c.fillStyle='#8c8c98';c.beginPath();c.arc(140,58,8,0,7);c.fill();c.fillStyle='#c8c8d0';c.beginPath();c.arc(138,56,3,0,7);c.fill()}
- box(184,8,128,204);ROOT.forEach((s,i)=>{hit(184,16+i*32,128,32,()=>{menu.i=i});txt(s,214,24+i*32);if(i===menu.i)txt('▶',196,24+i*32)})}
+ box(184,8,128,204);ROOT.forEach((s,i)=>{hit(184,14+i*28,128,28,()=>{menu.i=i});txt(s,214,22+i*28);if(i===menu.i)txt('▶',196,22+i*28)})}
+function drawQuit(){HITS.length=0;box(0,200,320,88);txt('セーブして タイトルに',18,218);txt('もどりますか？',18,250);box(212,124,108,72);['はい','いいえ'].forEach((t,i)=>{hit(212,134+i*26,108,26,()=>{menu.q=i});txt(t,248,140+i*26);if(i===menu.q)txt('▶',230,140+i*26)})}
 function drawShop(){box(8,8,120,62);txt('おかね',20,20,3,12);txt(`${S.money}えん`,116,40,3,16,'right');
  const ST=shop.stock;box(136,8,176,70+ST.length*40);[...ST.map(k=>IT[k].n),'やめる'].forEach((s,i)=>{const y=24+i*40;hit(136,y-10,176,40,()=>{shop.i=i});txt(s,166,y);if(i<ST.length)txt(`${IT[ST[i]].price}えん`,300,y+18,2,12,'right');if(i===shop.i)txt('▶',148,y)});
  if(!Q.length){box(0,200,320,88);if(shop.i<ST.length){const k=ST[shop.i];txt(IT[k].d,18,218,3,14);txt(`もっている かず ×${S.items[k]||0}`,18,250,2,14)}else txt('かいものを おわる',18,218,3,14)}}
@@ -1826,7 +1829,7 @@ function drawWorld(){
    if(e.alert>0){R(sx+7,sy-28,18,22,3);R(sx+9,sy-26,14,18,'#ffffff');txt('！',sx+16,sy-25,'#e03838',16,'center')}}}
  if(CUR.forest){const vg=c.createRadialGradient(W/2,H/2,70,W/2,H/2,210);vg.addColorStop(0,'rgba(8,30,10,0)');vg.addColorStop(1,'rgba(8,30,10,.5)');c.fillStyle=vg;c.fillRect(0,0,W,H)}
  if(nameT>0&&CUR.name&&!Q.length){const w=CUR.name.length*16+28;box(8,8,w,40);txt(CUR.name,22,20)}
- if(menu){if(menu.pg==='root')drawRoot();else if(menu.pg==='party'||menu.pg==='pmenu'){drawParty(menu.j,menu.use?'だれに つかう？':'てもち',menu.use?'A：つかう　B：もどる':'A：えらぶ　B：もどる',i=>{menu.j=i});if(menu.pg==='pmenu')drawPMenu()}else if(menu.pg==='stat')drawStatus(menu.j,menu.mv,menu.pick);else if(menu.pg==='wmap')drawWorldMap(menu.w||0);else if(menu.pg==='items')drawItems(menu.k,ITEMS,i=>{menu.k=i});else if(menu.pg==='dex')drawDex(menu.dx||0);else if(menu.pg==='dexd')drawDexDetail(menu.dx||0)}
+ if(menu){if(menu.pg==='root')drawRoot();else if(menu.pg==='quit'){drawRoot();drawQuit()}else if(menu.pg==='party'||menu.pg==='pmenu'){drawParty(menu.j,menu.use?'だれに つかう？':'てもち',menu.use?'A：つかう　B：もどる':'A：えらぶ　B：もどる',i=>{menu.j=i});if(menu.pg==='pmenu')drawPMenu()}else if(menu.pg==='stat')drawStatus(menu.j,menu.mv,menu.pick);else if(menu.pg==='wmap')drawWorldMap(menu.w||0);else if(menu.pg==='items')drawItems(menu.k,ITEMS,i=>{menu.k=i});else if(menu.pg==='dex')drawDex(menu.dx||0);else if(menu.pg==='dexd')drawDexDetail(menu.dx||0)}
  if(shop)drawShop();
  if(boxui)drawBox();
  drawMsg();
