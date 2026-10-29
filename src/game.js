@@ -1918,7 +1918,7 @@ function drawBattle(){
  if(B.meIn)infoBox(160,120,m,B.dM,true);
  if(B.forced){drawParty(B.pcur,'つぎは だれを だす？','A：くりだす',i=>{B.pcur=i});const t=S.party[B.pcur];if(t.hp<=0)txt('たたかえる げんきが ない！',160,240,'#e03030',12,'center');return}
  if(Q.length){drawMsg();return}
- if(B.menu==='moves'){box(0,200,320,88);m.moves.forEach((id,i)=>{const x=i%2?180:30,y=i<2?220:252;hit(x-20,y-10,150,32,()=>{B.mcur=i});txt(MV[id].n,x,y,3,14);if(i===B.mcur)txt('▶',x-16+((frame>>4)%2),y,3,14)});
+ if(B.menu==='moves'){box(0,200,320,88);m.moves.forEach((id,i)=>{const x=i%2?180:30,y=i<2?216:248;hit(x-20,y-8,150,32,()=>{B.mcur=i});txt(MV[id].n,x,y,3,14);{const v=MV[id];if(v.p&&B.foe){const ef=eff(v.t,SP[B.foe.id].type);if(ef>1)txt('ばつぐん',x,y+17,'#d83a2a',10);else if(ef<1)txt('いまひとつ',x,y+17,'#6a7a90',10)}}if(i===B.mcur)txt('▶',x-16+((frame>>4)%2),y,3,14)});
   const mv=MV[m.moves[B.mcur]];box(152,116,168,86);txt(`タイプ／${TN[mv.t]}`,166,128,3,14);txt(mv.p?`いりょく／${mv.p}${mv.hits?' ×'+mv.hits[0]+'〜'+mv.hits[1]:''}`:'へんかわざ',166,150,3,14);if(mv.d)txt(mv.d,166,174,2,11)}
  else{box(0,200,156,88);txt(`${nm(m)}は`,18,218);txt('どうする？',18,250);box(140,200,180,88);
   ['たたかう','どうぐ','てもち','にげる'].forEach((s,i)=>{const x=i%2?250:170,y=i<2?218:250;hit(x-20,y-10,80,32,()=>{B.cur=i});txt(s,x,y);if(i===B.cur)txt('▶',x-16+((frame>>4)%2),y)});
