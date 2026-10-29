@@ -1303,21 +1303,23 @@ function inflict(def,kind,who,fromHit){return[F(()=>{const ty=SP[def.id].type;
  def.status=kind;if(kind==='slp')def.slp=2+(Math.random()*3|0);
  return T(kind==='brn'?`${who}は やけどを おった！`:kind==='par'?`${who}は まひして\nわざが でにくくなった！`:`${who}は\nねむってしまった！`)})]}
 function resolve(att,def,mv,isP,who){const sd=side(isP),od=side(!isP),dwho=lab(def,!isP),r=[];
- if(mv.p){const hits=mv.hits?mv.hits[0]+(Math.random()*(mv.hits[1]-mv.hits[0]+1)|0):1,e=eff(mv.t,SP[def.id].type),stab=mv.t===SP[att.id].type?1.5:1;let total=0,n=0,crit1=false;
-  for(let h=0;h<hits&&def.hp>0;h++){const crit=Math.random()<(mv.crit?1/4:1/16)?1.5:1;if(crit>1)crit1=true;
+ if(mv.p){const hits=mv.hits?mv.hits[0]+(Math.random()*(mv.hits[1]-mv.hits[0]+1)|0):1,e=eff(mv.t,SP[def.id].type),stab=mv.t===SP[att.id].type?1.5:1;let total=0,n=0,crit1=false,hp=def.hp;const dm=[];
+  for(let h=0;h<hits&&hp>0;h++){const crit=Math.random()<(mv.crit?1/4:1/16)?1.5:1;if(crit>1)crit1=true;
    const A=att.atk*smul(B.st[sd].atk)*(att.status==='brn'?.5:1),Df=def.def*smul(B.st[od].def);
-   const d=Math.max(1,Math.floor((((2*att.lv/5+2)*mv.p*A/Df)/50+2)*stab*e*crit*(0.85+Math.random()*0.15)));def.hp=Math.max(B.god?1:0,def.hp-d);total+=d;n++}
-  B.blink={who:od,t:24};B.shake=e>1?12:7;AU.sfx(e>1?'super':'hit');
-  r.push(Wt(settled));
+   const d=Math.max(1,Math.floor((((2*att.lv/5+2)*mv.p*A/Df)/50+2)*stab*e*crit*(0.85+Math.random()*0.15)));hp=Math.max(B.god?1:0,hp-d);dm.push(d);total+=d;n++}
+  const alive=hp>0;
+  // each hit of a multi-hit move gets its own lunge + effect + damage animation
+  dm.forEach((d,k)=>{if(k>0)r.push(F(()=>{B.lunge={who:sd,t:0};AU.sfx('swing')}),Wt(()=>B.lunge.t>=10),F(()=>{B.lunge=null;B.fx={type:mv.t,t:0,to:od};AU.sfx('fx'+mv.t)}),Wt(()=>B.fx.t>=22),F(()=>{B.fx=null}));
+   r.push(F(()=>{def.hp=Math.max(B.god?1:0,def.hp-d);B.blink={who:od,t:24};B.shake=e>1?12:7;AU.sfx(e>1?'super':'hit')}),Wt(settled))});
   if(hits>1)r.push(...T(`${n}かい あたった！`));
   if(crit1)r.push(...T('きゅうしょに あたった！'));
   if(e>1)r.push(...T('こうかは ばつぐんだ！'));else if(e<1)r.push(...T('こうかは いまひとつの ようだ…'));
   if(mv.drain&&att.hp>0&&att.hp<att.mhp)r.push(F(()=>{att.hp=Math.min(att.mhp,att.hp+Math.max(1,total>>1))}),Wt(settled),...T(`${dwho}から\nたいりょくを すいとった！`));
-  if(mv.status&&def.hp>0&&Math.random()<(mv.chance||1))r.push(...inflict(def,mv.status,dwho,true));
-  if(mv.flinch&&def.hp>0&&Math.random()<mv.flinch)B.flinch[od]=true;
-  if(mv.hitStat&&def.hp>0&&Math.random()<(mv.hitStat.chance||1))r.push(...statChange(od,dwho,mv.hitStat.stat,mv.hitStat.st));
+  if(mv.status&&alive&&Math.random()<(mv.chance||1))r.push(...inflict(def,mv.status,dwho,true));
+  if(mv.flinch&&alive&&Math.random()<mv.flinch)B.flinch[od]=true;
+  if(mv.hitStat&&alive&&Math.random()<(mv.hitStat.chance||1))r.push(...statChange(od,dwho,mv.hitStat.stat,mv.hitStat.st));
   if(mv.recharge)B.rech[sd]=true;
-  if(mv.trap&&def.hp>0&&!B.dot[od])r.push(F(()=>{B.dot[od]={kind:'trap',turns:2+(Math.random()*3|0),nm:mv.trapNm||'うずまき'}}),...T(`${dwho}は ${mv.trapNm||'うずまき'}に\nとじこめられた！`));
+  if(mv.trap&&alive&&!B.dot[od])r.push(F(()=>{B.dot[od]={kind:'trap',turns:2+(Math.random()*3|0),nm:mv.trapNm||'うずまき'}}),...T(`${dwho}は ${mv.trapNm||'うずまき'}に\nとじこめられた！`));
  }else{
   if(mv.heal){if(att.hp>=att.mhp)r.push(...T('しかし HPは まんたんだ！'));else r.push(F(()=>{att.hp=Math.min(att.mhp,att.hp+Math.ceil(att.mhp*mv.heal));AU.sfx('statup')}),Wt(settled),...T(`${who}の\nHPが かいふくした！`))}
   if(mv.stat)r.push(...statChange(mv.self?sd:od,mv.self?who:dwho,mv.stat,mv.st));
@@ -1703,7 +1705,7 @@ function tile(ch,x,y,gx,gy){const v=(((gx*7+gy*13)%4)+4)%4;let key=ch+v,fn;
 
 let boxui=null;
 function openBox(){boxui={col:0,i:0,j:0}}
-function updBox(){const P0=S.party,BX=S.box,u=boxui;
+function updBox(){const P0=S.party,BX=S.box,u=boxui;u.i=Math.max(0,Math.min(u.i,P0.length-1));u.j=Math.max(0,Math.min(u.j,BX.length-1));
  if(btnp('left')||btnp('right')){u.col^=1;AU.sfx('cur')}
  const L=u.col===0?P0:BX,k=u.col===0?'i':'j',n=L.length;
  if(n){if(btnp('up')){u[k]=(u[k]+n-1)%n;AU.sfx('cur')}if(btnp('down')){u[k]=(u[k]+1)%n;AU.sfx('cur')}}
