@@ -1184,11 +1184,10 @@ function contGame(){let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch
  tmsg(['セーブデータが よみこめませんでした。'])}
 function tmsg(lines,after){TT={pg:'msg',lines,k:0,after:after||null,i:0}}
 function titleOpts(){
- if(TT.pg==='move')return[{t:'かきだす',fn:exportSave,direct:true},{t:'よみこむ',fn:pickSave,direct:true},{t:'もどる',fn:()=>{TT={pg:'main',i:2}}}];
  if(TT.pg==='new')return[{t:'はい',fn:()=>{TT={pg:'main',i:0};newGame()}},{t:'いいえ',fn:()=>{TT={pg:'main',i:1}}}];
- if(TT.pg==='imp')return[{t:'はい',fn:()=>{try{localStorage.setItem(KEY,JSON.stringify(TT.data));saved=true;AU.jingle('item');tmsg(['セーブを よみこみました！','「つづきから」で あそべます。'])}catch(e){tmsg(['ほぞんに しっぱい しました。'])}}},{t:'いいえ',fn:()=>{TT={pg:'main',i:0}}}];
- const o=saved?[{t:'つづきから',fn:contGame},{t:'はじめから',fn:()=>{TT={pg:'new',i:1}}},{t:'セーブを うつす',fn:()=>{TT={pg:'move',i:0}}}]
-  :[{t:'はじめから',fn:newGame},{t:'セーブを よみこむ',fn:pickSave,direct:true}];
+ if(TT.pg==='imp')return[{t:'はい',fn:()=>{try{localStorage.setItem(KEY,JSON.stringify(TT.data));saved=true;AU.jingle('item');tmsg(['セーブを とりこみました！','「つづきから」で あそべます。'])}catch(e){tmsg(['ほぞんに しっぱい しました。'])}}},{t:'いいえ',fn:()=>{TT={pg:'main',i:0}}}];
+ const o=saved?[{t:'つづきから',fn:contGame},{t:'はじめから',fn:()=>{TT={pg:'new',i:1}}},{t:'セーブを うつす',fn:exportSave,direct:true},{t:'セーブを とりこむ',fn:pickSave,direct:true}]
+  :[{t:'はじめから',fn:newGame},{t:'セーブを とりこむ',fn:pickSave,direct:true}];
  if(isWebHost()&&!isStandalone())o.push({t:'ホームがめんに ついか',fn:showHomeHelp});
  return o}
 function showHomeHelp(){const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -1197,21 +1196,21 @@ function showHomeHelp(){const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||
 function saveSummary(d){const m=d.party&&d.party[0];return `バッジ ${(d.badges||[]).length}こ　てもち ${(d.party||[]).length}ひき`+(m?`\nせんとう：${(SP[m.id]||{}).name||'？'} Lv${m.lv}`:'')}
 let DLS=null;try{if(window.claude&&claude.use)claude.use('downloads').then(d=>{DLS=d}).catch(()=>{})}catch(e){}
 function exportSave(){let raw=null;try{raw=localStorage.getItem(KEY)}catch(e){}
- if(!raw){tmsg(['かきだす セーブが ありません。']);return}
+ if(!raw){tmsg(['うつす セーブが ありません。']);return}
  const d=new Date(),ymd=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
  const body=JSON.stringify({game:'kusamura-monster',v:2,at:d.toISOString(),data:JSON.parse(raw)});
  const name=`kusamura-save-${ymd}.json`,blob=new Blob([body],{type:'application/json'});
- const done=()=>tmsg(['セーブを かきだしました！','べつの たんまつの タイトルで\n「セーブを よみこむ」を えらんでね。']);
- if(DLS){DLS.save({filename:name,data:body}).then(done,e=>{if(!e||e.code!=='declined')tmsg(['かきだしに しっぱい しました。'])});return}
+ const done=()=>tmsg(['セーブを うつす ファイルを\nつくりました！','うつしたい たんまつの タイトルで\n「セーブを とりこむ」を えらんでね。']);
+ if(DLS){DLS.save({filename:name,data:body}).then(done,e=>{if(!e||e.code!=='declined')tmsg(['ファイルを つくれませんでした。'])});return}
  try{const f=new File([blob],name,{type:'application/json'});
   if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'くさむらモンスター セーブ'}).then(done,e=>{if(e&&e.name!=='AbortError')dl()});return}}catch(e){}
- dl();function dl(){try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);done()}catch(e){tmsg(['かきだしに しっぱい しました。'])}}}
+ dl();function dl(){try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);done()}catch(e){tmsg(['ファイルを つくれませんでした。'])}}}
 function pickSave(){const inp=document.createElement('input');inp.type='file';inp.accept='.json,application/json,text/plain';inp.style.display='none';document.body.appendChild(inp);
  inp.onchange=()=>{const f=inp.files&&inp.files[0];inp.remove();if(!f)return;const r=new FileReader();
   r.onload=()=>{let j=null;try{j=JSON.parse(r.result)}catch(e){}
    const d=j&&(j.game==='kusamura-monster'?j.data:j);
    if(!d||!Array.isArray(d.party)||!d.pos||!d.items){tmsg(['この ファイルは くさむらモンスターの\nセーブでは ないみたい。']);return}
-   TT={pg:'imp',i:1,data:d,lines:[(saved?'いまの セーブに うわがきして\n':'')+'よみこみますか？',saveSummary(d)]}};
+   TT={pg:'imp',i:1,data:d,lines:[(saved?'いまの セーブに うわがきして\n':'')+'とりこみますか？',saveSummary(d)]}};
   r.readAsText(f)};
  inp.click()}
 function gestureA(){if(mode!=='title'||TT.pg==='msg')return false;const o=titleOpts()[TT.i];if(o&&o.direct){AU.sfx&&AU.sfx('sel');o.fn();return true}return false}
@@ -2013,10 +2012,10 @@ function drawBattle(){
 function drawTitle(){skyBG(150);hills(104,150);R(0,150,W,H-150,'#a6da74');
  for(let i=0;i<10;i++)tile('G',i*32,166,i,30);
  logo('くさむら',W/2,18,40,'#6cc848','#173a18');logo('モンスター',W/2,64,30,'#ffa040','#4a1a0a');
- STARTERS.forEach((id,i)=>{const bob=Math.sin(frame/14+i*2)*3;c.globalAlpha=.25;ell(60+i*100,190,24,5,'#000');c.globalAlpha=1;drawMon(id,20+i*100,106+bob,false)});
+ {const up=TT.pg!=='msg'&&titleOpts().length>4?12:0;STARTERS.forEach((id,i)=>{const bob=Math.sin(frame/14+i*2)*3;c.globalAlpha=.25;ell(60+i*100,190-up,24,5,'#000');c.globalAlpha=1;drawMon(id,20+i*100,106-up+bob,false)})}
  if(TT.pg==='msg'){box(8,196,304,84);const L=String(TT.lines[TT.k]).split('\n');L.forEach((l,i)=>txt(l,22,212+i*28,3,14));if((frame>>4)%2)txt('▼',296,262,3,12,'right');hit(0,0,W,H,()=>{});return}
  if(TT.pg==='imp'||TT.pg==='new'){box(8,196,190,84);const L=(TT.pg==='new'?'いまの セーブは きえて\nしまいます。 ほんとうに\nはじめから あそぶ？':TT.lines.join('\n')).split('\n');L.forEach((l,i)=>txt(l,18,206+i*18,3,11))}
- const o=titleOpts(),rh=24,bw=TT.pg==='imp'||TT.pg==='new'?100:206,bh=14+o.length*rh,bx=TT.pg==='imp'||TT.pg==='new'?208:(W-bw)/2,by=H-8-bh;
+ const o=titleOpts(),rh=o.length>4?21:24,bw=TT.pg==='imp'||TT.pg==='new'?100:206,bh=14+o.length*rh,bx=TT.pg==='imp'||TT.pg==='new'?208:(W-bw)/2,by=H-8-bh;
  box(bx,by,bw,bh);o.forEach((op,i)=>{const y=by+10+i*rh;hit(bx,y-4,bw,rh,()=>{TT.i=i});txt(op.t,bx+30,y,3,14);if(i===TT.i)txt('▶',bx+12+((frame>>4)%2),y,3,14)})}
 function drawStarter(){skyBG(120);hills(88,130);R(0,124,W,H-124,'#a6da74');
  box(10,8,300,36);txt('どの モンスターに するかね？',W/2,19,3,14,'center');
