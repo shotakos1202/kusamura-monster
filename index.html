@@ -593,12 +593,12 @@ const LVMAX=50;
 Object.assign(MV,{
  niramitsukeru:{n:'にらみつける',t:'normal',p:0,stat:'def',st:-1,d:'あいての ぼうぎょ↓'},
  subayai:{n:'すばやいひっかき',t:'normal',p:40,pri:1,d:'かならず せんせい'},
- honoonokiba:{n:'ほのおのキバ',t:'fire',p:65,status:'brn',chance:.15,d:'たまに やけど'},
+ honoonokiba:{n:'ほむらのキバ',t:'fire',p:65,status:'brn',chance:.15,d:'たまに やけど'},
  inazumakiba:{n:'いなずまキバ',t:'elec',p:65,status:'par',chance:.15,d:'たまに まひ'},
  hinokomai:{n:'ひのこまい',t:'fire',p:20,hits:[2,3],d:'2〜3かい こうげき'},
  kagerou:{n:'かげろう',t:'fire',p:0,self:true,stat:'spd',st:1,d:'じぶんの すばやさ↑'},
  kirisaku:{n:'きりさく',t:'normal',p:70,crit:true,d:'きゅうしょに あたりやすい'},
- kaenguruma:{n:'かえんぐるま',t:'fire',p:90,d:''},
+ kaenguruma:{n:'ほのおぐるま',t:'fire',p:90,d:''},
  marukunaru:{n:'まるくなる',t:'water',p:0,self:true,stat:'def',st:1,d:'じぶんの ぼうぎょ↑'},
  awanotate:{n:'あわのたて',t:'water',p:0,self:true,stat:'def',st:2,d:'ぼうぎょ ぐーんと↑'},
  aquatackle:{n:'アクアタックル',t:'water',p:65,d:''},
@@ -656,7 +656,7 @@ Object.assign(MV,{
  happagiri:{n:'はっぱぎり',t:'grass',p:55,crit:true,d:'きゅうしょに あたりやすい'},
  kyuketsu:{n:'きゅうけつ',t:'flying',p:45,drain:true,d:'HPを すいとる'},
  kowaikao:{n:'こわいかお',t:'normal',p:0,stat:'spd',st:-2,d:'すばやさ がくっと↓'},
- ayashiikaze:{n:'あやしいかぜ',t:'flying',p:40,flinch:.2,d:'たまに ひるませる'},
+ ayashiikaze:{n:'あやしいそよかぜ',t:'flying',p:40,flinch:.2,d:'たまに ひるませる'},
 });
 SP.kamaleaf={name:'カマリーフ',type:'grass',b:{hp:45,atk:64,def:46,spd:70},exp:70,cr:.45,moves:['happa','niramitsukeru'],learn:{9:'happagiri',12:'shibirekafun',15:'kirisaku',18:'tsuruuchi'},
  desc:'はっぱの かまを ふりかざす もりの むし。 くさに まぎれて えものを まつ。'};
@@ -666,11 +666,11 @@ DEX.splice(DEX.indexOf('denmushi')+1,0,'kamaleaf','kagebasa');
 Object.assign(MV,{
  katakunaru:{n:'かたくなる',t:'rock',p:0,self:true,stat:'def',st:1,d:'じぶんの ぼうぎょ↑'},
  gorogoro:{n:'ごろごろアタック',t:'rock',p:30,hits:[2,4],d:'2〜4かい こうげき'},
- iwakudaki:{n:'いわくだき',t:'rock',p:70,hitStat:{stat:'def',st:-1,chance:.5},d:'たまに ぼうぎょ↓'},
+ iwakudaki:{n:'いわわり',t:'rock',p:70,hitStat:{stat:'def',st:-1,chance:.5},d:'たまに ぼうぎょ↓'},
  jihibiki:{n:'じひびき',t:'normal',p:80,flinch:.2,d:'たまに ひるませる'},
  gansekiyoroi:{n:'がんせきのよろい',t:'rock',p:0,self:true,stat:'def',st:2,d:'ぼうぎょ ぐーんと↑'},
  ooiwaotoshi:{n:'おおいわおとし',t:'rock',p:90,acc:90,d:''},
- gansekiho:{n:'がんせきほう',t:'rock',p:120,acc:90,recharge:true,d:'つぎの ターン うごけない'},
+ gansekiho:{n:'がんせきだん',t:'rock',p:120,acc:90,recharge:true,d:'つぎの ターン うごけない'},
  daichi:{n:'だいちのいかり',t:'normal',p:100,acc:90,d:''},
  bakuretsugan:{n:'ばくれつがん',t:'rock',p:110,acc:80,d:'めいちゅうが ひくい'},
  shibiredenpa:{n:'しびれでんぱ',t:'elec',p:0,status:'par',acc:90,d:'あいてを まひ'},
@@ -704,7 +704,7 @@ Object.assign(MV,{
  glenho:{n:'グレンほう',t:'fire',p:120,acc:90,recharge:true,d:'つぎの ターン うごけない'},
  homuranomai:{n:'ほむらのまい',t:'fire',p:0,self:true,stats:[['atk',1],['spd',1]],d:'こうげきと すばやさ↑'},
  kirinotobari:{n:'きりのとばり',t:'water',p:0,stat:'acc',st:-1,d:'あいての めいちゅう↓'},
- mizunohado:{n:'みずのはどう',t:'water',p:75,hitStat:{stat:'spd',st:-1,chance:.3},d:'たまに すばやさ↓'},
+ mizunohado:{n:'みずのさざなみ',t:'water',p:75,hitStat:{stat:'spd',st:-1,chance:.3},d:'たまに すばやさ↓'},
  shiomichi:{n:'しおみち',t:'water',p:0,self:true,heal:.25,stats:[['def',1]],d:'すこし かいふく＋ぼうぎょ↑'},
  tsunami:{n:'つなみ',t:'water',p:100,d:''},
  oouzushio:{n:'おおうずしお',t:'water',p:120,acc:80,d:'めいちゅうが ひくい'},
@@ -767,8 +767,8 @@ Object.assign(MV,{
  saiminjutsu:{n:'さいみんじゅつ',t:'psychic',p:0,status:'slp',acc:60,d:'あいてを ねむらせる'},
  meisou:{n:'めいそう',t:'psychic',p:0,self:true,stat:'atk',st:1,d:'じぶんの こうげき↑'},
  barrier:{n:'バリアー',t:'psychic',p:0,self:true,stat:'def',st:2,d:'ぼうぎょ ぐーんと↑'},
- psybeam:{n:'サイケこうせん',t:'psychic',p:65,d:''},
- yumekui:{n:'ゆめくい',t:'psychic',p:75,drain:true,d:'HPを すいとる'},
+ psybeam:{n:'サイケビーム',t:'psychic',p:65,d:''},
+ yumekui:{n:'ゆめたべ',t:'psychic',p:75,drain:true,d:'HPを すいとる'},
  tsukinohikari:{n:'つきのひかり',t:'psychic',p:0,self:true,heal:.5,d:'HPを はんぶん かいふく'},
  hoshifuri:{n:'ほしふり',t:'psychic',p:20,hits:[2,4],d:'2〜4かい こうげき'},
  psychokinesis:{n:'サイコキネシス',t:'psychic',p:90,d:''},
@@ -787,7 +787,7 @@ Object.assign(WHERE,{yumemi:'ミライの おか',powan:'ミライの おか',ba
 
 const STARTERS=['hinokon','mizutama','happaru'];
 const IT={ball:{n:'ボール',price:100,d:'やせいの モンスターを つかまえる'},potion:{n:'くすり',price:150,d:'モンスターの HPを 20 かいふくする'}};
-Object.assign(IT,{superpotion:{n:'いいくすり',price:400,d:'モンスターの HPを 60 かいふくする'},revive:{n:'げんきのかけら',price:2000,d:'ひんしの モンスターを はんぶん かいふく'},rarecandy:{n:'ふしぎなアメ',price:9999,d:'モンスターの レベルが 1 あがる'}});
+Object.assign(IT,{superpotion:{n:'いいくすり',price:400,d:'モンスターの HPを 60 かいふくする'},revive:{n:'げんきのつぶ',price:2000,d:'ひんしの モンスターを はんぶん かいふく'},rarecandy:{n:'ふしぎなキャンディ',price:9999,d:'モンスターの レベルが 1 あがる'}});
 const ITEMS=['ball','potion','superpotion','revive','rarecandy'],BITEMS=['ball','potion','superpotion'];
 IT.ballplus={n:'ボールプラス',price:300,d:'ボールより 1.3ばい つかまえやすい'};
 ITEMS.splice(1,0,'ballplus');BITEMS.splice(1,0,'ballplus');
