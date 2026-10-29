@@ -1101,12 +1101,14 @@ function showHomeHelp(){const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||
  tmsg(ios?['iPhoneの ばあい：\nSafariで この ページを ひらく。','したの きょうゆうボタン（□に↑）を おして\n「ホームがめんに ついか」を えらぶ。','ホームがめんの アイコンから あそぶと\nセーブが きえにくく なるよ！']
   :['Androidの ばあい：\nChromeで この ページを ひらく。','みぎうえの メニュー（︙）から\n「ホームがめんに ついか」を えらぶ。','「アプリを インストール」と でたら\nそれを えらんでも OK！','ホームがめんの アイコンから あそぶと\nオフラインでも あそべるよ！'])}
 function saveSummary(d){const m=d.party&&d.party[0];return `バッジ ${(d.badges||[]).length}こ　てもち ${(d.party||[]).length}ひき`+(m?`\nせんとう：${(SP[m.id]||{}).name||'？'} Lv${m.lv}`:'')}
+let DLS=null;try{if(window.claude&&claude.use)claude.use('downloads').then(d=>{DLS=d}).catch(()=>{})}catch(e){}
 function exportSave(){let raw=null;try{raw=localStorage.getItem(KEY)}catch(e){}
  if(!raw){tmsg(['かきだす セーブが ありません。']);return}
  const d=new Date(),ymd=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
  const body=JSON.stringify({game:'kusamura-monster',v:2,at:d.toISOString(),data:JSON.parse(raw)});
  const name=`kusamura-save-${ymd}.json`,blob=new Blob([body],{type:'application/json'});
  const done=()=>tmsg(['セーブを かきだしました！','べつの たんまつの タイトルで\n「セーブを よみこむ」を えらんでね。']);
+ if(DLS){DLS.save({filename:name,data:body}).then(done,e=>{if(!e||e.code!=='declined')tmsg(['かきだしに しっぱい しました。'])});return}
  try{const f=new File([blob],name,{type:'application/json'});
   if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:'くさむらモンスター セーブ'}).then(done,e=>{if(e&&e.name!=='AbortError')dl()});return}}catch(e){}
  dl();function dl(){try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);done()}catch(e){tmsg(['かきだしに しっぱい しました。'])}}}
