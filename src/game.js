@@ -562,6 +562,29 @@ const ARTDEF={
   LN(g,[4,30.4,8,31],'#2a1008',1.2);
   E(g,13,35,3.2,1.8,'#3a2420');E(g,29,35,3.2,1.8,'#3a2420');
  },['#3a1a10','#4a2a20','#3a2420','#5a3a30','#7a5444','#ff5a14','#ffb030','#a87a5a','#d0a47a','#ffd040','#1a0a04','#2a1008'],'#1a0804'],
+ hyouen:[g=>{
+  LN(g,[29,30,35,27,37,20,34,14],'#c8541c',2.6);PG(g,[34,16,31,9,34,11,36,4,37.6,11,39.4,8,38,17],'#ff5a1a');PG(g,[34.6,15,33.4,11,35,12,36.2,8,36.8,13,38,11.6,37.4,16],'#ffd84a');
+  SE(g,21,27,11,7.4,'#c8541c','#f08a2e','#ffc070');E(g,19,29.6,6,3.6,'#fff0d0');
+  for(const[x,y]of[[24,24],[27,27],[21,23],[16,25]])E(g,x,y,1.2,1,'#8a3410');
+  for(const x of[13,17,24,28])LN(g,[x,31,x,36],'#c8541c',2.4);for(const x of[13,17,24,28])E(g,x,36.4,1.8,1,'#a8401a');
+  PG(g,[7,14,6,4,12,9,16,2,18,10,22,5,21,13,24,20,8,22],'#ff5a1a');PG(g,[9,14,9,7,12,11,15,5,17,12,20,9,19,14,21,19,10,20],'#ffb030');
+  SE(g,14,16,7.4,6.6,'#c8541c','#f08a2e','#ffc070');E(g,12,19,3.6,2.4,'#fff0d0');
+  PG(g,[8,10,9,5,12,9],'#c8541c');PG(g,[18,9,20,4,21,10],'#c8541c');
+  PG(g,[9,15,12.4,14,12,16.6],'#ffe040');PG(g,[19,14.6,15.8,13.8,16.4,16.4],'#ffe040');LN(g,[10.6,14.2,10.6,16.4],'#181818',1.1);LN(g,[17.2,14,17.2,16.2],'#181818',1.1);
+  E(g,12,18,1,.7,'#5a1a10');LN(g,[10.6,20,12,20.6,13.4,20],'#5a1a10',1);
+ },['#c8541c','#ff5a1a','#ffd84a','#f08a2e','#ffc070','#fff0d0','#8a3410','#a8401a','#ffb030','#ffe040','#181818','#5a1a10'],'#3a1004'],
+ kazandori:[g=>{
+  PG(g,[18,20,2,12,6,20,1,25,8,27,4,31,16,29],'#c8341a');PG(g,[17,21,6,15,8,21,5,25,10,26,8,29,16,27],'#ff7a22');
+  PG(g,[24,20,38,13,35,21,39,26,32,27,36,31,25,29],'#c8341a');PG(g,[25,21,34,16,33,21,35,25,30,26,32,29,25,27],'#ff7a22');
+  PG(g,[17,31,14,38,20,35,26,38,23,31],'#ff5a1a');PG(g,[18,32,17,36,20,34,23,36,22,32],'#ffd04a');
+  SE(g,20,24,8,9,'#a8281a','#e84a1c','#ff9a40');E(g,20,27,4.6,4.8,'#ffd890');
+  SE(g,20,13,6.4,6,'#a8281a','#e84a1c','#ff9a40');
+  PG(g,[15,9,17,1,20,6,23,1,25,9],'#5a3a30');PG(g,[17,7,18,3,20,6,22,3,23,7],'#ff5a1a');E(g,20,3.4,1.6,1.2,'#ffd04a');
+  PG(g,[18.6,15,21.4,15,20,19],'#ffc030');PG(g,[19,15.4,21,15.4,20,17.4],'#e89010');
+  E(g,17.2,12.4,1.5,1.9,'#181818');E(g,22.8,12.4,1.5,1.9,'#181818');E(g,16.8,11.7,.6,.6,'#ffffff');E(g,22.4,11.7,.6,.6,'#ffffff');
+  LN(g,[17,33,16,37],'#5a3a30',1.3);LN(g,[23,33,24,37],'#5a3a30',1.3);
+  for(const[x,y]of[[6,6],[33,5],[29,2]]){E(g,x,y,1.8,1.4,'#8a8a92');E(g,x+.4,y-.4,.8,.6,'#b8b8c0')}
+ },['#c8341a','#ff7a22','#ff5a1a','#ffd04a','#a8281a','#e84a1c','#ff9a40','#ffd890','#5a3a30','#ffc030','#e89010','#181818','#ffffff','#8a8a92','#b8b8c0'],'#3a0804'],
 };
 const ART={};for(const k in ARTDEF){const[fn,cols,o]=ARTDEF[k];ART[k]=bake(fn,cols,o)}
 function drawMon(id,x,y,flip,white){const a=ART[id],img=white?a.white:a.img;c.imageSmoothingEnabled=false;
@@ -785,6 +808,15 @@ SP.koromagu={name:'コロマグ',type:'fire',b:{hp:58,atk:66,def:72,spd:44},exp:
 SP.magumajiro={name:'マグマジロ',type:'fire',b:{hp:88,atk:98,def:104,spd:46},exp:185,cr:.12,moves:['butsukaru','katakunaru'],learn:{...SP.koromagu.learn,33:'homuranoyoroi',37:'iwanadare',41:'glenho'},
  desc:'こうらの すじから ようがんが ふきだす。 かざんの ちかくで ねむるのが すき。'};
 DEX.push('hidane','kagaribi','koromagu','magumajiro');
+MV.kazandan={n:'かざんだん',t:'fire',p:95,acc:85,d:'めいちゅうが すこし ひくい'};
+SP.hononyan.evo={lv:32,to:'hyouen'};
+SP.hyouen={name:'ヒョウエン',type:'fire',b:{hp:70,atk:100,def:62,spd:104},exp:180,cr:.12,moves:['hinoiki','niramitsukeru'],learn:{...SP.hononyan.learn,32:'atsukaze',36:'homuranomai',41:'glenho'},
+ desc:'たてがみの ほのおを なびかせて はしる。 きまぐれだが みとめた あいてには いちずに つくす。'};
+SP.kazandori={name:'カザンドリ',type:'fire',b:{hp:66,atk:90,def:58,spd:96},exp:170,cr:.12,moves:['hinoiki','kazekiribane'],learn:{30:'atsukaze',33:'kyukoka',37:'kazandan',42:'glenho'},
+ desc:'かざんの けむりの なかを とぶ めずらしい とり。 とさかから ひのこを ふりまく。'};
+DEX.splice(DEX.indexOf('hononyan')+1,0,'hyouen');DEX.push('kazandori');
+Object.assign(WHERE,{hyouen:'ホノニャンが Lv32で しんか',kazandori:'5ばんどうろ（まれ）'});
+
 Object.assign(WHERE,{hidane:'5ばんどうろ',koromagu:'5ばんどうろ',kagaribi:'ヒダネが Lv32で しんか',magumajiro:'コロマグが Lv33で しんか'});
 
 Object.assign(WHERE,{fuwakura:'5ばんどうろの うみ',namigame:'5ばんどうろの うみ',tobiuon:'5ばんどうろの うみ'});
@@ -1024,7 +1056,7 @@ Object.assign(MAPS,{
   warps:{'33,2':['town3',1,14,'right'],'33,3':['town3',1,15,'right'],'26,12':['sea5',37,7,'left']},
   signs:{'26,4':['5ばんどうろ\nにし：ふなつきば → ユノハマシティ']},
   items:[{id:'r5a',x:1,y:1,k:'superpotion',amt:2},{id:'r5b',x:1,y:10,k:'ballplus',amt:3}],
-  wild:(x,y)=>[['hidane',27,30,18],['koromagu',27,30,18],['hononyan',27,30,10],['puraguru',27,30,10],['umidory',27,30,10],['yumemi',27,29,6],['powan',27,29,6],['tsubametto',27,30,8]],
+  wild:(x,y)=>[['hidane',27,30,18],['koromagu',27,30,18],['kazandori',28,30,4],['hononyan',27,30,10],['puraguru',27,30,10],['umidory',27,30,10],['yumemi',27,29,6],['powan',27,29,6],['tsubametto',27,30,8]],
   npcs:[
    {id:'messenger',x:31,y:2,dir:'right',spr:'boy',pal:['#f8d0a8','#58a858','#706858','#1c1820'],showIf:'ev5call',text:['ミドリのむらの ひと「ちょうろうさまを\nどうか たのむ！」']},
    {id:'r5boat',x:27,y:10,dir:'left',spr:'old',pal:['#f0c090','#f4f4f4','#2a4a80','#1c1820'],text:['せんどう「ふねで うみを わたれば\nユノハマシティだ。」','せんどう「さんばしの さきから\nのっていきな！」']},
@@ -1058,11 +1090,11 @@ Object.assign(MAPS,{
  gym4:{rows:["kkkkkkkkkkkk", "kpffffffffpk", "kfJJJffJJJfk", "kfJJJffJJJfk", "kffffffffffk", "kJJJJJJJJffk", "kJJJJJJJJffk", "kffffffffffk", "kffJJJJJJJJk", "kffJJJJJJJJk", "kffffffffffk", "kffffffffffk", "kffffffffffk", "kkkkkmmkkkkk"],
   warps:{'5,13':['town4',5,5,'down'],'6,13':['town4',5,5,'down']},
   npcs:[
-   {id:'hibana',x:5,y:1,dir:'down',spr:'girl',pal:['#f8d0a8','#e84828','#f8c030','#7a1a0a'],sight:3,tname:'ジムリーダーの ヒバナ',team:[['kagaribi',34],['magumajiro',34],['hononyan',34],['glencon',36]],money:90,
+   {id:'hibana',x:5,y:1,dir:'down',spr:'girl',pal:['#f8d0a8','#e84828','#f8c030','#7a1a0a'],sight:3,tname:'ジムリーダーの ヒバナ',team:[['kagaribi',34],['magumajiro',34],['hyouen',35],['glencon',36]],money:90,
     say:['ようこそ ユノハマジムへ！\nあたしが リーダーの ヒバナ！','この まちの おんせんより\nあつい しょうぶに しようね！'],lose:['あちち……！ まけちゃった！'],after:['もえる こころが あれば\nどこまでも いけるよ！'],
     badge:'ヒバナバッジ',badgeTalk:['ヒバナ「かった あかしに\nヒバナバッジを あげる！」']},
    {id:'kazuma',x:10,y:10,dir:'left',spr:'boy',pal:['#f8d0a8','#e86030','#5a2a1a','#1c1820'],sight:6,tname:'ジムトレーナーの カズマ',team:[['hidane',31],['koromagu',32]],money:30,say:['ほのおの ジムへ ようこそ！\nやけどに ちゅうい だぜ！'],lose:['ひが きえた……'],after:['ようがんの あいだの みちを\nすすむんだ。']},
-   {id:'yui',x:10,y:7,dir:'left',spr:'girl',pal:['#f8d0a8','#f08040','#5a2a1a','#1c1820'],sight:8,tname:'ジムトレーナーの ユイ',team:[['hononyan',31],['kagaribi',33]],money:30,say:['もえあがれ！'],lose:['まっくろこげ……'],after:['ヒバナさんの グレンコンは\nほんとうに つよいの。']},
+   {id:'yui',x:10,y:7,dir:'left',spr:'girl',pal:['#f8d0a8','#f08040','#5a2a1a','#1c1820'],sight:8,tname:'ジムトレーナーの ユイ',team:[['kazandori',31],['kagaribi',33]],money:30,say:['もえあがれ！'],lose:['まっくろこげ……'],after:['ヒバナさんの グレンコンは\nほんとうに つよいの。']},
    {id:'tsubasa',x:1,y:4,dir:'right',spr:'boy',pal:['#f8d0a8','#f8c030','#7a1a0a','#1c1820'],sight:8,tname:'ジムトレーナーの ツバサ',team:[['koromagu',32],['magumajiro',33]],money:32,say:['ヒバナさんの まえに\nおれを こえてみろ！'],lose:['あつく なりすぎた……'],after:['きみなら ヒバナさんに\nかてるかもな。']},
    {x:2,y:11,dir:'right',spr:'boy',pal:['#f8d0a8','#40a070','#303030','#1c1820'],text:['ようこそ ユノハマジムへ！','ここは ほのおタイプの ジム。\nみずや いわの わざが よく きくよ！']},
   ]},
