@@ -1013,6 +1013,28 @@ Object.assign(ARTDEF,{
   E(g,13,36.6,4,2,'#3e2818');E(g,25,36.6,4,2,'#3e2818');
  },['#4a3828','#6a4628','#946a40','#b88a5c','#3e2818','#d8c098','#f4e2c0','#fff4dc','#c83838','#f06060','#e8c040','#5a3a22','#ffffff','#1a1008','#d8b060','#f0d080','#a8803c','#8a6428'],'#1e120a',{'#946a40':['#b88a5c','#6a4628']}],
 });
+Object.assign(ARTDEF,{
+ shounon:[g=>{
+  // holographic halo
+  g.strokeStyle='#3ae0f0';g.lineWidth=1.6;g.beginPath();g.ellipse(20,6.4,11,2.8,0,0,Math.PI*2);g.stroke();
+  // antenna fins
+  PG(g,[12,10,7,1,9.6,1,15,8],'#c8d4e2');PG(g,[28,10,33,1,30.4,1,25,8],'#c8d4e2');PG(g,[7,1,9.6,1,8.6,3.4],'#3ae0f0');PG(g,[33,1,30.4,1,31.4,3.4],'#3ae0f0');
+  // digital tail dissolving into pixels
+  PG(g,[14,26,26,26,23,32,20,35,17,32],'#d6e0ec');
+  for(const[x,y,c]of[[19,36,'#3ae0f0'],[22,34.6,'#e050c0'],[16,34.4,'#3ae0f0'],[24,37.6,'#3ae0f0'],[17.6,38.6,'#e050c0'],[21,39,'#3ae0f0']])PG(g,[x,y,x+1.6,y,x+1.6,y+1.6,x,y+1.6],c);
+  // body
+  SE(g,20,18,11,10,'#8a9ab0','#e8f0f8','#ffffff');
+  // face screen
+  PG(g,[12.4,12.4,27.6,12.4,28.4,14,28,20.6,26.6,21.8,13.4,21.8,12,20.6,11.6,14],'#0e1626');PG(g,[13,13,27,13,27.6,14.2,27.4,15,12.6,15,12.4,14.2],'#1e2c44');
+  // pixel eyes + mouth
+  for(const x of[15.6,22.4]){PG(g,[x,15.4,x+2,15.4,x+2,18.6,x,18.6],'#3ae0f0');PG(g,[x,15.4,x+1,15.4,x+1,16.4,x,16.4],'#c8ffff')}
+  PG(g,[18.6,19.8,21.4,19.8,21.4,20.8,18.6,20.8],'#e050c0');
+  // circuit lines on body
+  LN(g,[10,22,13,24,17,24,18.6,26],'#3ae0f0',.9);LN(g,[30,22,27,24,23,24,21.4,26],'#3ae0f0',.9);E(g,18.6,26,.9,.9,'#3ae0f0');E(g,21.4,26,.9,.9,'#3ae0f0');E(g,10,22,.8,.8,'#e050c0');E(g,30,22,.8,.8,'#e050c0');
+  // floating hand pods
+  for(const[x,s]of[[5.6,1],[34.4,-1]]){PG(g,[x,19,x+3.6*s,23,x,27,x-3.6*s,23],'#c8d4e2');PG(g,[x,20.6,x+2.2*s,23,x,25.4,x-2.2*s,23],'#e8f0f8');PG(g,[x,22,x+1*s,23,x,24,x-1*s,23],'#3ae0f0')}
+ },['#3ae0f0','#c8d4e2','#d6e0ec','#e050c0','#8a9ab0','#e8f0f8','#ffffff','#0e1626','#1e2c44','#c8ffff'],'#101826',{'#e8f0f8':['#ffffff','#b0c0d4']}],
+});
 const ART={};for(const k in ARTDEF){const[fn,cols,o,bv]=ARTDEF[k];ART[k]=bake(fn,cols,o,bv)}
 function drawMon(id,x,y,flip,white){const a=ART[id],img=white?a.white:a.img;c.imageSmoothingEnabled=false;
  if(flip){c.save();c.translate(Math.round(x)+80,Math.round(y));c.scale(-1,1);c.drawImage(img,0,0,80,80);c.restore()}else c.drawImage(img,Math.round(x),Math.round(y),80,80)}
@@ -1327,6 +1349,16 @@ SP.tanuoyabun={name:'タヌオヤブン',type:'normal',b:{hp:108,atk:102,def:80,
 DEX.push('iwamogu','ganmogura','tsuraran','tsuraragi','kirakoro','kiraseki','suishouou','ishigaeru','gamaiwa','miminaga','hibikimimi','mofutanu','tanuoyabun');
 Object.assign(WHERE,{iwamogu:'ひびきの どうくつ',ganmogura:'イワモグが Lv38で しんか',tsuraran:'ひびきの どうくつ',tsuraragi:'ツラランが Lv36で しんか',kirakoro:'ひびきの どうくつ',kiraseki:'キラコロが Lv38で しんか',suishouou:'キラセキが Lv52で しんか',
  ishigaeru:'6ばんどうろ・ひびきの どうくつ',gamaiwa:'イシガエルが Lv37で しんか',miminaga:'6ばんどうろ・ひびきの どうくつ',hibikimimi:'ミミナガが Lv36で しんか',mofutanu:'6ばんどうろ・ひびきの どうくつ',tanuoyabun:'モフタヌが Lv35で しんか'});
+/* ---------- まぼろしの モンスター: ショウノーン ---------- */
+Object.assign(MV,{
+ datastream:{n:'データストリーム',t:'normal',p:90,hitStat:{stat:'spd',st:-1,chance:.3},d:'たまに あいての すばやさ↓'},
+ reboot:{n:'リブート',t:'normal',p:0,self:true,heal:.5,cure:true,d:'HPと じょうたいを かいふく'},
+ holoslash:{n:'ホロスラッシュ',t:'normal',p:80,crit:true,d:'きゅうしょに あたりやすい'},
+ pixelnova:{n:'ピクセルノヴァ',t:'normal',p:130,acc:90,recharge:true,d:'つぎの ターンは うごけない'},
+});
+SP.shounon={name:'ショウノーン',type:'normal',b:{hp:100,atk:100,def:100,spd:100},exp:270,cr:.03,grow:1.1,moves:['butsukaru','niramitsukeru'],learn:{10:'kodamagaeshi',20:'subayai',30:'kirisaku',36:'datastream',40:'reboot',45:'holoslash',52:'daichi',60:'pixelnova'},
+ desc:'ひびきの どうくつの おくで ねむっていた なぞの モンスター。 からだの なかを ひかる データが ながれている。'};
+DEX.push('shounon');WHERE.shounon='ひびきの どうくつの おく（？？？）';
 const STARTERS=['hinokon','mizutama','happaru'];
 const IT={ball:{n:'ボール',price:100,d:'やせいの モンスターを つかまえる'},potion:{n:'くすり',price:150,d:'モンスターの HPを 20 かいふくする'}};
 Object.assign(IT,{superpotion:{n:'いいくすり',price:400,d:'モンスターの HPを 60 かいふくする'},revive:{n:'げんきのつぶ',price:2000,d:'ひんしの モンスターを はんぶん かいふく'},rarecandy:{n:'ふしぎなキャンディ',price:9999,d:'モンスターの レベルが 1 あがる'}});
@@ -1685,7 +1717,7 @@ Object.assign(MAPS,{
    {id:'c1t2',x:16,y:10,dir:'left',spr:'girl',pal:['#f8d0a8','#d8a040','#5a4a2a','#2a1a14'],sight:4,tname:'たんけんかの ミオ',team:[['miminaga',33],['kirakoro',34]],money:32,say:['この どうくつは わたしの\nけんきゅうの ばしょ！'],lose:['きろくして おかなくちゃ……'],after:['キラコロの すいしょうは\nくらやみで ひかるの。']},
    {id:'c1t3',x:25,y:7,dir:'left',spr:'boy',pal:HIKER,sight:2,tname:'やまおとこの テツ',team:[['iwamogu',33],['tsuraran',33],['goroiwa',34]],money:32,say:['おれの いわの\nモンスターを みろ！'],lose:['ぐぬぬ……'],after:['この さきの おおひろまは\nほんとうに ひろいぞ。']},
   ]},
- cave2:{name:'ひびきの どうくつ おおひろま',out:true,cave:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T...TTTTTTTTTTT2.TTTT.2TTTTTTTTTTTT...TT", "TT4.TT.....TTTT..TTT.....TTT..TTTTT...TT", "TTT..............TTT......TT...2TT....TT", "T.TTT2...........TT..........2.......TTT", "T.......A........TT..................TTT", "TT.......................A...........TTT", "TTTT..........A......................TTT", "TTTT................A............A..TTTT", "TTTT.....2.....................2....TTTT", "TTTTTTTTT.......................TTTTTTTT", "TTTTTTTTT.....WWWWWWWWWWWWW.....TTTTTTTT", "TTTTTTTTT..nWWWWWWWWWWWWWWWWWn..TTTTTTTT", "TTTTTTTTTWWnWWWWWWWWWWWWWWWWWnWWTTTTTTTT", "TTTTTTTTWWWnWWWWWWW2..WWWWWWWnWWWTTTTTTT", "TTTTTTTTWWWnnnnnnnn...nnnnnnnnWWWTTTTTTT", "TTTTTTTTWWWnWWWWWWW..2WWWWWWWnWWWTTTTTTT", "TTTTTTTTTWWnWWWWWWWWWWWWWWWWWnWWTTTTTTTT", "TTTTTTTTT..nWWWWWWWWWWWWWWWWWn..TTTTTTTT", "TTTTTTTTT.....WWWWWWWWWWWWW.....TTTTTTTT", "TTTTTTTTT.......................TTTTTTTT", "TT.......2.....................2.......T", "TT2.........A...............TT...A....TT", "TTTTT.A......................T.......TTT", "T2..T........TT............A.........TTT", "T........A...T.......................2TT", "TTTT.......T....2T.....A......TTT..4..TT", "TTTTTT....TT...TTTTT....T.....TTTT...TTT", "TTTTTTTTTTTT...TTTTTTTTTTT....TTTTTTTTTT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"],
+ cave2:{name:'ひびきの どうくつ おおひろま',out:true,cave:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T...TTTTTTTTTTT2.TTTT.2TTTTTTTTTTTT...TT", "TT4.TT.....TTTT..TTT.....TTT..TTTTT...TT", "TTT..............TTT......TT...2TT....TT", "T.TTT2...........TT..........2.......TTT", "T.......A........TT..................TTT", "TT.......................A...........TTT", "TTTT..........A......................TTT", "TTTT................A............A..TTTT", "TTTT.....2.....................2....TTTT", "TTTTTTTTT.......................TTTTTTTT", "TTTTTTTTT.....WWWWWWWWWWWWW.....TTTTTTTT", "TTTTTTTTT..nWWWWWWWWWWWWWWWWWn..TTTTTTTT", "TTTTTTTTTWWnWWWWWWWWWWWWWWWWWnWWTTTTTTTT", "TTTTTTTTWWWnWWWWWWW2..WWWWWWWnWWWTTTTTTT", "TTTTTTTTWWWnnnnnnnn...nnnnnnnnWWWTTTTTTT", "TTTTTTTTWWWnWWWWWWW..2WWWWWWWnWWWTTTTTTT", "TTTTTTTTTWWnWWWWWWWWWWWWWWWWWnWWTTTTTTTT", "TTTTTTTTT..nWWWWWWWWWWWWWWWWWn..TTTTTTTT", "TTTTTTTTT.....WWWWWWWWWWWWW.....TTTTTTTT", "TTTTTTTTT.......................TTTTTTTT", "TT.......2.....................2.......T", "TT2.........A...............TT...A....TT", "TTTTT.A......................T.......TTT", "T2..T........TT............A.........TTT", "T........A...T.......................2TT", "TTTT.......T....2T.....A......TTT..4..TT", "TTTTTT....TT...TTTTT....T.....TTTT...TTT", "TTTTTTTTTTTTT.TTTTTTTTTTTT....TTTTTTTTTT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"],
   warps:{'2,2':['cave1',25,1,'down'],'35,26':['cave3',2,3,'down']},
   items:[{id:'c2a',x:20,y:14,k:'rarecandy',amt:1},{id:'c2b',x:1,y:4,k:'superpotion',amt:2},{id:'c2c',x:38,y:21,k:'revive',amt:1},{id:'c2d',x:1,y:25,k:'ballplus',amt:3},{id:'c2e',x:36,y:1,k:'money',amt:2000}],
   wild:(x,y)=>[['iwamogu',34,37,16],['tsuraran',34,35,18],['kirakoro',34,37,16],['ishigaeru',34,36,14],['miminaga',34,35,10],['mofutanu',34,34,10],['goroiwa',34,37,8],['kiraseki',38,39,2],['tsuraragi',36,37,2]],
@@ -1742,11 +1774,20 @@ Object.assign(MAPS,{
   npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','potion','superpotion','revive']},
    {x:6,y:4,dir:'down',spr:'girl',pal:['#f8d0a8','#80d0f0','#3a3a8a','#2a1a14'],text:['ここは たかい ところだから\nにもつを はこぶのが たいへん。']}]},
 });
+// ひびきの どうくつの ひみつ: すいしょうの とびら → ひかりの パネル → ショウノーン
+MAPS.cave2.warps['13,28']=['cave4',6,11,'up'];
+MAPS.cave2.npcs.push({x:13,y:28,dir:'down',obj:'mdoor',hideFlag:'tonedone',text:[]},
+ {x:15,y:26,dir:'down',obj:'etablet',text:['いしばんに もじが\nきざまれている……','「ひびきの とびらを\nひらく ものよ」','「こだまの おおき ものより\nじゅんに うちならせ」','「さすれば みちは\nひらかれん」']},
+ {x:6,y:24,dir:'down',obj:'tone',col:'blue',text:[]},{x:16,y:25,dir:'down',obj:'tone',col:'green',text:[]},{x:8,y:22,dir:'down',obj:'tone',col:'red',text:[]},{x:8,y:27,dir:'down',obj:'tone',col:'yellow',text:[]});
+MAPS.cave4={name:'ひびきの どうくつ ひみつのま',tech:true,grid:[5,7],rows:["TTTTTTTTTTTTT", "TTTTT...TTTTT", "TTTT.....TTTT", "TTTT.....TTTT", "TTTTTT.TTTTTT", "TTT.......TTT", "TT.........TT", "TT...888...TT", "TT...888...TT", "TT...888...TT", "TT.........TT", "TTT.......TTT", "TTTTTT.TTTTTT"],
+ warps:{'6,12':['cave2',13,27,'up']},
+ npcs:[{x:6,y:4,dir:'down',obj:'tgate',hideFlag:'lightdone',text:[]},{x:6,y:2,dir:'down',obj:'dpedestal',text:[]},{x:10,y:9,dir:'left',obj:'lreset',text:[]},
+  {x:2,y:9,dir:'down',obj:'etablet',text:['かべに ひかる もじが\nうかんでいる……','「ここのつの ひかりを\nすべて ともせ」','「ひとつ ふめば じゅうじに\nひかりが いれかわる」']}]};
 for(const id in MAPS){const m=MAPS[id];m.npcs=m.npcs||[];m.npcs.forEach(e=>{e.hx=e.x;e.hy=e.y;e.hdir=e.dir;e.fx=e.x;e.fy=e.y;e.mv=0;e.alert=0;e.trainer=!!e.team});m.h=m.rows.length;m.w=m.rows[0].length}
 let CUR=MAPS.village;
 const at=(x,y)=>(x<0||y<0||x>=CUR.w||y>=CUR.h)?(CUR.out?'T':' '):CUR.rows[y][x];
 const canWalk=t=>CUR&&CUR.boat?(t==='W'||t==='n'):WALK.has(t);
-const WALK=new Set(['.','G','F','D','f','m','K','n','s','a','l','z','d','o','x','1','4','5','7']);
+const WALK=new Set(['.','G','F','D','f','m','K','n','s','a','l','z','d','o','x','1','4','5','7','8']);
 const D={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
 const OPP={up:'down',down:'up',left:'right',right:'left'};
 const hid=e=>!!(S&&S.flags&&((e.hideFlag&&S.flags[e.hideFlag])||(e.showIf&&!S.flags[e.showIf])));
@@ -1929,7 +1970,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.10.30-2236';
+const BUILD='2026.10.30-2339';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -2110,6 +2151,71 @@ function caveBG(){const gr=c.createLinearGradient(0,0,0,112);gr.addColorStop(0,'
  for(let i=0;i<6;i++){const x=(i*61+20)%W,y=40+(i*23)%50;c.globalAlpha=.5+.3*Math.sin(frame/20+i);R(x,y,2,2,i%2?'#8ad0ff':'#c0a0ff');c.globalAlpha=1}
  R(0,108,W,H-108,'#6e604e');for(let i=0;i<16;i++){const x=(i*53+7)%W,y=118+(i*37)%80;R(x,y,3,2,'#5e5042');R(x+4,y+1,2,1,'#84745f')}}
 function skyGymBG(){skyBG(H);for(let i=0;i<7;i++){const x=((i*71+frame/4)%(W+60))-30,y=20+(i*37)%140;ell(x,y,22,7,'#ffffff');ell(x+12,y-4,12,6,'#ffffff')}}
+/* ---------- ひびきの どうくつ: ひみつの なぞとき（ショウノーン） ---------- */
+const TONE_N={blue:4,green:3,red:2,yellow:1},TONE_C={blue:'b',green:'g',red:'r',yellow:'y'},TONE_ORDER='bgry',TONE_DESC={blue:'あおい',green:'みどりの',red:'あかい',yellow:'きいろい'},TONE_F={blue:523,green:659,red:784,yellow:1047};
+const SHO_HINT={
+ tn:{3:'「ピ…… すいしょうの\nこだまの かずを かぞえて……」',6:'「ピピ…… 4かい ひびく ものが\nはじめ。 1かいの ものが さいご」',10:'「ピピピ…… あお、 みどり、\nあか、 きいろ…… その じゅんに」'},
+ lo:{3:'「ピ…… パネルを ふむと\nとなりも いっしょに かわる……」',6:'「ピピ…… 2かい ふむと\nもとに もどる……\nまわりの みちから\nふむ パネルを えらんで」',10:'「ピピピ…… ×の かたちに……\nよすみと まんなかを\n1かいずつ……」'}};
+function shoHint(t){const n=S.flags[t+'f']=(S.flags[t+'f']||0)+1,H=SHO_HINT[t],msg=n>=10?H[10]:(n===3||n===6)?H[n]:null;if(!msg)return[];
+ const ls=msg.split('\n'),pg=[];for(let i=0;i<ls.length;i+=2)pg.push(ls.slice(i,i+2).join('\n'));
+ return[delay(20),F(()=>AU.sfx('fxstatus')),...T('……どこからか デジタルな\nこえが あたまに ひびく……','？？？「ピ…… ピピ……」',...pg)]}
+function toneLit(col){return (S.flags.toneseq||'').includes(TONE_C[col])||S.flags.tonedone}
+function toneSound(col,n){if(!AU.ok())return;const t0=AU.ctx.currentTime+.02,f=TONE_F[col];for(let i=0;i<=n;i++)AU.tone(f,t0+i*.34,.3,'sine',.1*Math.pow(.62,i))}
+function toneTalk(e){const d=TONE_DESC[e.col],n=TONE_N[e.col];
+ if(S.flags.tonedone)return say(`${d} すいしょうが\nしずかに ひかっている。`);
+ const echo='カーン……！',back=Array(n).fill('……ン').join(' ');toneSound(e.col,n);
+ const seq=(S.flags.toneseq||'')+TONE_C[e.col];
+ if(TONE_ORDER.startsWith(seq)){S.flags.toneseq=seq;
+  if(seq===TONE_ORDER){S.flags.tonedone=1;delete S.flags.toneseq;
+   Q.push(...T(`${d} すいしょうを たたいた。`,echo,back),delay(20),F(()=>{AU.jingle('heal')}),...T('4つの すいしょうが\nいっせいに かがやいた！'),F(()=>{shakeT=40;AU.sfx('fxrock')}),delay(40),...T('ゴゴゴゴ……','どこかで おもい とびらが\nひらく おとが した！'),F(save));return}
+  return say(`${d} すいしょうを たたいた。`,echo,back,'すいしょうが ひかりを やどした！')}
+ delete S.flags.toneseq;Q.push(...T(`${d} すいしょうを たたいた。`,echo,back,'……ひびきが みだれて\nすいしょうの ひかりが きえた！'),...shoHint('tn'),F(save))}
+// light panels (lights-out 3x3)
+function loBits(){return S.flags.lo|0}
+function loLit(x,y){const g=CUR.grid;if(!g)return false;if(S.flags.lightdone)return true;return !!(loBits()>>((y-g[1])*3+(x-g[0]))&1)}
+function loStep(){if(!CUR.grid||at(P.x,P.y)!=='8'||S.flags.lightdone)return false;const[gx,gy]=CUR.grid,cx=P.x-gx,cy=P.y-gy;let b=loBits();
+ for(const[dx,dy]of[[0,0],[1,0],[-1,0],[0,1],[0,-1]]){const x=cx+dx,y=cy+dy;if(x>=0&&x<3&&y>=0&&y<3)b^=1<<(y*3+x)}S.flags.lo=b;AU.sfx('cur');
+ if(b===511){S.flags.lightdone=1;delete S.flags.lo;Q.push(delay(10),F(()=>{AU.jingle('heal')}),...T('9まいの パネルが すべて\nひかりで みたされた！'),F(()=>{shakeT=36;AU.sfx('fxpsychic')}),delay(40),...T('ピピピ……！','ひかりの かべが きえて いく……！'),F(save));return true}
+ return false}
+function shoTalk(e){
+ if(e.obj==='mdoor')return say('つめたい きんぞくの とびらだ。\nどうくつの なかに どうして……？','とびらから 4つの すいしょうへ\nひかる せんが のびている。');
+ if(e.obj==='tone')return toneTalk(e);
+ if(e.obj==='lreset'){if(S.flags.lightdone)return say('たんまつの がめんに\n「ロック かいじょ ずみ」と でている。');
+  Q.push(...T('ふしぎな たんまつを しらべた。','ピッ……！\nパネルが すべて きえた！'),F(()=>{S.flags.lo=0}),...shoHint('lo'),F(save));return}
+ if(e.obj==='tgate')return say('ひかりの かべが みちを\nふさいでいる。','さわると ビリッと した！');
+ if(e.obj==='dpedestal'){if(S.flags.shounonGot)return say('きんぞくの だいざだ。\nいまは なにも ない。');
+  Q.push(...T('きんぞくの だいざの うえで\nボールが あおく ひかっている……','ボールを ひろった！','……ピピピ……！\nボールから デジタルな おとが する！'),F(()=>{shakeT=30;AU.sfx('fxpsychic')}),delay(40),
+   F(()=>{const m=mon('shounon',40);S.flags.shounonGot=1;if(!S.seen.includes('shounon'))S.seen.push('shounon');if(!S.caught.includes('shounon'))S.caught.push('shounon');AU.jingle('catch');
+    const r=[...T('ボールの なかから\nショウノーンが あらわれた！','ショウノーン「ピポ……♪」')];
+    if(S.party.length<6){S.party.push(m);r.push(...T('ショウノーンが なかまに なった！'))}else{S.box.push(m);r.push(...T('ショウノーンは クラウドBOXへ\nてんそう された！'))}
+    r.push(...T('……あの デジタルな こえの ぬしは\nショウノーン だったんだ！'),F(save));return r}));return}
+ return null}
+function drawSho(e,sx,sy){const o=e.obj;
+ if(o==='tone'){const C={blue:['#2a60c0','#6aa8f0','#d0ecff'],green:['#20904a','#5ad080','#d0ffe0'],red:['#b02a2a','#f06a6a','#ffd8d8'],yellow:['#b08a10','#f0d040','#fff6c0']}[e.col],lit=toneLit(e.col);
+  if(lit){c.globalAlpha=.28+.12*Math.sin(frame/8);ell(sx+16,sy+16,18,16,C[1]);c.globalAlpha=1}
+  ell(sx+16,sy+29,10,3,'rgba(0,0,0,.3)');R(sx+7,sy+24,18,5,'#5e5042');R(sx+8,sy+24,16,1,'#84745f');
+  for(const[x,y,w,h]of[[13,4,6,21],[8,11,5,14],[19,9,5,16]]){R(sx+x,sy+y+2,w,h-2,C[0]);R(sx+x+1,sy+y,w-2,2,C[1]);R(sx+x+1,sy+y+2,2,h-4,lit?C[2]:C[1])}
+  if(lit){const k=(frame>>3)%4;R(sx+15,sy+3+k,2,2,'#ffffff')}}
+ else if(o==='mdoor'){R(sx+2,sy,28,32,'#3a4250');R(sx+4,sy+2,24,30,'#6a7686');R(sx+15,sy+2,2,30,'#2a3240');for(const y of[8,16,24]){R(sx+4,sy+y,24,1,'#4a5464')}
+  const g=.5+.5*Math.sin(frame/10);c.globalAlpha=.5+.5*g;R(sx+6,sy+5,8,2,'#3ae0f0');R(sx+18,sy+5,8,2,'#3ae0f0');R(sx+14,sy+14,4,4,'#3ae0f0');c.globalAlpha=1}
+ else if(o==='etablet'){ell(sx+16,sy+29,11,3,'rgba(0,0,0,.25)');R(sx+7,sy+6,18,22,'#7a7a82');R(sx+8,sy+7,16,20,'#9a9aa4');R(sx+6,sy+26,20,4,'#5a5a62');for(let i=0;i<4;i++)R(sx+11,sy+11+i*4,10,1,'#3a8a9a')}
+ else if(o==='lreset'){ell(sx+16,sy+29,11,3,'rgba(0,0,0,.3)');R(sx+6,sy+8,20,20,'#2a3240');R(sx+8,sy+10,16,10,S.flags.lightdone?'#3ae070':'#3ae0f0');R(sx+9,sy+11,14,1,'#e0ffff');R(sx+10,sy+23,4,3,'#e05050');R(sx+18,sy+23,4,3,'#50e070')}
+ else if(o==='tgate'){for(let i=0;i<6;i++){const a=.35+.3*Math.sin(frame/6+i);c.globalAlpha=a;R(sx+2+i*5,sy,3,32,i%2?'#3ae0f0':'#a0f8ff')}c.globalAlpha=1;R(sx,sy,2,32,'#3a4250');R(sx+30,sy,2,32,'#3a4250')}
+ else if(o==='dpedestal'){const t=frame/20;c.globalAlpha=S.flags.shounonGot?.08:.25+.12*Math.sin(t);ell(sx+16,sy+12,22,18,'#a0f8ff');c.globalAlpha=1;
+  ell(sx+16,sy+29,12,3,'rgba(0,0,0,.3)');R(sx+6,sy+18,20,11,'#4a5464');R(sx+4,sy+16,24,4,'#7a8696');R(sx+6,sy+26,20,3,'#2a3240');R(sx+8,sy+21,16,1,'#3ae0f0');
+  if(!S.flags.shounonGot){const by=sy+10+Math.sin(t*2)*1.5;ell(sx+16,by,6,6,'#181818');ell(sx+16,by,5,5,'#ffffff');c.fillStyle='#3ae0f0';c.beginPath();c.arc(sx+16,by,5,Math.PI,0);c.fill();R(sx+11,by-1,10,2,'#181818');ell(sx+16,by,2,2,'#ffffff');
+   for(let i=0;i<4;i++){const a=t*1.6+i*1.57;R(sx+16+Math.cos(a)*11,by+Math.sin(a)*5-2,2,2,i%2?'#3ae0f0':'#e050c0')}}}
+ else return false;return true}
+function techFloorT(g,v){pr(g,0,0,16,16,'#283040');pr(g,0,0,16,1,'#36404f');pr(g,0,0,1,16,'#36404f');pr(g,15,0,1,16,'#1c222e');pr(g,0,15,16,1,'#1c222e');if(v%2){pp(g,7,7,'#3ae0f0');pp(g,8,8,'#2a8a9a')}else{pr(g,3,8,10,1,'#30485a')}}
+function techWallT(g,v,face){if(face){pr(g,0,0,16,16,'#3a4658');pr(g,0,0,16,2,'#4c5a70');for(let x=2;x<16;x+=5)pr(g,x,3,1,10,'#2c3646');pr(g,0,8,16,1,(frame>>5)%2?'#3ae0f0':'#2aa8b8');pr(g,0,14,16,2,'#1e2632')}
+ else{pr(g,0,0,16,16,'#141a24');for(let i=0;i<4;i++)pp(g,(hsh(i,v,11)*16)|0,(hsh(v,i,13)*16)|0,'#22303e')}}
+function panelT(g,lit){pr(g,0,0,16,16,'#283040');pr(g,1,1,14,14,'#5a6a80');pr(g,2,2,12,12,lit?'#7ff0ff':'#1e2632');
+ if(lit){pr(g,4,4,8,8,'#c8ffff');pr(g,6,6,4,4,'#ffffff')}else{pr(g,4,4,8,1,'#2e4a5a');pr(g,4,11,8,1,'#2e4a5a');pr(g,4,4,1,8,'#2e4a5a');pr(g,11,4,1,8,'#2e4a5a')}}
+function techTile(ch,v,gx,gy){if(!CUR.tech)return null;const wall=t=>t==='T'||t===' ';
+ if(ch==='.')return['tf'+v,g=>techFloorT(g,v)];
+ if(ch==='T'){const face=!wall(at(gx,gy+1)),fr=face?(frame>>5)%2:0;return['tw'+v+(face?1:0)+fr,g=>techWallT(g,v,face)]}
+ if(ch==='8'){const lit=loLit(gx,gy);return['tp'+(lit?1:0),g=>panelT(g,lit)]}
+ return null}
 /* ---------- しれん: logic ---------- */
 const T1_ORDER='rwpb',T1_COL={red:'r',white:'w',pink:'p',blue:'b'},T1_NAME={red:'あか',white:'しろ',pink:'もも',blue:'あお'};
 const T1_DIR={r:['ひがし','right'],w:['きた','up'],p:['きた','up'],b:['にし','left']};
@@ -2123,7 +2229,7 @@ function uppyHint(t){const n=S.flags[t+'f']=(S.flags[t+'f']||0)+1,H=UPPY_HINT[t]
  return[delay(20),...T('……どこからか ウッピーの\nこえが きこえる……','ウッピー「ウピィ……」',...pages)]}
 const T1_DESC={red:'あかい',white:'しろい',pink:'ももいろの',blue:'あおい'};
 function t1Lit(col){return (S.flags.t1seq||'').includes(T1_COL[col])||S.flags.t1done}
-function objTalk(e){
+function objTalk(e){{const r=shoTalk(e);if(r!==null)return r}
  if(e.obj==='lantern'){
   if(!S.flags.uppy)return say('いしの とうろうだ。\nあかるく ひが ともっている。');
   const c=T1_COL[e.col],nm=T1_NAME[e.col];
@@ -2171,7 +2277,7 @@ function t3Exit(){if(S.map!=='trial3')return false;const m=CUR;let d=null;
  S.flags.t3step=0;fadeTo('trial3',6,9,'up');Q.push(delay(20),...T('……きがつくと もとの ばしょに\nもどっていた。'),...uppyHint('t3'));return true}
 let shakeT=0;
 // world objects drawing
-function drawObj(e,sx,sy){const o=e.obj;
+function drawObj(e,sx,sy){const o=e.obj;if(drawSho(e,sx,sy))return;
  if(o==='lantern'){const lit=!S.flags.uppy||t1Lit(e.col),C={red:'#e84838',white:'#f4f4f4',pink:'#f890c0',blue:'#4890f0'}[e.col];
   ell(sx+16,sy+29,9,3,'rgba(0,0,0,.25)');R(sx+11,sy+22,10,6,'#7c7468');R(sx+13,sy+16,6,6,'#a8a092');R(sx+9,sy+8,14,9,'#bab2a4');R(sx+7,sy+4,18,5,'#8c8476');R(sx+10,sy+1,12,4,'#9a9284');
   R(sx+11,sy+10,10,5,lit?'#3a2a10':'#2a2a30');if(S.flags.uppy)R(sx+10,sy+17,12,3,C);
@@ -2204,6 +2310,7 @@ function drawObj(e,sx,sy){const o=e.obj;
 const NEWS=[
  {id:'2026.10.30a',title:'ver 2026.10.30 の おしらせ',body:['いつも あそんでくれて ありがとう！','こんかいの こうしん：','・5ばんどうろ と ユノハマシティを ついか','・ストーリーイベントが はじまる……！','・ほのおタイプが 6しゅるい ふえた','・まよいのもりの ほこらに なにかが……？','・メールきのうを ついか しました','これからも くさむらモンスターを\nよろしくね！']},
  {id:'2026.10.30b',title:'あたらしい ぼうけんの おしらせ',body:['いつも あそんでくれて ありがとう！','こんかいの こうしん：','・ユノハマシティの さきへ\n すすめるように なった','・6ばんどうろ、 ひびきの どうくつ、\n タカネシティを ついか','・いわ と ノーマルの モンスターが\n 13しゅるい ふえた','・5つめの ジムが オープン！','・ストーリーが すこし すすむ……！','これからも くさむらモンスターを\nよろしくね！']},
+ {id:'2026.10.30c',title:'ひびきの どうくつの うわさ',body:['ひびきの どうくつの どこかに\nふしぎな きかいが ねむっている\nらしい……','こだまに みみを すませて みよう。','なにかが みつかる かも しれないよ！']},
 ];
 let toast=null;
 function deliverNews(st){st.mail=st.mail||[];const ids=NEWS.map(n=>n.id);let from=st.newsSeen?ids.indexOf(st.newsSeen)+1:Math.max(0,NEWS.length-1);let n=0;
@@ -2276,6 +2383,9 @@ const SCN=[
  ['イシモリの まえ',()=>{devBase(38,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1});S.items.oldmap=1;loadMap('cave3',17,9,'down')}],
  ['タカネシティ',()=>{devBase(40,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1,ishimoriGone:1,it_cmap:1,caveOpen:1});S.items.oldmap=1;S.items.cavemap=1;loadMap('town5',13,15,'up')}],
  ['タカネジム',()=>{devBase(42,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1,ishimoriGone:1,it_cmap:1,caveOpen:1});S.items.oldmap=1;S.items.cavemap=1;loadMap('gym5',5,12,'up')}],
+ ['すいしょうの とびら',()=>{devBase(40,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1});S.items.oldmap=1;loadMap('cave2',13,26,'down')}],
+ ['ひかりの パネル',()=>{devBase(40,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1,tonedone:1});S.items.oldmap=1;loadMap('cave4',6,11,'up')}],
+ ['ショウノーンの だいざ',()=>{devBase(40,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1,tonedone:1,lightdone:1});S.items.oldmap=1;loadMap('cave4',6,3,'up')}],
  ['しれん① とうろう',()=>{devBase(16,1,{uppy:1});loadMap('forest',5,5,'up')}],
  ['しれん② いわ',()=>{devBase(16,1,{uppy:1,t1done:1});loadMap('trial2',6,7,'up')}],
  ['しれん③ めいろ',()=>{devBase(16,1,{uppy:1,t1done:1,t2done:1});loadMap('trial3',6,9,'up')}],
@@ -2293,7 +2403,7 @@ function devMenu(){const push=L=>menu.dev.push(L),onoff=v=>v?'ON':'OFF';
  const level={title:'レベル へんこう',i:0,hint:'A：えらぶ　B：もどる',items:()=>S.party.map(m=>({t:nm(m),v:()=>'Lv'+m.lv,a:()=>{let lv=m.lv;
    push({title:nm(m)+' の レベル',i:0,items:()=>[...lvAdj(()=>lv,v=>{lv=v}),{t:'これに する',a:()=>{const om=m.mhp;m.lv=lv;m.exp=expAt(m,lv);calc(m);m.hp=m.mhp;AU.jingle('lvup');menu.dev.pop()}}]})}}))};
  const badge={title:'バッジ',i:0,items:()=>BADGES.map(b=>({t:b,v:()=>onoff(S.badges.includes(b)),a:()=>{if(S.badges.includes(b))S.badges=S.badges.filter(x=>x!==b);else S.badges.push(b)}}))};
- const EVF=[['uppy','ウッピーの イベント'],['t1done','しれん① とうろう'],['t2done','しれん② いわ'],['t3done','しれん③ めいろ'],['hisuiGot','ヒスイコを てにいれた'],['ev5done','キヨシ イベント'],['elderGone','ちょうろうが いない'],['fishCandy','つりの ごほうび'],['ygruntGone','ユノハマの したっぱ'],['ev6done','ミネゾーウ イベント'],['ishimoriGone','イシモリに かった'],['caveOpen','かくし つうろ']];
+ const EVF=[['uppy','ウッピーの イベント'],['t1done','しれん① とうろう'],['t2done','しれん② いわ'],['t3done','しれん③ めいろ'],['hisuiGot','ヒスイコを てにいれた'],['ev5done','キヨシ イベント'],['elderGone','ちょうろうが いない'],['fishCandy','つりの ごほうび'],['ygruntGone','ユノハマの したっぱ'],['ev6done','ミネゾーウ イベント'],['ishimoriGone','イシモリに かった'],['caveOpen','かくし つうろ'],['tonedone','すいしょうの とびら'],['lightdone','ひかりの パネル'],['shounonGot','ショウノーンを てにいれた']];
  const events={title:'イベントの じょうたい',i:0,items:()=>EVF.map(([k,t])=>({t,v:()=>onoff(S.flags[k]),a:()=>{if(S.flags[k])delete S.flags[k];else S.flags[k]=1}}))};
  return{title:'かいはつしゃ メニュー',i:0,items:()=>[
   {t:'ワープ',a:()=>push(warp)},
@@ -2356,7 +2466,7 @@ function drawDrops(cx,cy){if(!S)return;const L=[...((S.drops&&S.drops[S.map])||[
   else if(d.k==='rarecandy'){ell(x+16,y+18,6,5,'#4a7ad0');ell(x+16,y+17.5,4.6,3.8,'#8ab4f8');R(x+8,y+15,4,6,'#e05080');R(x+20,y+15,4,6,'#e05080');R(x+14,y+15,2,2,'#ffffff')}
   else{const sp2=d.k==='superpotion';R(x+14,y+9,4,3,'#8a6a4a');R(x+12,y+12,8,11,sp2?'#8a2a4a':'#4a2a7a');R(x+13,y+13,6,9,sp2?'#f070a0':'#a070e8');R(x+14,y+14,2,4,'#ffe8f0')}
   const tw=(frame+d.x*7+d.y*13)%80;if(tw<12){const s=tw<6?tw:12-tw;R(x+23,y+7-s,2,2+s*2,'#ffffff');R(x+22-s,y+8,2+s*2,2,'#ffffff')}}}
-function onStep(){if(t3Exit())return;t2Check();if(pickUp())return;
+function onStep(){if(t3Exit())return;t2Check();if(loStep())return;if(pickUp())return;
  {const lk=CUR.locked&&CUR.locked[P.x+','+P.y];if(lk){Q.push(...T(...lk),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=STEP}));return}}
  if(S.map==='town2'&&P.y<=1&&(P.x===10||P.x===11)&&!S.badges.includes('アクアバッジ')){Q.push(...T('みちの ばんにん「まった！\nこの さきは 4ばんどうろだ。」','みちの ばんにん「ミナモジムの バッジが\nない ひとは とおせないよ。」'),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=STEP}));return}
  if(S.map==='town'&&P.y<=1&&(P.x===9||P.x===10)&&!S.badges.length){Q.push(...T('もりの ばんにん「まった！\nこの さきは まよいの もりだ。」','もりの ばんにん「ジムの バッジが\nない ひとは とおせないよ。」'),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=STEP}));return}
@@ -2831,7 +2941,7 @@ function padT(g,fr){psyFloorT(g,0);const cl=['#e050c0','#f070d8','#ff90e8','#f07
  for(let y=0;y<16;y++)for(let x=0;x<16;x++){const d=Math.hypot(x-7.5,y-7.5);if(d<7&&d>=5.6)pp(g,x,y,'#6a3aa0');else if(d<5.6&&d>=4.2)pp(g,x,y,cl);else if(d<4.2&&d>=2.8)pp(g,x,y,'#ffe0fa');else if(d<2.8)pp(g,x,y,cl)}}
 const ROOFS='RCMYe',isWallT=t=>t==='w'||t==='D';
 function tile(ch,x,y,gx,gy){const v=(((gx*7+gy*13)%4)+4)%4;let key=ch+v,fn;
- {const X=tileX(ch,v,gx,gy);if(X){c.drawImage(tcv(X[0],X[1]),x,y);return}}
+ {const X=techTile(ch,v,gx,gy)||tileX(ch,v,gx,gy);if(X){c.drawImage(tcv(X[0],X[1]),x,y);return}}
  switch(ch){
   case '.':if(CUR.forest){key='j'+v;fn=g=>forestFloor(g,v)}else fn=g=>meadow(g,v);break;
   case 'G':key='G';fn=tallGrass;break;
@@ -2919,7 +3029,7 @@ function drawBox(){const P0=S.party,BX=S.box,u=boxui;box(8,8,304,272);txt('ク�
 function termT(g,v){floorT(g,v);pr(g,1,9,14,7,'#8a6a4a');pr(g,1,9,14,1,'#b08860');pr(g,2,15,12,1,'#5a3a20');pr(g,7,8,2,1,'#3a3a44');
  pr(g,3,1,10,8,'#2a2a36');pr(g,4,2,8,5,'#46c8d8');pr(g,4,2,8,1,'#8ae8f0');pr(g,6,4,4,2,'#ffffff');pp(g,7,3,'#ffffff');pp(g,8,3,'#ffffff');pr(g,4,11,8,2,'#c8c8d0');pr(g,4,11,8,1,'#e8e8f0')}
 
-const REGION={route6:'route6',cave1:'cave',cave2:'cave',cave3:'cave',town5:'town5',gym5:'town5',center5:'town5',shop5:'town5',trial2:'forest',trial3:'forest',grove:'forest',route5:'route5',sea5:'sea5',town4:'town4',gym4:'town4',center4:'town4',shop4:'town4',hill:'hill',gym3:'town3',coast:'coast',route4:'route4',town3:'town3',center3:'town3',shop3:'town3',home:'village',nbr:'village',village:'village',route:'route',town:'town',center:'town',shop:'town',house:'town',gym:'town',forest:'forest',route3:'route3',town2:'town2',center2:'town2',shop2:'town2',house2:'town2',gym2:'town2'};
+const REGION={cave4:'cave',route6:'route6',cave1:'cave',cave2:'cave',cave3:'cave',town5:'town5',gym5:'town5',center5:'town5',shop5:'town5',trial2:'forest',trial3:'forest',grove:'forest',route5:'route5',sea5:'sea5',town4:'town4',gym4:'town4',center4:'town4',shop4:'town4',hill:'hill',gym3:'town3',coast:'coast',route4:'route4',town3:'town3',center3:'town3',shop3:'town3',home:'village',nbr:'village',village:'village',route:'route',town:'town',center:'town',shop:'town',house:'town',gym:'town',forest:'forest',route3:'route3',town2:'town2',center2:'town2',shop2:'town2',house2:'town2',gym2:'town2'};
 const WMAP=[{id:'village',n:'ミドリのむら',d:'みどりが いっぱいの ちいさな むら',x:78,y:210,k:'town',roof:'#d8583c'},
  {id:'route',n:'1ばんどうろ',d:'くさむらの おおい はじまりの みち',x:78,y:182,k:'road'},
  {id:'town',n:'ハナサキタウン',d:'はなと いしの まち。 ジムは いわタイプ',x:82,y:154,k:'town',roof:'#8c8c98'},
@@ -3158,7 +3268,7 @@ function drawTrans(){drawWorld();
 
 /* ---------- loop ---------- */
 function bgmFor(){if(mode==='evolve')return null;if(mode==='mini')return'minamo';if(mode==='trans'||mode==='battle')return B&&B.over?null:(B&&B.trainer&&B.trainer.boss?'boss':'battle');if(mode==='title'||mode==='starter')return'field';
- if(S&&S.flags.ev6call)return SKY?'danger':'shinpi';if(S&&['trial2','trial3','grove'].includes(S.map))return'shinpi';const rg=S&&(REGION[S.map]||S.map);if(rg==='village'&&S.flags.ev5raid)return'danger';return {village:'village',town:'town',town2:'minamo',town3:'mirai',town4:'yunohama',sea5:'umi',cave:'doukutsu',town5:'takane'}[rg]||'field'}
+ if(S&&S.flags.ev6call)return SKY?'danger':'shinpi';if(S&&S.map==='cave4')return'shinpi';if(S&&['trial2','trial3','grove'].includes(S.map))return'shinpi';const rg=S&&(REGION[S.map]||S.map);if(rg==='village'&&S.flags.ev5raid)return'danger';return {village:'village',town:'town',town2:'minamo',town3:'mirai',town4:'yunohama',sea5:'umi',cave:'doukutsu',town5:'takane'}[rg]||'field'}
 function update(){frame++;
  const ui=Q.length||menu||shop||mode!=='world';
  if(pressed.a&&ui)AU.sfx('sel');else if(pressed.b&&(menu||shop||(mode==='battle'&&!Q.length&&B&&B.menu!=='main')))AU.sfx('back');

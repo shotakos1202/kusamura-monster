@@ -6,7 +6,7 @@ async def main():
         b=await p.chromium.launch(); pg=await b.new_page()
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)))
         await pg.goto(URL);await pg.wait_for_function('window.__t',timeout=20000)
-        for seed,start in [(1,"'route',10,18"),(2,"'forest',12,30"),(3,"'route3',10,18"),(4,"'town2',10,16"),(5,"'coast',2,4"),(6,"'route4',10,23"),(7,"'hill',2,7"),(8,"'gym3',5,12"),(9,"'route5',30,3"),(10,"'sea5',30,7"),(11,"'town4',13,15"),(12,"'gym4',5,12"),(13,"'trial2',6,7"),(14,"'trial3',6,9"),(15,"'forest',5,5"),(16,"'route6',9,18"),(17,"'cave1',14,20"),(18,"'cave2',2,2"),(19,"'cave3',2,3"),(20,"'town5',13,15"),(21,"'gym5',5,12"),(22,"'town4',2,16")]:
+        for seed,start in [(1,"'route',10,18"),(2,"'forest',12,30"),(3,"'route3',10,18"),(4,"'town2',10,16"),(5,"'coast',2,4"),(6,"'route4',10,23"),(7,"'hill',2,7"),(8,"'gym3',5,12"),(9,"'route5',30,3"),(10,"'sea5',30,7"),(11,"'town4',13,15"),(12,"'gym4',5,12"),(13,"'trial2',6,7"),(14,"'trial3',6,9"),(15,"'forest',5,5"),(16,"'route6',9,18"),(17,"'cave1',14,20"),(18,"'cave2',2,2"),(19,"'cave3',2,3"),(20,"'town5',13,15"),(21,"'gym5',5,12"),(22,"'town4',2,16"),(23,"'cave4',6,11"),(24,"'cave2',13,26")]:
           r=await pg.evaluate("""([seed,start])=>{window.requestAnimationFrame=()=>0;const t=__t;let s=seed;const r=()=>{s=(s*1103515245+12345)%2147483648;return s/2147483648};
            const step=()=>{t.update();t.draw();for(const x in t.pressed)t.pressed[x]=false};
            if(t.mode==='title'){t.pressed.a=true;step();t.pressed.a=true;step()}
