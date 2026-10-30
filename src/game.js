@@ -697,7 +697,7 @@ function drawMon(id,x,y,flip,white){const a=ART[id],img=white?a.white:a.img;c.im
  if(flip){c.save();c.translate(Math.round(x)+80,Math.round(y));c.scale(-1,1);c.drawImage(img,0,0,80,80);c.restore()}else c.drawImage(img,Math.round(x),Math.round(y),80,80)}
 const DEX=['hinokon','homurakon','mizutama','namitama','happaru','tsubomiru','piyotto','koroishi','denmushi'];
 /* ---------- starter evolutions, new moves ---------- */
-const LVMAX=50;
+const LVMAX=100;
 Object.assign(MV,{
  niramitsukeru:{n:'にらみつける',t:'normal',p:0,stat:'def',st:-1,d:'あいての ぼうぎょ↓'},
  subayai:{n:'すばやいひっかき',t:'normal',p:40,pri:1,d:'かならず せんせい'},
@@ -944,6 +944,21 @@ SP.hisuijin={name:'ヒスイジン',type:'dragon',b:{hp:98,atk:120,def:102,spd:9
  desc:'もりを まもる ひすいの おう。 その ほうこうは やまを こえて とおくまで ひびくという。'};
 DEX.push('hisuiko','hisuiryu','hisuijin');
 Object.assign(WHERE,{hisuiko:'まよいのもりの おく（？？？）',hisuiryu:'ヒスイコが Lv30で しんか',hisuijin:'ヒスイリュウが Lv45で しんか'});
+
+
+/* ---------- late-game moves (level cap 100: fewer new moves after 45, everything learned by 70) ---------- */
+Object.assign(MV,{
+ inferno:{n:'インフェルノ',t:'fire',p:110,acc:85,status:'brn',chance:.3,d:'たまに やけど'},
+ daikaishou:{n:'だいかいしょう',t:'water',p:110,acc:85,d:'めいちゅうが すこし ひくい'},
+ shinrinnoikari:{n:'しんりんのいかり',t:'grass',p:110,acc:85,d:'めいちゅうが すこし ひくい'},
+ daichiware:{n:'だいちわれ',t:'rock',p:110,acc:85,d:'めいちゅうが すこし ひくい'},
+ ikazuchi:{n:'いかずち',t:'elec',p:110,acc:85,status:'par',chance:.3,d:'たまに まひ'},
+ tenkuuzan:{n:'てんくうざん',t:'flying',p:95,crit:true,d:'きゅうしょに あたりやすい'},
+ psychoburst:{n:'サイコバースト',t:'psychic',p:110,acc:85,d:'めいちゅうが すこし ひくい'},
+ hisuinokakusei:{n:'ひすいのかくせい',t:'dragon',p:0,self:true,stats:[['atk',1],['def',1],['spd',1]],d:'こうげき・ぼうぎょ・すばやさ↑'},
+});
+const LATE_LEARN={"kazekirio": {"61": "tenkuuzan"}, "gansekidon": {"56": "daichiware"}, "raidenga": {"57": "ikazuchi"}, "glencon": {"54": "yougantackle", "58": "inferno"}, "uzushion": {"62": "daikaishou"}, "hanamiru": {"55": "midoriissen", "60": "shinrinnoikari"}, "kamasamurai": {"44": "oosuitori", "47": "sakurafubuki", "52": "daichinomegumi", "59": "shinrinnoikari"}, "maobasa": {"52": "toppu", "57": "ootatsumaki", "65": "tenkuuzan"}, "rakkoole": {"44": "mizunohado", "47": "oouzushio", "53": "daikaishou"}, "daiogani": {"52": "honryu", "54": "tsunami", "57": "oouzushio", "61": "daikaishou"}, "yadoiwa": {"44": "gansekiho", "48": "daichiware"}, "umidory": {"44": "ootatsumaki", "47": "tenkuuzan"}, "puraguru": {"44": "rinpun", "49": "kaminarinohane", "57": "ikazuchi"}, "bakumu": {"68": "psychoburst"}, "lunapowan": {"44": "yumekui", "48": "psychoburst"}, "fuwakura": {"44": "oouzushio", "48": "daikaishou"}, "namigame": {"44": "mizunohado", "49": "oouzushio", "57": "daikaishou"}, "tobiuon": {"44": "mizunohado", "48": "tsunami", "55": "oouzushio", "64": "daikaishou"}, "kagaribi": {"45": "yougantackle", "50": "kaenguruma", "58": "inferno"}, "magumajiro": {"44": "kaenguruma", "47": "atsukaze", "52": "inferno"}, "hyouen": {"45": "yougantackle", "49": "inferno"}, "kazandori": {"47": "kaenguruma", "52": "inferno"}, "hisuijin": {"66": "hisuinokakusei"}};
+for(const id in LATE_LEARN)if(SP[id])SP[id].learn=Object.assign({...SP[id].learn},LATE_LEARN[id]);
 
 const STARTERS=['hinokon','mizutama','happaru'];
 const IT={ball:{n:'ボール',price:100,d:'やせいの モンスターを つかまえる'},potion:{n:'くすり',price:150,d:'モンスターの HPを 20 かいふくする'}};
