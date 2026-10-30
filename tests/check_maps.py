@@ -11,7 +11,7 @@ async def main():
   const block=new Set(m.npcs.filter(e=>!e.hideFlag).map(e=>e.x+','+e.y));
   const ok=(x,y)=>(m.boat?'Wn'.includes(at(x,y)):WALK.has(at(x,y)))&&!block.has(x+','+y);
   const arr=[];for(const o in MAPS)for(const k in (MAPS[o].warps||{})){const w=MAPS[o].warps[k];if(w[0]===id)arr.push([w[1],w[2]])}
-  if(!arr.length){out.push(id+' no arrivals');continue}
+  if(m.start)arr.push(m.start);if(!arr.length){out.push(id+' no arrivals');continue}
   const s0=arr[0];const seen=new Set([s0+'']);const st=[s0];
   while(st.length){const[x,y]=st.pop();{const w=(m.warps||{})[x+','+y];if(w&&w[0]===id&&!seen.has(w[1]+','+w[2])){seen.add(w[1]+','+w[2]);st.push([w[1],w[2]])}}for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(ok(nx,ny)&&!seen.has(nx+','+ny)){seen.add(nx+','+ny);st.push([nx,ny])}}}
   const adj=(x,y)=>[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>seen.has((x+dx)+','+(y+dy)));
