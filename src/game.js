@@ -936,11 +936,11 @@ Object.assign(MV,{
  hisuiounohoukou:{n:'ひすいおうの ほうこう',t:'dragon',p:130,recharge:true,d:'つぎの ターンは うごけない'},
 });
 const HISUI_LEARN={20:'hisuinoibuki',25:'urokonoyoroi',30:'hisuireppa',38:'morinokodou',45:'hisuiounohoukou'};
-SP.hisuiko={name:'ヒスイコ',type:'dragon',b:{hp:64,atk:72,def:66,spd:62},exp:220,cr:.05,grow:1.35,moves:['zutsuki','kamitsuku'],learn:HISUI_LEARN,evo:{lv:30,to:'hisuiryu'},
+SP.hisuiko={name:'ヒスイコ',type:'dragon',b:{hp:64,atk:72,def:66,spd:62},exp:220,cr:.05,grow:1.15,moves:['zutsuki','kamitsuku'],learn:HISUI_LEARN,evo:{lv:30,to:'hisuiryu'},
  desc:'まよいのもりの おくで ねむっていた ひすいいろの りゅう。 もりの かみと ふかい えんが あるらしい。'};
-SP.hisuiryu={name:'ヒスイリュウ',type:'dragon',b:{hp:80,atk:94,def:84,spd:80},exp:300,cr:.05,grow:1.35,moves:['zutsuki','kamitsuku'],learn:HISUI_LEARN,evo:{lv:45,to:'hisuijin'},
+SP.hisuiryu={name:'ヒスイリュウ',type:'dragon',b:{hp:80,atk:94,def:84,spd:80},exp:300,cr:.05,grow:1.15,moves:['zutsuki','kamitsuku'],learn:HISUI_LEARN,evo:{lv:45,to:'hisuijin'},
  desc:'つばさを ひろげると もりの かぜが うずを まく。 するどい めで とおくの えものも みのがさない。'};
-SP.hisuijin={name:'ヒスイジン',type:'dragon',b:{hp:98,atk:120,def:102,spd:98},exp:380,cr:.03,grow:1.35,moves:['zutsuki','kamitsuku'],learn:HISUI_LEARN,
+SP.hisuijin={name:'ヒスイジン',type:'dragon',b:{hp:98,atk:120,def:102,spd:98},exp:380,cr:.03,grow:1.15,moves:['zutsuki','kamitsuku'],learn:HISUI_LEARN,
  desc:'もりを まもる ひすいの おう。 その ほうこうは やまを こえて とおくまで ひびくという。'};
 DEX.push('hisuiko','hisuiryu','hisuijin');
 Object.assign(WHERE,{hisuiko:'まよいのもりの おく（？？？）',hisuiryu:'ヒスイコが Lv30で しんか',hisuijin:'ヒスイリュウが Lv45で しんか'});

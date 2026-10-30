@@ -1030,11 +1030,11 @@ Object.assign(MV,{
  hisuiounohoukou:{n:'ひすいおうの ほうこう',t:'dragon',p:130,recharge:true,d:'つぎの ターンは うごけない'},
 });
 const HISUI_LEARN={20:'hisuinoibuki',25:'urokonoyoroi',30:'hisuireppa',38:'morinokodou',45:'hisuiounohoukou'};
-SP.hisuiko={name:'ヒスイコ',type:'dragon',b:{hp:64,atk:72,def:66,spd:62},exp:220,cr:.05,grow:1.35,moves:['zutsuki','kamitsuku'],learn:HISUI_LEARN,evo:{lv:30,to:'hisuiryu'},
+SP.hisuiko={name:'ヒスイコ',type:'dragon',b:{hp:64,atk:72,def:66,spd:62},exp:220,cr:.05,grow:1.15,moves:['zutsuki','kamitsuku'],learn:HISUI_LEARN,evo:{lv:30,to:'hisuiryu'},
  desc:'まよいのもりの おくで ねむっていた ひすいいろの りゅう。 もりの かみと ふかい えんが あるらしい。'};
-SP.hisuiryu={name:'ヒスイリュウ',type:'dragon',b:{hp:80,atk:94,def:84,spd:80},exp:300,cr:.05,grow:1.35,moves:['zutsuki','kamitsuku'],learn:HISUI_LEARN,evo:{lv:45,to:'hisuijin'},
+SP.hisuiryu={name:'ヒスイリュウ',type:'dragon',b:{hp:80,atk:94,def:84,spd:80},exp:300,cr:.05,grow:1.15,moves:['zutsuki','kamitsuku'],learn:HISUI_LEARN,evo:{lv:45,to:'hisuijin'},
  desc:'つばさを ひろげると もりの かぜが うずを まく。 するどい めで とおくの えものも みのがさない。'};
-SP.hisuijin={name:'ヒスイジン',type:'dragon',b:{hp:98,atk:120,def:102,spd:98},exp:380,cr:.03,grow:1.35,moves:['zutsuki','kamitsuku'],learn:HISUI_LEARN,
+SP.hisuijin={name:'ヒスイジン',type:'dragon',b:{hp:98,atk:120,def:102,spd:98},exp:380,cr:.03,grow:1.15,moves:['zutsuki','kamitsuku'],learn:HISUI_LEARN,
  desc:'もりを まもる ひすいの おう。 その ほうこうは やまを こえて とおくまで ひびくという。'};
 DEX.push('hisuiko','hisuiryu','hisuijin');
 Object.assign(WHERE,{hisuiko:'まよいのもりの おく（？？？）',hisuiryu:'ヒスイコが Lv30で しんか',hisuijin:'ヒスイリュウが Lv45で しんか'});
@@ -1543,7 +1543,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.10.30-1422';
+const BUILD='2026.10.30-1446';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
