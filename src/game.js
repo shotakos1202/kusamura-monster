@@ -1266,8 +1266,8 @@ Object.assign(MV,{
 SP.shounon={name:'ショウノーン',type:'normal',b:{hp:100,atk:100,def:100,spd:100},exp:270,cr:.03,grow:1.1,moves:['butsukaru','niramitsukeru'],learn:{10:'kodamagaeshi',20:'subayai',30:'kirisaku',36:'datastream',40:'reboot',45:'holoslash',52:'daichi',60:'pixelnova'},
  desc:'ひびきの どうくつの おくで ねむっていた なぞの モンスター。 からだの なかを ひかる データが ながれている。'};
 DEX.push('shounon');WHERE.shounon='ひびきの どうくつの おく（？？？）';
-/* でんせつ・まぼろしは ずかんの さいご。あたらしく ふやしたら ここに たす（この じゅんで ならぶ） */
-const LEGEND=['uppy','hisuiko','hisuiryu','hisuijin','shounon'];
+/* でんせつ・まぼろしは ずかんの さいご（この じゅんで ならぶ）。まぼろし → さんしん（もり・そら・うみ）の じゅん。そらの かみ・うみの かみは ウッピーの うしろに たす */
+const LEGEND=['hisuiko','hisuiryu','hisuijin','shounon','uppy'];
 for(const id of LEGEND){const k=DEX.indexOf(id);if(k>=0)DEX.splice(k,1)}DEX.push(...LEGEND.filter(id=>SP[id]));
 const STARTERS=['hinokon','mizutama','happaru'];
 const IT={ball:{n:'ボール',price:100,d:'やせいの モンスターを つかまえる'},potion:{n:'くすり',price:150,d:'モンスターの HPを 20 かいふくする'}};
