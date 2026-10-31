@@ -14374,12 +14374,12 @@ try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted(
 let mode='title',frame=0,tsel=0,ssel=0,trans=0,fade=null,nameT=0;
 let S=null,P={x:4,y:4,dir:'down',mv:0,fx:4,fy:4},menu=null,shop=null,B=null;
 function save(){TMAIL=null;if(!S||DEV)return;S.pos={map:S.map,x:P.x,y:P.y,dir:P.dir};try{localStorage.setItem(KEY,JSON.stringify(S));saved=true}catch(e){}}
-function loadMap(id,x,y,dir){if(!S.visited){const f=S.flags||{},V={village:1};if(f.kenta||f.takumi||f.miho||S.badges.length){V.route=1;V.town=1}if(f.yuta||f.aya||f.gonzo||f.hayato||f.misaki||f.uppy)V.forest=1;S.visited=V}S.visited[REGION[id]||id]=1;S.items=S.items||{};for(const k of ITEMS)S.items[k]=S.items[k]||0;if(id==='trial3'&&S.map!=='trial3')S.flags.t3step=0;S.map=id;CUR=MAPS[id];for(const e of CUR.npcs){if(e.hx!==undefined){e.x=e.fx=e.hx;e.y=e.fy=e.hy;e.dir=e.hdir;e.mv=0;e.alert=0}}P={x,y,dir,mv:0,fx:x,fy:y};encSafe=3;if(CUR.name)nameT=110;if(CUR.out&&Math.random()<.25)spawnDrop()}
+function loadMap(id,x,y,dir){if(!S.visited){const f=S.flags||{},V={village:1};if(f.kenta||f.takumi||f.miho||S.badges.length){V.route=1;V.town=1}if(f.yuta||f.aya||f.gonzo||f.hayato||f.misaki||f.uppy)V.forest=1;S.visited=V}S.visited[REGION[id]||id]=1;S.items=S.items||{};for(const k of ITEMS)S.items[k]=S.items[k]||0;if(id==='trial3'&&S.map!=='trial3')S.flags.t3step=0;S.map=id;CUR=MAPS[id];for(const e of CUR.npcs){if(e.hx!==undefined){e.x=e.fx=e.hx;e.y=e.fy=e.hy;e.dir=e.hdir;e.mv=0;e.alert=0}}P={x,y,dir,mv:0,fx:x,fy:y};encSafe=safeSteps(3);if(CUR.name)nameT=110;if(CUR.out&&Math.random()<.25)spawnDrop()}
 function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.10.31-1837';
+const BUILD='2026.10.31-1839';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -14979,7 +14979,8 @@ function drawDrops(cx,cy){if(!S)return;const L=[...((S.drops&&S.drops[S.map])||[
   else{const sp2=d.k==='superpotion';R(x+14,y+9,4,3,'#8a6a4a');R(x+12,y+12,8,11,sp2?'#8a2a4a':'#4a2a7a');R(x+13,y+13,6,9,sp2?'#f070a0':'#a070e8');R(x+14,y+14,2,4,'#ffe8f0')}
   const tw=(frame+d.x*7+d.y*13)%80;if(tw<12){const s=tw<6?tw:12-tw;R(x+23,y+7-s,2,2+s*2,'#ffffff');R(x+22-s,y+8,2+s*2,2,'#ffffff')}}}
 // encounter rates per step (grass ≈ 1 in 14, sea ≈ 1 in 22, cave floor ≈ 1 in 28) and a few safe steps after a battle or a map change
-const ENC={grass:0.07,sea:0.045,cave:0.035};let encSafe=0;
+// ENC.rare: during the safe steps an encounter can still happen, just rarely (keeps it unpredictable)
+const ENC={grass:0.07,sea:0.045,cave:0.035,rare:0.15};let encSafe=0;const safeSteps=n=>Math.random()<.12?0:n;
 function onStep(){if(t3Exit())return;t2Check();if(loStep())return;if(pickUp())return;
  {const lk=CUR.locked&&CUR.locked[P.x+','+P.y];if(lk){Q.push(...T(...lk),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=STEP}));return}}
  if(S.map==='town2'&&P.y<=1&&(P.x===10||P.x===11)&&!S.badges.includes('アクアバッジ')){Q.push(...T('みちの ばんにん「まった！\nこの さきは 4ばんどうろだ。」','みちの ばんにん「ミナモジムの バッジが\nない ひとは とおせないよ。」'),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=STEP}));return}
@@ -14987,7 +14988,7 @@ function onStep(){if(t3Exit())return;t2Check();if(loStep())return;if(pickUp())re
  if(S.map==='village'&&P.y<=1&&!hasStarter()){Q.push(...T('むらの ひと「まって！ モンスターを\nつれずに そとへ でては だめ！」'),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=STEP}));return}const w=CUR.warps&&CUR.warps[P.x+','+P.y];if(w){fadeTo(...w);return}
  if(CUR.out&&Math.random()<1/200)spawnDrop();
  if(checkSight())return;
- if(encSafe>0)encSafe--;else if((at(P.x,P.y)==='G'||(CUR.boat&&at(P.x,P.y)==='W')||(CUR.cave&&at(P.x,P.y)==='.'))&&CUR.wild&&!(DEV&&DEV.noenc)&&Math.random()<(CUR.boat?ENC.sea:CUR.cave?ENC.cave:ENC.grass)){const tb=CUR.wild(P.x,P.y);let tw=tb.reduce((s2,e)=>s2+(e[3]||10),0)*Math.random(),pick=tb[0];for(const e of tb){tw-=(e[3]||10);if(tw<=0){pick=e;break}}const[id,a,b]=pick;B={foe:mon(id,a+(Math.random()*(b-a+1)|0))};mode='trans';trans=0}}
+ const encRoll=encSafe>0?(encSafe--,ENC.rare):1;if((at(P.x,P.y)==='G'||(CUR.boat&&at(P.x,P.y)==='W')||(CUR.cave&&at(P.x,P.y)==='.'))&&CUR.wild&&!(DEV&&DEV.noenc)&&Math.random()<encRoll*(CUR.boat?ENC.sea:CUR.cave?ENC.cave:ENC.grass)){const tb=CUR.wild(P.x,P.y);let tw=tb.reduce((s2,e)=>s2+(e[3]||10),0)*Math.random(),pick=tb[0];for(const e of tb){tw-=(e[3]||10);if(tw<=0){pick=e;break}}const[id,a,b]=pick;B={foe:mon(id,a+(Math.random()*(b-a+1)|0))};mode='trans';trans=0}}
 function checkSight(){for(const e of CUR.npcs){if(!e.trainer||S.flags[e.id]||!e.sight)continue;const[dx,dy]=D[e.dir];
  for(let k=1;k<=e.sight;k++){const x=e.x+dx*k,y=e.y+dy*k;if(x===P.x&&y===P.y){spot(e,true);return true}if(!canWalk(at(x,y))||entityAt(x,y))break}}return false}
 function walkHome(e){let started=false;return Wt(()=>{if(e.mv>0){e.mv--;return false}
@@ -15304,8 +15305,8 @@ function run(){const m=me(),foe=B.foe;
  else Q.push(...T('にげられない！'),...foeTurn())}
 function doSwitch(i){const old=me();B.menu='main';
  Q.push(...T(`もどれ！ ${nm(old)}！`),F(()=>{B.meIn=false}),delay(12),F(()=>{B.mi=i;B.dM=me().hp;B.dExp=me().exp;B.st.me=newSt();B.dot.me=null;B.rech.me=false}),delay(6),F(()=>{B.meIn=true}),...T(`ゆけっ！ ${nm(S.party[i])}！`),...foeTurn())}
-function endBattle(){Q.length=0;B=null;mode='world';encSafe=5;save()}
-function blackout(){Q.length=0;healAll();encSafe=5;for(const k of TATSU_TEMP)delete S.flags[k];if(S.flags.ev5raid||S.flags.ev5call){delete S.flags.ev5raid;delete S.flags.ev5call}const lost=Math.floor(S.money/2);S.money-=lost;B=null;mode='world';loadMap(...S.respawn);save();
+function endBattle(){Q.length=0;B=null;mode='world';encSafe=safeSteps(5);save()}
+function blackout(){Q.length=0;healAll();encSafe=safeSteps(5);for(const k of TATSU_TEMP)delete S.flags[k];if(S.flags.ev5raid||S.flags.ev5call){delete S.flags.ev5raid;delete S.flags.ev5call}const lost=Math.floor(S.money/2);S.money-=lost;B=null;mode='world';loadMap(...S.respawn);save();
  say('あわてて かいふくした ばしょへ\nもどった…',lost>0?`おかねを ${lost}えん おとしてしまった…`:'モンスターたちは げんきに なった。')}
 function grid(cur,n){let k=cur;if(btnp('left')&&k%2===1)k--;if(btnp('right')&&k%2===0&&k+1<n)k++;if(btnp('up')&&k>=2)k-=2;if(btnp('down')&&k+2<n)k+=2;return k}
 function updBattle(){
