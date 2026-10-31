@@ -14139,8 +14139,8 @@ Object.assign(MAPS,{
   items:[{id:'c3a',x:2,y:16,k:'superpotion',amt:2},{id:'c3b',x:8,y:12,k:'ballplus',amt:3},{id:'c3c',x:26,y:10,k:'revive',amt:1},{id:'cmap',x:20,y:11,k:'cavemap',amt:1,showIf:'ishimoriGone'}],
   wild:(x,y)=>[['tsuraran',35,35,18],['iwamogu',35,37,16],['kirakoro',35,37,14],['ishigaeru',35,36,14],['mofutanu',34,34,10],['miminaga',35,35,10],['ganmogura',38,39,3],['gamaiwa',37,38,3],['hibikimimi',36,38,3],['tanuoyabun',35,37,3]],
   npcs:[
-   {id:'c3g1',x:12,y:6,dir:'down',spr:'boy',pal:GRUNT_PAL,tname:'したっぱの コダマ',team:[['yamibasa',36],['tsuraran',36]],money:40,get say(){let g=false;try{g=!!(S&&S.flags&&S.flags.ygruntGone)}catch(e){}return g?['げっ！ また おまえかよ！','ユノハマの うらみ、\nここで はらして やる！']:['ここから さきは\nとおさねえ！','……って いうか だれ？\nまあ いいや、 しょうぶだ！']},lose:['コダマ「まって？\nおれ わるい？」'],after:['コダマ「おれは わるくねえ！\nおまえが つよすぎるんだ！」','コダマ「この おくには かんぶの\nイシモリさまが いるんだからな！」']},
-   {id:'c3g2',x:19,y:8,dir:'left',spr:'girl',pal:GRUNT_PAL,tname:'くろふくの おんな',team:[['goroiwa',36],['kagebasa',35],['yamibasa',37]],money:40,say:['あら、 こどもが\nまよいこんだの？'],lose:['うそでしょ……！'],after:['イシモリさまは\nいわより かたい おかた。']},
+   {id:'c3g1',x:12,y:6,dir:'down',spr:'boy',pal:GRUNT_PAL,sight:1,tname:'したっぱの コダマ',team:[['yamibasa',36],['tsuraran',36]],money:40,get say(){let g=false;try{g=!!(S&&S.flags&&S.flags.ygruntGone)}catch(e){}return g?['げっ！ また おまえかよ！','ユノハマの うらみ、\nここで はらして やる！']:['ここから さきは\nとおさねえ！','……って いうか だれ？\nまあ いいや、 しょうぶだ！']},lose:['コダマ「まって？\nおれ わるい？」'],after:['コダマ「おれは わるくねえ！\nおまえが つよすぎるんだ！」','コダマ「この おくには かんぶの\nイシモリさまが いるんだからな！」']},
+   {id:'c3g2',x:19,y:8,dir:'left',spr:'girl',pal:GRUNT_PAL,sight:3,tname:'くろふくの おんな',team:[['goroiwa',36],['kagebasa',35],['yamibasa',37]],money:40,say:['あら、 こどもが\nまよいこんだの？'],lose:['うそでしょ……！'],after:['イシモリさまは\nいわより かたい おかた。']},
    {id:'ishimori',x:20,y:11,dir:'left',spr:'boy',pal:ISHI_PAL,boss:true,hideFlag:'ishimoriGone',tname:'かんぶの イシモリ',team:[['tsuraragi',38],['gamaiwa',38],['kiraseki',39],['ganmogura',40]],money:80,
     get say(){const L=['……とまれ。','わたしは イシモリ。\nこの さきへは いかせん。','ほう…… きさまか。','とよっちょむらで キヨシさまを\nてこずらせた こどもは。'];
      if(typeof S!=='undefined'&&S&&S.flags&&S.flags.ygruntGone)L.push('ユノハマで うちの したっぱを\nおいかえしたのも きさまだな？');
@@ -14394,7 +14394,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.10.31-1957';
+const BUILD='2026.10.31-2015';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
