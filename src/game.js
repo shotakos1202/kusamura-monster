@@ -3067,8 +3067,9 @@ function drawRoot(){box(8,8,164,78);txt(`おかね ${S.money}えん`,22,22,3,14)
  if(S.badges.length){c.fillStyle='#8c8c98';c.beginPath();c.arc(140,58,8,0,7);c.fill();c.fillStyle='#c8c8d0';c.beginPath();c.arc(138,56,3,0,7);c.fill()}
  const RT=DEV?['かいはつしゃ',...ROOT]:ROOT;box(184,8,128,12+RT.length*24);RT.forEach((s,i)=>{hit(184,13+i*24,128,24,()=>{menu.i=i});txt(s,214,19+i*24);if(i===menu.i)txt('▶',196,19+i*24);if(s==='メール'&&unread(S))ell(272,27+i*24,4,4,'#e84848')})}
 function drawQuit(){HITS.length=0;box(0,200,320,88);txt(DEV?'かいはつしゃモードを おわって':'セーブして タイトルに',18,218);txt('もどりますか？',18,250);box(212,124,108,72);['はい','いいえ'].forEach((t,i)=>{hit(212,134+i*26,108,26,()=>{menu.q=i});txt(t,248,140+i*26);if(i===menu.q)txt('▶',230,140+i*26)})}
-function drawShop(){box(8,8,120,62);txt('おかね',20,20,3,12);txt(`${S.money}えん`,116,40,3,16,'right');
- const ST=shop.stock;box(136,8,176,70+ST.length*40);[...ST.map(k=>IT[k].n),'やめる'].forEach((s,i)=>{const y=24+i*40;hit(136,y-10,176,40,()=>{shop.i=i});txt(s,166,y);if(i<ST.length)txt(`${IT[ST[i]].price}えん`,300,y+18,2,12,'right');if(i===shop.i)txt('▶',148,y)});
+function drawShop(){box(8,8,92,58);txt('おかね',20,19,3,12);txt(`${S.money}えん`,90,38,3,S.money>=10000?12:14,'right');
+ // list fits above the message box (y<200): one row per item, price on the same line
+ const ST=shop.stock,rows=ST.length+1,rh=Math.min(30,Math.floor(170/rows));box(104,8,208,22+rows*rh);[...ST.map(k=>IT[k].n),'やめる'].forEach((s,i)=>{const y=20+i*rh;hit(104,y-6,208,rh,()=>{shop.i=i});txt(s,130,y,3,14);if(i<ST.length)txt(`${IT[ST[i]].price}えん`,300,y+2,2,12,'right');if(i===shop.i)txt('▶',114,y,3,14)});
  if(!Q.length){box(0,200,320,88);if(shop.i<ST.length){const k=ST[shop.i];txt(IT[k].d,18,218,3,14);txt(`もっている かず ×${S.items[k]||0}`,18,250,2,14)}else txt('かいものを おわる',18,218,3,14)}}
 function epos(e){const k=e.mv/STEP;return[(e.x+(e.fx-e.x)*k)*TS,(e.y+(e.fy-e.y)*k)*TS]}
 function drawWorld(){
