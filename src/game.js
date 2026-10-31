@@ -1897,9 +1897,11 @@ function tmsg(lines,after){TT={pg:'msg',lines,k:0,after:after||null,i:0}}
 function titleOpts(){
  if(TT.pg==='new')return[{t:'はい',fn:()=>{TT={pg:'main',i:0};newGame()}},{t:'いいえ',fn:()=>{TT={pg:'main',i:1}}}];
  if(TT.pg==='imp')return[{t:'はい',fn:()=>{try{localStorage.setItem(KEY,JSON.stringify(TT.data));saved=true;TMAIL=null;AU.jingle('item');tmsg(['セーブを とりこみました！','「つづきから」で あそべます。'])}catch(e){tmsg(['ほぞんに しっぱい しました。'])}}},{t:'いいえ',fn:()=>{TT={pg:'main',i:0}}}];
+ if(TT.pg==='out')return[{t:'QRコードを だす',fn:showQR},{t:'リンクを おくる',fn:shareLink,direct:true},{t:'ファイルで うつす',fn:exportSave,direct:true},{t:'もどる',fn:()=>{TT={pg:'main',i:3}}}];
+ if(TT.pg==='in')return[{t:'QRコードを よみとる',fn:startScan,direct:true},{t:'リンクを はりつける',fn:pasteLink,direct:true},{t:'ファイルから',fn:pickSave,direct:true},{t:'もどる',fn:()=>{TT={pg:'main',i:saved?4:1}}}];
  const tm=saved?tmail():null,un=tm?unread(tm):0;
- const o=saved?[{t:'つづきから',fn:contGame},{t:'はじめから',fn:()=>{TT={pg:'new',i:1}}},{t:'メール'+(un?' ●'+un:''),fn:()=>{const d=tmail();if(d)TT={pg:'mail',u:{pg:'list',i:0},d}}},{t:'セーブを うつす',fn:exportSave,direct:true},{t:'セーブを とりこむ',fn:pickSave,direct:true}]
-  :[{t:'はじめから',fn:newGame},{t:'セーブを とりこむ',fn:pickSave,direct:true}];
+ const o=saved?[{t:'つづきから',fn:contGame},{t:'はじめから',fn:()=>{TT={pg:'new',i:1}}},{t:'メール'+(un?' ●'+un:''),fn:()=>{const d=tmail();if(d)TT={pg:'mail',u:{pg:'list',i:0},d}}},{t:'セーブを うつす',fn:()=>{TT={pg:'out',i:0};prepCode()}},{t:'セーブを とりこむ',fn:()=>{TT={pg:'in',i:0}}}]
+  :[{t:'はじめから',fn:newGame},{t:'セーブを とりこむ',fn:()=>{TT={pg:'in',i:0}}}];
  if(isWebHost()&&!isStandalone())o.push({t:'ホームがめんに ついか',fn:showHomeHelp});
  return o}
 function showHomeHelp(){const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -1925,8 +1927,79 @@ function pickSave(){const inp=document.createElement('input');inp.type='file';in
    TT={pg:'imp',i:1,data:d,lines:[(saved?'いまの セーブに うわがきして\n':'')+'とりこみますか？',saveSummary(d)]}};
   r.readAsText(f)};
  inp.click()}
-function gestureA(){if(mode!=='title'||['msg','mail','pass','devscn'].includes(TT.pg))return false;const o=titleOpts()[TT.i];if(o&&o.direct){AU.sfx&&AU.sfx('sel');o.fn();return true}return false}
+function gestureA(){if(mode!=='title'||['msg','mail','pass','devscn','ovl'].includes(TT.pg))return false;const o=titleOpts()[TT.i];if(o&&o.direct){AU.sfx&&AU.sfx('sel');o.fn();return true}return false}
+/* ---------- セーブの いどう: QRコード／リンク（サーバー なし） ---------- */
+// The save is packed (derived stats and re-creatable mail removed), deflated and base64url-encoded,
+// then carried in a link's #hash: SHARE_BASE#save=<code>. Opening the link (or scanning its QR) imports it.
+const SHARE_BASE='https://shotakos1202.github.io/kusamura-monster/';
+const shareBase=()=>isWebHost()?location.origin+location.pathname:SHARE_BASE;
+const b64u=u8=>{let s='';for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const ub64=s=>{s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+async function zipU8(u8,pack){const cs=pack?new CompressionStream('deflate-raw'):new DecompressionStream('deflate-raw');const w=cs.writable.getWriter();w.write(u8);w.close();return new Uint8Array(await new Response(cs.readable).arrayBuffer())}
+function packSave(d){const c=JSON.parse(JSON.stringify(d));
+ // only what differs from a fresh monster of the same level is kept (moves, exp past the level, damage)
+ const mm=m=>{const o={i:m.id,l:m.lv};if(!SP[m.id])return o;const eo=m.exp-expAt(m,m.lv);if(eo)o.e=eo;if(JSON.stringify(m.moves)!==JSON.stringify(mon(m.id,m.lv).moves))o.m=m.moves;if(m.hp!==m.mhp)o.h=m.hp;if(m.status)o.s=m.status;if(m.slp)o.z=m.slp;if(m.evoPending)o.v=1;return o};
+ c.party=(c.party||[]).map(mm);c.box=(c.box||[]).map(mm);delete c.drops;const cg=new Set(c.caught||[]);c.seen=(c.seen||[]).filter(x=>!cg.has(x));
+ const NID=new Set(NEWS.map(n=>n.id).concat(['welcome']));c.mail=(c.mail||[]).map(m=>NID.has(m.id)?{id:m.id,r:m.read?1:0}:m);c.sv=1;return c}
+function unpackSave(c){if(!c||c.sv!==1)return c;delete c.sv;
+ const um=o=>{if(!SP[o.i])return null;const m={id:o.i,lv:o.l,exp:expAt({id:o.i},o.l)+(o.e||0),moves:o.m||mon(o.i,o.l).moves};calc(m);m.hp=o.h===undefined?m.mhp:Math.max(0,Math.min(o.h,m.mhp));if(o.s)m.status=o.s;if(o.z)m.slp=o.z;if(o.v)m.evoPending=true;return m};
+ c.party=c.party.map(um).filter(Boolean);c.box=(c.box||[]).map(um).filter(Boolean);c.caught=c.caught||[];c.seen=[...new Set([...c.caught,...(c.seen||[])])];
+ c.mail=(c.mail||[]).map(m=>{if(m.body)return m;const N=m.id==='welcome'?WELCOME_MAIL:NEWS.find(n=>n.id===m.id);return N?{id:m.id,from:'かいはつしゃ',title:N.title,body:N.body,read:!!m.r}:null}).filter(Boolean);return c}
+async function makeSaveCode(){let raw=null;try{raw=localStorage.getItem(KEY)}catch(e){}if(!raw)return null;
+ const u=new TextEncoder().encode(JSON.stringify(packSave(JSON.parse(raw))));
+ if(window.CompressionStream){try{return 'z'+b64u(await zipU8(u,true))}catch(e){}}return 'j'+b64u(u)}
+async function readSaveCode(text){let code=String(text||'').trim();const m=/save=([A-Za-z0-9_-]+)/.exec(code);if(m)code=m[1];
+ if(!/^[zj][A-Za-z0-9_-]+$/.test(code))throw new Error('bad');const body=ub64(code.slice(1)),u=code[0]==='z'?await zipU8(body,false):body;
+ const d=unpackSave(JSON.parse(new TextDecoder().decode(u)));if(!d||!Array.isArray(d.party)||!d.pos||!d.items)throw new Error('bad');return d}
+const shareURL=code=>shareBase()+'#save='+code;
+function askImport(d){TT={pg:'imp',i:1,data:d,lines:[(saved?'いまの セーブに うわがきして\n':'')+'とりこみますか？',saveSummary(d)]}}
+// DOM overlay used for the QR code, the camera and pasting a link (crisp, larger than the 320px game screen)
+let OVL=null;
+function closeOverlay(){if(!OVL)return;try{OVL.stop&&OVL.stop()}catch(e){}OVL.el.remove();OVL=null;if(TT.pg==='ovl')TT={pg:'main',i:0}}
+function overlay(title,note){closeOverlay();const el=document.createElement('div');
+ el.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(10,14,12,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;box-sizing:border-box;color:#f4f4ec;font-family:'+FONT+';text-align:center';
+ const h=document.createElement('div');h.textContent=title;h.style.cssText='font-size:20px';el.appendChild(h);
+ const body=document.createElement('div');body.style.cssText='display:flex;flex-direction:column;align-items:center;gap:10px;max-width:100%';el.appendChild(body);
+ if(note){const p=document.createElement('div');p.style.cssText='font-size:14px;line-height:1.7;white-space:pre-line;opacity:.9';p.textContent=note;el.appendChild(p)}
+ const b=document.createElement('button');b.textContent='とじる';b.style.cssText='font:inherit;font-size:16px;padding:10px 28px;border-radius:10px;border:2px solid #f4f4ec;background:transparent;color:#f4f4ec';b.onclick=()=>closeOverlay();el.appendChild(b);
+ el.addEventListener('keydown',e=>e.stopPropagation());document.body.appendChild(el);OVL={el,body};TT={pg:'ovl'};return OVL}
+addEventListener('keydown',e=>{if(OVL&&(e.key==='Escape'||e.key==='Backspace'&&e.target.tagName!=='TEXTAREA')){e.preventDefault();closeOverlay()}},true);
+function showQR(){const code=TT.code;if(!code){tmsg(['じゅんび ちゅう です。\nもういちど えらんでね。']);return}
+ let q=null;try{q=qrcode(0,'L');q.addData(shareURL(code));q.make()}catch(e){q=null}
+ if(!q){tmsg(['セーブが おおきすぎて\nQRコードに できません。','「リンクを おくる」を\nつかってね。']);return}
+ const n=q.getModuleCount(),qz=4,cv2=document.createElement('canvas');cv2.width=cv2.height=n+qz*2;const g=cv2.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,n+qz*2,n+qz*2);g.fillStyle='#000';
+ for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(q.isDark(y,x))g.fillRect(x+qz,y+qz,1,1);
+ cv2.style.cssText='width:min(78vw,62vh);height:min(78vw,62vh);image-rendering:pixelated;image-rendering:crisp-edges;background:#fff;border-radius:6px';
+ const o=overlay('QRコードで うつす','うけとる スマホの カメラで よみとってね。\nホームがめんの アプリや PCに うつすときは\nアプリの「セーブを とりこむ → QRコードを よみとる」で。');o.body.appendChild(cv2)}
+function shareLink(){const code=TT.code;if(!code){tmsg(['じゅんび ちゅう です。\nもういちど えらんでね。']);return}const url=shareURL(code);
+ const copied=()=>tmsg(['リンクを コピーしました！','LINEや メールで じぶんに おくって\nうつしたい たんまつで ひらいてね。']);
+ const manual=()=>{const o=overlay('リンクで うつす','この リンクを コピーして\nLINEや メールで じぶんに おくってね。');const ta=document.createElement('textarea');ta.value=url;ta.readOnly=true;ta.style.cssText='width:min(86vw,520px);height:120px;font-size:12px;border-radius:8px;padding:8px';o.body.appendChild(ta);setTimeout(()=>{ta.focus();ta.select()},50)};
+ const copy=()=>{try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(copied,manual);return}}catch(e){}manual()};
+ try{if(navigator.share&&/iPhone|iPad|iPod|Android/.test(navigator.userAgent)){navigator.share({title:'くさむらモンスターの セーブ',text:'くさむらモンスターの セーブを うつす リンク',url}).then(()=>tmsg(['リンクを おくりました！','うつしたい たんまつで\nリンクを ひらいてね。']),e=>{if(!e||e.name!=='AbortError')copy()});return}}catch(e){}
+ copy()}
+function pasteLink(){const o=overlay('リンクを はりつけて とりこむ','おくられてきた リンクを\nここに はりつけてね。');const ta=document.createElement('textarea');ta.placeholder='https://…#save=…';ta.style.cssText='width:min(86vw,520px);height:110px;font-size:14px;border-radius:8px;padding:8px';
+ const b=document.createElement('button');b.textContent='とりこむ';b.style.cssText='font:inherit;font-size:16px;padding:10px 28px;border-radius:10px;border:none;background:#6cc848;color:#173a18';
+ b.onclick=()=>{readSaveCode(ta.value).then(d=>{closeOverlay();askImport(d)},()=>{b.textContent='よみこめません… もういちど';setTimeout(()=>{b.textContent='とりこむ'},1800)})};
+ o.body.appendChild(ta);o.body.appendChild(b);setTimeout(()=>ta.focus(),50)}
+function startScan(){if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){tmsg(['この たんまつでは\nカメラが つかえません。','「リンクを はりつける」を\nつかってね。']);return}
+ const o=overlay('QRコードを よみとる','うつす がわの がめんに だした\nQRコードを カメラに うつしてね。');const v=document.createElement('video');v.setAttribute('playsinline','');v.muted=true;v.style.cssText='width:min(80vw,60vh);max-height:60vh;border-radius:10px;background:#000;transform:scaleX(1)';o.body.appendChild(v);
+ const cv2=document.createElement('canvas'),g=cv2.getContext('2d',{willReadFrequently:true});let stream=null,timer=0,busy=false;
+ const det=('BarcodeDetector' in window)?(()=>{try{return new BarcodeDetector({formats:['qr_code']})}catch(e){return null}})():null;
+ o.stop=()=>{clearInterval(timer);if(stream)stream.getTracks().forEach(t=>t.stop())};
+ const found=text=>{if(!/save=/.test(text))return;readSaveCode(text).then(d=>{closeOverlay();AU.sfx('statup');askImport(d)},()=>{})};
+ navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false}).then(s=>{stream=s;if(!OVL||OVL!==o){o.stop();return}v.srcObject=s;v.play().catch(()=>{});
+  timer=setInterval(async()=>{if(busy||!v.videoWidth)return;busy=true;try{
+    if(det){const r=await det.detect(v);if(r&&r[0])found(r[0].rawValue)}
+    else if(window.jsQR){const w=Math.min(720,v.videoWidth),h=Math.round(v.videoHeight*w/v.videoWidth);cv2.width=w;cv2.height=h;g.drawImage(v,0,0,w,h);const r=jsQR(g.getImageData(0,0,w,h).data,w,h,{inversionAttempts:'dontInvert'});if(r)found(r.data)}
+   }catch(e){}busy=false},200)},
+  ()=>{closeOverlay();tmsg(['カメラを ひらけませんでした。','カメラの きょかを かくにんするか\n「リンクを はりつける」を つかってね。'])})}
+function prepCode(){const t=TT;t.code=null;makeSaveCode().then(c=>{t.code=c}).catch(()=>{})}
+// a link that was opened directly: #save=…
+function checkLinkImport(){const m=/save=([A-Za-z0-9_-]+)/.exec(location.hash||'');if(!m)return;
+ const clear=()=>{try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}};
+ readSaveCode(m[1]).then(d=>{clear();askImport(d)},()=>{clear();tmsg(['リンクが こわれている みたい……','もういちど おくって もらってね。'])})}
 function updTitle(){
+ if(TT.pg==='ovl')return;
  if(TT.pg==='pass'){updPass();return}
  if(TT.pg==='devscn'){updList(TT.dl,()=>{TT={pg:'main',i:0}});return}
  if(TT.pg==='mail'){updMailUI(TT.u,TT.d.mail,()=>{TT={pg:'main',i:2};TMAIL=null},()=>{try{localStorage.setItem(KEY,JSON.stringify(TT.d))}catch(e){}});return}
@@ -1935,7 +2008,8 @@ function updTitle(){
  if(btnp('up')){TT.i=(TT.i+n-1)%n;AU.sfx('cur')}if(btnp('down')){TT.i=(TT.i+1)%n;AU.sfx('cur')}
  if(btnp('b')){if(TT.pg!=='main'){TT={pg:'main',i:0};return}devTap();return}
  if(btnp('a')){AU.sfx('sel');o[TT.i].fn()}}
-function newGame(){S={party:[],box:[],items:{ball:0,potion:2},money:1000,badges:[],seen:[],caught:[],flags:{},respawn:['home',4,5,'up'],map:'home',mail:[{id:'welcome',from:'かいはつしゃ',title:'ようこそ！',body:['くさむらモンスターへ ようこそ！','こうしんが あると ここに\nメールが とどくよ。','メニューの「メール」で\nいつでも よめるよ。','たのしんでね！'],read:false}],newsSeen:NEWS[NEWS.length-1].id};
+const WELCOME_MAIL={title:'ようこそ！',body:['くさむらモンスターへ ようこそ！','こうしんが あると ここに\nメールが とどくよ。','メニューの「メール」で\nいつでも よめるよ。','たのしんでね！']};
+function newGame(){S={party:[],box:[],items:{ball:0,potion:2},money:1000,badges:[],seen:[],caught:[],flags:{},respawn:['home',4,5,'up'],map:'home',mail:[{id:'welcome',from:'かいはつしゃ',title:WELCOME_MAIL.title,body:WELCOME_MAIL.body,read:false}],newsSeen:NEWS[NEWS.length-1].id};
  loadMap('home',4,5,'up');mode='world';
  say('きょうは まちに まった\nたびだちの ひ！','ママ「おはよう。 とうとう\nこの ひが きたのね。」','ママ「おとうさんが いなくなって\nもう なんねんかしら……」','ママ「おにいちゃんも おとうさんを\nさがしに いったきり……」','ママ「……ううん、 しんみりするのは\nなし！」','ママ「おじいちゃんが あなたを\nよんでいたわよ。」','ママ「おじいちゃんの いえは\nむらの みぎがわよ。」');save()}
 const hasStarter=()=>!!(S.flags.starter||S.party.length);
@@ -2250,6 +2324,7 @@ const NEWS=[
  {id:'2026.10.30c',title:'ひびきの どうくつの うわさ',body:['ひびきの どうくつの どこかに\nふしぎな きかいが ねむっている\nらしい……','こだまに みみを すませて みよう。','なにかが みつかる かも しれないよ！']},
  {id:'2026.10.31a',title:'ストーリーの おしらせ',body:['ふるさとの むらの なまえが\n「とよっちょむら」に なったよ。','しゅじんこうの たびだちの\nおはなしも あたらしく なったよ。\n（さいしょから あそぶと みられるよ）','ハナサキジムの リーダーが\n「イワイ」に なったよ。','1ばんどうろの モンスターが\nすこし よわく なったよ。']},
  {id:'2026.10.31b',title:'ライバル とうじょう！',body:['おさななじみの タツヤが\nとうじょう！','「さいきょー！」が くちぐせの\nにぎやかな あいつが\nたびの さきざきで まっている……！','バトルの うごきも\nなめらかに なったよ。']},
+ {id:'2026.10.31c',title:'セーブの うつしかたが かんたんに！',body:['ほかの たんまつへ セーブを\nうつすのが かんたんに なったよ。','カメラが ある たんまつへは\n「QRコードを だす」で よみとるだけ。','カメラが ない ときは\n「リンクを おくる」で LINEや メールで\nじぶんに おくって ひらくだけ。','タイトルの「セーブを うつす」から\nためしてね！']},
 ];
 let toast=null;
 function deliverNews(st){st.mail=st.mail||[];const ids=NEWS.map(n=>n.id);let from=st.newsSeen?ids.indexOf(st.newsSeen)+1:Math.max(0,NEWS.length-1);let n=0;
@@ -3196,10 +3271,12 @@ function drawBattle(){
 function drawTitle(){skyBG(150);hills(104,150);R(0,150,W,H-150,'#a6da74');
  for(let i=0;i<10;i++)tile('G',i*32,166,i,30);
  logo('くさむら',W/2,18,40,'#6cc848','#173a18');logo('モンスター',W/2,64,30,'#ffa040','#4a1a0a');
- {const no=!['msg','mail','pass','devscn'].includes(TT.pg)?titleOpts().length:0,up=no>5?22:no>4?12:0;STARTERS.forEach((id,i)=>{const bob=Math.sin(frame/14+i*2)*3;c.globalAlpha=.25;ell(60+i*100,190-up,24,5,'#000');c.globalAlpha=1;drawMon(id,20+i*100,106-up+bob,false)})}
+ {const no=!['msg','mail','pass','devscn','ovl'].includes(TT.pg)?titleOpts().length:0,up=no>5?22:no>4?12:0;STARTERS.forEach((id,i)=>{const bob=Math.sin(frame/14+i*2)*3;c.globalAlpha=.25;ell(60+i*100,190-up,24,5,'#000');c.globalAlpha=1;drawMon(id,20+i*100,106-up+bob,false)})}
  txt('ver '+BUILD,W-4,4,'#3a5a3a',9,'right');hit(W-130,0,130,18,devTap,false,true);
+ if(TT.pg==='ovl')return;
  if(TT.pg==='pass'){drawPass();return}
  if(TT.pg==='devscn'){drawList(TT.dl);return}
+ if(TT.pg==='out'||TT.pg==='in'){box(8,96,304,50);const L=TT.pg==='out'?['カメラが ある たんまつへ → QRコード','カメラが ない ときは → リンク']:['QRコード：うつす がわの がめんを よみとる','リンク：おくられた リンクを はりつける'];L.forEach((l,i)=>txt(l,20,106+i*18,3,11))}
  if(TT.pg==='mail'){drawMailUI(TT.u,TT.d.mail);return}
  if(TT.pg==='msg'){box(8,196,304,84);const L=String(TT.lines[TT.k]).split('\n');L.forEach((l,i)=>txt(l,22,212+i*28,3,14));if((frame>>4)%2)txt('▼',296,262,3,12,'right');hit(0,0,W,H,()=>{});return}
  if(TT.pg==='imp'||TT.pg==='new'){box(8,196,190,84);const L=(TT.pg==='new'?'いまの セーブは きえて\nしまいます。 ほんとうに\nはじめから あそぶ？':TT.lines.join('\n')).split('\n');L.forEach((l,i)=>txt(l,18,206+i*18,3,11))}
@@ -3234,6 +3311,7 @@ function loop(t){if(!last)last=t;acc+=Math.min(100,t-last);last=t;
  while(acc>=1000/60){acc-=1000/60;update();for(const k in pressed)pressed[k]=false;for(let sp=1;sp<((DEV&&DEV.speed)||1);sp++)update()}
  draw();requestAnimationFrame(loop)}
 R(0,0,W,H,0);txt('よみこみちゅう…',W/2,136,3,16,'center');
+checkLinkImport();
 const fontReady=document.fonts&&document.fonts.load?document.fonts.load('16px "DotGothic16"'):Promise.resolve();
 Promise.race([fontReady.catch(()=>{}),new Promise(r=>setTimeout(r,2500))]).then(()=>requestAnimationFrame(loop));
 })();

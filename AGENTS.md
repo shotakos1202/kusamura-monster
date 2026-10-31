@@ -5,6 +5,7 @@
 ## ファイル構成とビルド
 - 編集するのは `src/game.js`（ゲーム本体）と `src/shell.html`（画面レイアウト・CSS）。
 - `index.html` と `dist/` は `python3 tools/build.py` で生成する。直接編集しない。
+- `src/vendor/`（QRコードの生成・読み取りライブラリ）はビルド時にゲームの前に読み込まれる。直接編集しない（出典とライセンスは `src/vendor/README.md`）。
 - claude.ai のアーティファクトとして公開するときは `dist/artifact.html`（doctype なしの版）を使う。
 - タイトル画面右上のバージョン表示（`ver 2026.10.29-2343` など）は、ビルドした日時（日本時間）が自動で入る。手で書き換えない。
 - GitHub に push すると GitHub Pages（https://shotakos1202.github.io/kusamura-monster/）に自動で反映される（1〜10分）。push 前に必ずビルドする。
