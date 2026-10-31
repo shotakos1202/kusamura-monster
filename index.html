@@ -14000,7 +14000,7 @@ Object.assign(MAPS,{
 
 const KIYO_PAL=['#e8c8a8','#3a2a5a','#1a1a2a','#e8e8f0'],GRUNT_PAL=['#f0c8a0','#26262e','#18181e','#101014'];
 Object.assign(MAPS,{
- route5:{name:'5ばんどうろ',out:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T.....GGGGG......GGGGGG......F...T", "T..F..GGGGG......GGGGGG...........", "T.....GGGGG......GGGGGG...........", "T.........................S......T", "T..GGGG......GGGGGG.......GGGG...T", "TTT..TTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T...........GGGGG................T", "T..GGGGG....GGGGG.....GGGGG......T", "T..GGGGG..............GGsssssssssT", "T.........F.............sssssssssT", "TWWWWWWWWWWWWWWWWWWWWWWWWWnWWWWWWT", "TWWWWWWWWWWWWWWWWWWWWWWWWWnWWWWWWT", "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"],
+ route5:{name:'5ばんどうろ',out:true,noSurf:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T.....GGGGG......GGGGGG......F...T", "T..F..GGGGG......GGGGGG...........", "T.....GGGGG......GGGGGG...........", "T.........................S......T", "T..GGGG......GGGGGG.......GGGG...T", "TTT..TTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T...........GGGGG................T", "T..GGGGG....GGGGG.....GGGGG......T", "T..GGGGG..............GGsssssssssT", "T.........F.............sssssssssT", "TWWWWWWWWWWWWWWWWWWWWWWWWWnWWWWWWT", "TWWWWWWWWWWWWWWWWWWWWWWWWWnWWWWWWT", "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"],
   warps:{'33,2':['town3',1,14,'right'],'33,3':['town3',1,15,'right'],'26,12':['sea5',37,7,'left']},
   signs:{'26,4':['5ばんどうろ\nにし：ふなつきば → ユノハマシティ']},
   items:[{id:'r5a',x:1,y:1,k:'superpotion',amt:2},{id:'r5b',x:1,y:10,k:'ballplus',amt:3}],
@@ -14399,7 +14399,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.10.31-2046';
+const BUILD='2026.10.31-2049';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -15007,7 +15007,7 @@ function jetTo(n){const curR=REGION[S.map]||S.map;menu=null;
  Q.push(...T(`ジェットパックで\n${n.n}へ とんでいく！`),F(()=>{S.items.fuel--;onBike=false;JET={t:0,ph:'up'};AU.sfx('fxfire')}),Wt(()=>++JET.t>=44),
   F(()=>{fade={t:0,to:[n.id,x,y,'down']};AU.sfx('fxflying')}),Wt(()=>!fade),F(()=>{JET={t:0,ph:'down'}}),Wt(()=>++JET.t>=36),F(()=>{JET=null;AU.sfx('fxrock');shakeT=10}),...T(`${n.n}に とうちゃく！`),F(save))}
 function useTool(k,m){if(k==='bike'){menu=null;toggleBike();return true}
- if(k==='boat'){say('みずの ほうを むいて\nAボタンで のろう！');return true}
+ if(k==='boat'){if(CUR.noSurf||CUR.boat)say('ここでは かんいボートは\nつかえない！','ボートのりばから\nボートに のろう！');else say('みずの ほうを むいて\nAボタンで のろう！');return true}
  if(k==='jetpack'){const cur=REGION[S.map]||S.map,i=WMAP.findIndex(n=>n.id===cur);m.pg='wmap';m.w=Math.max(0,i);m.jet=true;return true}
  if(k==='fuel'){say('ジェットパックで 1かい\nとべる ねんりょうだ。');return true}
  return false}
@@ -15062,6 +15062,7 @@ function interact(){const[dx,dy]=D[P.dir];let x=P.x+dx,y=P.y+dy,e=entityAt(x,y);
  const t=at(x,y);
  const DECO={O:'ふかい いどだ。\nそこの ほうで みずが ひかっている。',X:'ゆうびんうけだ。\nてがみは はいっていない。',V:'はたけで やさいが\nすくすく そだっている。',N:'ベンチで ひとやすみ……。\nそよかぜが きもちいい。',A:'おおきな いわだ。\nびくとも しない。',
   B:'はなだんに いろとりどりの\nはなが さいている。',Q:'いしの モンスターの ぞう。\n「ハナサキの まもりがみ」と ほってある。',U:'ふんすいの みずが\nきらきら はねている。',I:'がいとうだ。\nよるに なると あかりが ともる らしい。',L:'じょうぶな きの さくだ。'};
+ if(t==='W'&&S.items.boat&&CUR.noSurf&&!P.surf)return say('ここでは かんいボートは\nつかえない！','ボートのりばから\nボートに のろう！');
  if(t==='W'&&S.items.boat&&!CUR.boat&&!P.surf&&!entityAt(x,y))return startSurf(x,y);
  if(t==='q'){Q.push(...T('クラウドたんまつを きどうした！'),F(()=>{openBox();AU.sfx('fxstatus')}));return}
  if(t==='Z')return say(S.flags.uppy?'ふるい ほこら。\nウッピーの けはいは もう ない……':'ふるい ほこらだ。\nしずかな ちからを かんじる……');
