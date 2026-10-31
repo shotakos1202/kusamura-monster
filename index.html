@@ -1693,8 +1693,8 @@ const ISHI_PAL=['#e0c0a0','#4a4a52','#1e1e26','#a8a8b4'],HIB_PAL=['#f8d0a8','#e8
   {x:22,y:1,dir:'down',spr:'old',pal:['#f8d0a8','#3a6a9a','#7a5a3a','#2a2a2a'],showIf:'ev6done',text:['ヒバナが いわを どかして\nくれたんじゃ。','やまみちの さきには\nひびきの どうくつが あるぞ。']},
   {x:25,y:1,dir:'down',obj:'boulder',hideFlag:'ev6done',text:['おおきな いわが みちを\nふさいでいる。']},
   {x:26,y:1,dir:'down',obj:'boulder',hideFlag:'ev6done',text:['おおきな いわが みちを\nふさいでいる。']},
-  {id:'ygrunt',x:1,y:16,dir:'left',spr:'boy',pal:GRUNT_PAL,hideFlag:'ygruntGone',tname:'くろふくの おとこ',team:[['yamibasa',33],['koromagu',33],['goroiwa',34]],money:40,
-   say:['……ん？','じゃまするな！！！\nいま だいじな しごとちゅうだ！','みられた からには\nただじゃ かえさねえ！'],lose:['くろふくの おとこ「く、\nくそっ……！」'],after:['……'],onWin:()=>ygruntWin()},
+  {id:'ygrunt',x:1,y:16,dir:'left',spr:'boy',pal:GRUNT_PAL,hideFlag:'ygruntGone',tname:'したっぱの コダマ',team:[['yamibasa',33],['koromagu',33],['goroiwa',34]],money:40,
+   say:['……ん？','じゃまするな！！！\nいま だいじな しごとちゅうだ！','……って、 みられた！？\nこうなったら しょうぶだ！'],lose:['コダマ「まって？\nおれ わるい？」'],after:['……'],onWin:()=>ygruntWin()},
   {id:'hibanaOut',x:6,y:5,dir:'left',spr:'girl',pal:HIB_PAL,showIf:'ev6hib',hideFlag:'ev6done',text:['……']});}
 Object.assign(MAPS,{
  route6:{name:'6ばんどうろ',out:true,rows:["TTTT666666666666TTTT", "TTT66666666666666TTT", "TT6666666556666666TT", "T6..........S.....6T", "T6..GGGG......GGG.6T", "T...GGGG..A...GGG..T", "T.A.......A........T", "TTTTTTT....TTTTTGGGT", "TGGGGTT....T....GGGT", "TGGGG......T.WW....T", "TGGGG..A...TWWWW...T", "T........F..WWW..A.T", "T..TTTTT.......GGG.T", "T..TGGG..A.....GGG.T", "T...GGG.......TTTTTT", "T...GGG.F.....TTTTTT", "TTT.......AA..TTTTTT", "TTTTT...........TTTT", "TTTTTTTT....TTTTTTTT", "TTTTTTTTT..TTTTTTTTT"],
@@ -1733,10 +1733,10 @@ Object.assign(MAPS,{
   items:[{id:'c3a',x:2,y:16,k:'superpotion',amt:2},{id:'c3b',x:8,y:12,k:'ballplus',amt:3},{id:'c3c',x:26,y:10,k:'revive',amt:1},{id:'cmap',x:20,y:11,k:'cavemap',amt:1,showIf:'ishimoriGone'}],
   wild:(x,y)=>[['tsuraran',35,35,18],['iwamogu',35,37,16],['kirakoro',35,37,14],['ishigaeru',35,36,14],['mofutanu',34,34,10],['miminaga',35,35,10],['ganmogura',38,39,3],['gamaiwa',37,38,3],['hibikimimi',36,38,3],['tanuoyabun',35,37,3]],
   npcs:[
-   {id:'c3g1',x:12,y:6,dir:'down',spr:'boy',pal:GRUNT_PAL,sight:1,tname:'くろふくの おとこ',team:[['yamibasa',36],['tsuraran',36]],money:40,say:['ここから さきは\nとおさねえ！'],lose:['かんぶに しかられる……'],after:['この おくには\nかんぶの イシモリさまが いる。']},
+   {id:'c3g1',x:12,y:6,dir:'down',spr:'boy',pal:GRUNT_PAL,sight:1,tname:'したっぱの コダマ',team:[['yamibasa',36],['tsuraran',36]],money:40,get say(){let g=false;try{g=!!(S&&S.flags&&S.flags.ygruntGone)}catch(e){}return g?['げっ！ また おまえかよ！','ユノハマの うらみ、\nここで はらして やる！']:['ここから さきは\nとおさねえ！','……って いうか だれ？\nまあ いいや、 しょうぶだ！']},lose:['コダマ「まって？\nおれ わるい？」'],after:['コダマ「おれは わるくねえ！\nおまえが つよすぎるんだ！」','コダマ「この おくには かんぶの\nイシモリさまが いるんだからな！」']},
    {id:'c3g2',x:19,y:8,dir:'left',spr:'girl',pal:GRUNT_PAL,sight:3,tname:'くろふくの おんな',team:[['goroiwa',36],['kagebasa',35],['yamibasa',37]],money:40,say:['あら、 こどもが\nまよいこんだの？'],lose:['うそでしょ……！'],after:['イシモリさまは\nいわより かたい おかた。']},
    {id:'ishimori',x:20,y:11,dir:'left',spr:'boy',pal:ISHI_PAL,sight:3,boss:true,hideFlag:'ishimoriGone',tname:'かんぶの イシモリ',team:[['tsuraragi',38],['gamaiwa',38],['kiraseki',39],['ganmogura',40]],money:80,
-    get say(){const L=['……とまれ。','わたしは イシモリ。\nこの さきへは いかせん。','ほう…… きさまか。','とよっちょむらで キヨシを\nてこずらせた こどもは。'];
+    get say(){const L=['……とまれ。','わたしは イシモリ。\nこの さきへは いかせん。','ほう…… きさまか。','とよっちょむらで キヨシさまを\nてこずらせた こどもは。'];
      if(typeof S!=='undefined'&&S&&S.flags&&S.flags.ygruntGone)L.push('ユノハマで うちの したっぱを\nおいかえしたのも きさまだな？');
      L.push('そらを ゆく くろい つばさを\nみたか？','あれこそ われらの のぞみ……！','じゃまを する ものは\nいしの ように くだいて やる！');return L},
     lose:['イシモリ「……ばかな。\nこの わたしが……」'],after:['……'],onWin:()=>ishimoriWin()},
@@ -1783,6 +1783,12 @@ MAPS.cave4={name:'ひびきの どうくつ ひみつのま',tech:true,grid:[5,7
  warps:{'6,12':['cave2',13,27,'up']},
  npcs:[{x:6,y:4,dir:'down',obj:'tgate',hideFlag:'lightdone',text:[]},{x:6,y:2,dir:'down',obj:'dpedestal',text:[]},{x:10,y:9,dir:'left',obj:'lreset',text:[]},
   {x:2,y:9,dir:'down',obj:'etablet',text:['かべに ひかる もじが\nうかんでいる……','「ここのつの ひかりを\nすべて ともせ」','「ひとつ ふめば じゅうじに\nひかりが いれかわる」']}]};
+// ライバル タツヤ（イベントで あらわれる）
+const TATSU_PAL=['#f8d0a8','#f08a20','#2a2a3a','#1c1820'],TN_='タツヤ';
+const RIVAL_OF={hinokon:'mizutama',mizutama:'happaru',happaru:'hinokon'},EVO2={hinokon:'homurakon',mizutama:'namitama',happaru:'tsubomiru'},EVO3={hinokon:'glencon',mizutama:'uzushion',happaru:'hanamiru'};
+MAPS.nbr.npcs.push({id:'tatsuV',x:4,y:6,dir:'up',spr:'boy',pal:TATSU_PAL,showIf:'tvShow',hideFlag:'tvDone',text:['……']});
+MAPS.forest.npcs.push({id:'tatsuF',x:14,y:37,dir:'down',spr:'boy',pal:TATSU_PAL,showIf:'tfShow',hideFlag:'tatsu1',rival:true,tname:'ライバルの タツヤ',get team(){const b=rivalBase();return[['piyotto',12],['koroishi',12],[EVO2[b],15]]},money:50,say:[],lose:['タツヤ「……へえ。\nやるじゃん。」'],after:['……'],onWin:()=>tatsuForestWin()});
+MAPS.town4.npcs.push({id:'tatsu6',x:13,y:15,dir:'up',spr:'boy',pal:TATSU_PAL,showIf:'t6Show',hideFlag:'tatsu2',rival:true,tname:'ライバルの タツヤ',get team(){const b=rivalBase();return[['kazekirio',37],['gansekidon',37],['raidenga',38],[EVO3[b],40]]},money:90,say:[],lose:['タツヤ「うおっ……\nまじかよ！」'],after:['……'],onWin:()=>tatsuYunohamaWin()});
 for(const id in MAPS){const m=MAPS[id];m.npcs=m.npcs||[];m.npcs.forEach(e=>{e.hx=e.x;e.hy=e.y;e.hdir=e.dir;e.fx=e.x;e.fy=e.y;e.mv=0;e.alert=0;e.trainer=!!e.team});m.h=m.rows.length;m.w=m.rows[0].length}
 let CUR=MAPS.village;
 const at=(x,y)=>(x<0||y<0||x>=CUR.w||y>=CUR.h)?(CUR.out?'T':' '):CUR.rows[y][x];
@@ -1865,6 +1871,9 @@ const SONGS={
  takane:{bpm:118,drum:"k.h.k.h.",
   lead:trk("A4 - D5 - F#5 - A5 - | G5 - F#5 - E5 - D5 - | B4 - E5 - G5 - B5 - | A5 - - - - - . . | A4 - D5 - F#5 - A5 - | B5 - A5 - G5 - F#5 - | E5 - G5 - F#5 - E5 - | D5 - - - - - . ."),
   bass:trk("D3 - A3 - D3 - A3 - | G2 - D3 - G2 - D3 - | E3 - B3 - E3 - B3 - | A2 - E3 - A2 - E3 - | D3 - A3 - D3 - A3 - | G2 - D3 - G2 - D3 - | A2 - E3 - A2 - E3 - | D3 - A3 - D3 - . .")},
+ rival:{bpm:172,drum:"k.hkk.h.",
+  lead:trk("E5 - B4 E5 G#5 - F#5 E5 | D#5 - B4 - F#5 - E5 D#5 | C#5 - E5 - A5 - G#5 F#5 | G#5 - - - B5 - - - | E5 - B4 E5 G#5 - B5 - | C#6 - B5 A5 G#5 - F#5 - | E5 F#5 G#5 A5 B5 - A5 G#5 | F#5 - - - B4 - - -"),
+  bass:trk("E2 E3 E2 E3 E2 E3 E2 E3 | B1 B2 B1 B2 B1 B2 B1 B2 | A1 A2 A1 A2 A1 A2 A1 A2 | B1 B2 B1 B2 B1 B2 D#2 D#3 | E2 E3 E2 E3 E2 E3 E2 E3 | A1 A2 A1 A2 A1 A2 A1 A2 | C#2 C#3 C#2 C#3 B1 B2 B1 B2 | B1 B2 B1 B2 B1 B2 B1 B2")},
  shinpi:{bpm:84,
   lead:trk("E5 - - B4 - - G5 - | F#5 - - - E5 - - - | C5 - - G5 - - E6 - | D6 - - - B5 - - - | A5 - - E5 - - C6 - | B5 - - G5 - - E5 - | F#5 - G5 - A5 - B5 - | E5 - - - - - . ."),
   bass:trk("E2 - B2 - E3 - B2 - | E2 - B2 - D3 - B2 - | C2 - G2 - C3 - G2 - | G1 - D2 - G2 - D2 - | A1 - E2 - A2 - E2 - | E2 - B2 - E3 - B2 - | B1 - F#2 - B2 - F#2 - | E2 - B2 - E2 - . .")},
@@ -1970,13 +1979,13 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.10.31-0754';
+const BUILD='2026.10.31-1724';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
 const isWebHost=()=>{try{return /^https?:$/.test(location.protocol)&&window.top===window&&!/claude/.test(location.hostname)}catch(e){return false}};
 function contGame(){let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}
- if(d&&d.party){S=d;S.flags=S.flags||{};if(S.flags.ev5raid){delete S.flags.ev5raid;S.pos={map:'center3',x:4,y:4,dir:'up'}}delete S.flags.ev5call;delete S.flags.ev6call;delete S.flags.ev6hib;const nn=deliverNews(S);loadMap(S.pos.map,S.pos.x,S.pos.y,S.pos.dir);mode='world';say('つづきから はじめよう！');if(nn||unread(S))toast={text:nn?'メールが とどいた！':`みどくの メールが ${unread(S)}つ`,t:220};return}
+ if(d&&d.party){S=d;S.flags=S.flags||{};if(S.flags.ev5raid){delete S.flags.ev5raid;S.pos={map:'center3',x:4,y:4,dir:'up'}}delete S.flags.ev5call;delete S.flags.ev6call;delete S.flags.ev6hib;for(const k of TATSU_TEMP)delete S.flags[k];const nn=deliverNews(S);loadMap(S.pos.map,S.pos.x,S.pos.y,S.pos.dir);mode='world';say('つづきから はじめよう！');if(nn||unread(S))toast={text:nn?'メールが とどいた！':`みどくの メールが ${unread(S)}つ`,t:220};return}
  tmsg(['セーブデータが よみこめませんでした。'])}
 function tmsg(lines,after){TT={pg:'msg',lines,k:0,after:after||null,i:0}}
 function titleOpts(){
@@ -2035,7 +2044,7 @@ function updStarter(){
 function giveStarter(id){const m=mon(id,5);S.party.push(m);S.seen.push(id);S.caught.push(id);S.flags.starter=id;mode='world';
  Q.push(F(()=>AU.jingle('catch')),...T(`${SP[id].name}を もらった！`,
   'おじいちゃん「モンスターは\nたたかう ほどに つよく なる。」','おじいちゃん「そうじゃ、 これも\nもっていきなさい。」'),
-  F(()=>{S.items.ball+=5;AU.jingle('item')}),...T('ボールを 5こ もらった！','おじいちゃん「くさむらの あいては\nよわらせてから ボールじゃ。」','おじいちゃん「1ばんどうろを\nぬけると ハナサキタウンじゃ。」','おじいちゃん「まちの ジムで\nうでだめし するが よい！」'),F(save))}
+  F(()=>{S.items.ball+=5;AU.jingle('item')}),...T('ボールを 5こ もらった！','おじいちゃん「くさむらの あいては\nよわらせてから ボールじゃ。」','おじいちゃん「1ばんどうろを\nぬけると ハナサキタウンじゃ。」','おじいちゃん「まちの ジムで\nうでだめし するが よい！」'),...tatsuVillage(),F(save))}
 
 /* ---------- 5ばんどうろ event ---------- */
 const GR='くろふくの おとこ',GR2='くろふくの おんな';
@@ -2065,8 +2074,8 @@ function npcRun(e,dirs,spd=2){let i=0;return Wt(()=>{if(e.mv>0){e.mv=Math.max(0,
  const d=dirs[i++];e.dir=d;const[dx,dy]=D[d];e.fx=e.x;e.fy=e.y;e.x+=dx;e.y+=dy;e.mv=STEP;e.par=(e.par|0)^1;return false})}
 function ygruntWin(){const g=MAPS.town4.npcs.find(e=>e.id==='ygrunt');g.hx=g.x;g.hy=g.y;
  const path=P.y<g.y?['down','right','right','right','right','right','right','right']:['up','up','right','right','right','right','right','right'];
- return[delay(10),...T('くろふくの おとこ「ひっ……！\nま、 まけた……」','くろふくの おとこ「まけたなんて\nしられたら……」','くろふくの おとこ「リーダーに\nころされる……！」','くろふくの おとこ「お、\nおぼえてろよ～！」'),
-  F(()=>AU.sfx('fxflying')),npcRun(g,path,3),F(()=>{S.flags.ygruntGone=1;save()}),...T('くろふくの おとこは\nあわてて にげて いった……')]}
+ return[delay(10),...T('コダマ「ひっ……！\nま、 まけた……」','コダマ「まけたなんて\nしられたら……」','コダマ「キヨシさまに\nころされる……！」','コダマ「お、 おぼえてろよ～！」'),
+  F(()=>AU.sfx('fxflying')),npcRun(g,path,3),F(()=>{S.flags.ygruntGone=1;save()}),...T('コダマは あわてて\nにげて いった……')]}
 let SKY=null;const HB='ヒバナ';
 function ev6Start(){S.flags.ev6call=1;const h=MAPS.town4.npcs.find(e=>e.id==='hibanaOut');
  let sp=null;for(const[dx,dy,d]of[[1,0,'left'],[-1,0,'right'],[0,1,'up'],[0,-1,'down']]){const x=P.x+dx,y=P.y+dy;if(canWalk(at(x,y))&&!entityAt(x,y)){sp=[x,y,d];break}}if(!sp)sp=[P.x+1,P.y,'left'];
@@ -2078,7 +2087,7 @@ function ev6Start(){S.flags.ev6call=1;const h=MAPS.town4.npcs.find(e=>e.id==='hi
   delay(20),
   ...T('……むかし むかし。\nこの ちほうの そらには','ひかり かがやく ふしぎな\nとりが すんでいた。','その はねは ほのおの いろ。\nもえつきても よみがえる。','ひとびとは その とりを\nいのちの かみと あがめた。','けれど あるとき ひとびとは\nとりの ちからを ほしがった。','よみがえりの ひみつを ねらい\nとりの すみかを あらした。','いかった とりの はねは\nまっくろに そまった……','くろい ほのおは なのかかん\nやまも まちも もやしつづけた。','その ほのおの あとから\nわきだしたのが……','いまの ユノハマの\nおんせん なのだという。','さいごに ひとびとは わびて\nうたを ささげた。','とりは しずかに めを とじ\nふかい ねむりに ついた……','その とりこそ じゃしん\nミネゾーウ。','ふたたび めざめる とき\nよに わざわいが おとずれる……'),
   delay(20),
-  ...T(HB+'「……って おはなし。\nおとぎばなしだと おもってた。」',HB+'「でも あの すがた……\nせなかに だれかが いた。」',HB+'「だれかが ミネゾーウを\nあやつって いるのかも。」',HB+'「さいきん まちで\nくろふくを よく みかけるし……」',HB+'「なにか かんけいが\nあるのかも しれない。」',HB+'「あいつが とんだのは\nきたの やまの むこう……」',HB+'「きたの やまみちは\nいわで ふさがってる けど……」',HB+'「まかせて！ あたしの\nモンスターで ふきとばすよ！」'),
+  ...T(HB+'「……って おはなし。\nおとぎばなしだと おもってた。」',HB+'「でも あの すがた……\nせなかに だれかが いた。」',HB+'「だれかが ミネゾーウを\nあやつって いるのかも。」',HB+'「そういえば…… ユノハマには\nべつの いいつたえも あるの。」',HB+'「もりの かみ、\nそらの かみ、 うみの かみ。」',HB+'「みっつの かみを\nしたがえた ものは……」',HB+'「せかいの てんきさえ\nおもいのままに できる……って。」',HB+'「……まさかね。\nただの むかしばなしよ。」',HB+'「さいきん まちで\nくろふくを よく みかけるし……」',HB+'「なにか かんけいが\nあるのかも しれない。」',HB+'「あいつが とんだのは\nきたの やまの むこう……」',HB+'「きたの やまみちは\nいわで ふさがってる けど……」',HB+'「まかせて！ あたしの\nモンスターで ふきとばすよ！」'),
   F(()=>{AU.sfx('fxfire')}),delay(30),F(()=>{shakeT=40;AU.sfx('fxrock')}),delay(44),...T('ドーン！！','とおくで いわの くだける\nおとが ひびいた！'),
   ...T(HB+'「これで やまみちを\nとおれる はず！」',HB+'「その さきの ひびきの\nどうくつを ぬければ……」',HB+'「つぎの まち\nタカネシティに つくよ。」',HB+'「きを つけてね！\nなにか あったら しらせて！」'),
   F(()=>{S.flags.ev6done=1;delete S.flags.ev6hib;delete S.flags.ev6call;h.alert=0;AU.sfx('door');
@@ -2216,6 +2225,27 @@ function techTile(ch,v,gx,gy){if(!CUR.tech)return null;const wall=t=>t==='T'||t=
  if(ch==='T'){const face=!wall(at(gx,gy+1)),fr=face?(frame>>5)%2:0;return['tw'+v+(face?1:0)+fr,g=>techWallT(g,v,face)]}
  if(ch==='8'){const lit=loLit(gx,gy);return['tp'+(lit?1:0),g=>panelT(g,lit)]}
  return null}
+/* ---------- ライバル: タツヤ ---------- */
+function rivalBase(){try{return (S&&S.flags&&(S.flags.rivalStarter||RIVAL_OF[S.flags.starter]))||'mizutama'}catch(e){return 'mizutama'}}
+const TATSU_TEMP=['tfCall','tfShow','t6Call','t6Show','tvShow'];
+function tatsuNear(e){for(const[dx,dy,d]of[[0,-1,'down'],[1,0,'left'],[-1,0,'right'],[0,1,'up']]){const x=P.x+dx,y=P.y+dy;if(canWalk(at(x,y))&&!entityAt(x,y)){e.x=e.fx=x;e.y=e.fy=y;e.dir=d;P.dir=OPP[d];return}}e.x=e.fx=P.x;e.y=e.fy=P.y-1;e.dir='down';P.dir='up'}
+function tatsuVillage(){const e=MAPS.nbr.npcs.find(n=>n.id==='tatsuV'),rs=rivalBase(),rn=SP[rs].name,mn=SP[S.flags.starter].name;
+ return[delay(20),F(()=>{e.x=e.fx=4;e.y=e.fy=6;e.dir='up';S.flags.tvShow=1;AU.sfx('door')}),...T('？？？「おーい！ じいちゃーん！」'),npcRun(e,['up','up'],1),F(()=>{e.dir='right';P.dir='left';e.alert=30;AU.sfx('alert')}),Wt(()=>e.alert<=0),
+  ...T(TN_+'「よっ！ きいたぜ。\nきょう たびだち なんだって？」',TN_+'「おまえだけ ずるいって！\nおれにも モンスター くれよ！」','おじいちゃん「……タツヤ。 まったく\nおまえと いう やつは。」','おじいちゃん「よかろう。 のこりの\nモンスターから えらぶが よい。」',
+   TN_+`「じゃあ…… ${rn}！\nこいつに きーめた！」`),F(()=>AU.jingle('catch')),...T(`タツヤは ${rn}を もらった！`,TN_+`「${rn}は ${mn}に\nつよいからな！」`,TN_+'「やっぱ おれって\nさいきょー！」',TN_+'「……おまえの とうちゃんと\nにいちゃんの こと。」',TN_+'「おれも ずっと\nきに なってたんだ。」',TN_+'「さきに いきな。\nすぐ おいついて やるからよ！」',TN_+'「なんたって おれは\nさいきょー！ だからな！」'),
+  F(()=>{e.dir='down'}),npcRun(e,['down','down','down'],2),F(()=>{delete S.flags.tvShow;S.flags.tvDone=1;S.flags.rivalStarter=rs;save()}),...T('タツヤは いきおいよく\nとびだして いった……')]}
+function tatsuForest(){const e=MAPS.forest.npcs.find(n=>n.id==='tatsuF');S.flags.tfCall=1;tatsuNear(e);S.flags.tfShow=1;e.alert=40;AU.sfx('alert');
+ Q.push(Wt(()=>e.alert<=0),...T(TN_+'「……よう。 まってたぜ。」',TN_+'「この もりは まよう。\nよわい やつには むりだ。」',TN_+'「この さきへ\nすすみたいなら……」',TN_+'「おれを こえて いきな。」'),F(()=>{B={trainer:e};mode='trans';trans=0}))}
+function tatsuForestWin(){const e=MAPS.forest.npcs.find(n=>n.id==='tatsuF');e.hx=e.x;e.hy=e.y;
+ return[delay(10),...T(TN_+'「……って、 くっそー！\nまけたー！ くやしーっ！」',TN_+'「さっきの セリフ、\nかっこよかったろ？」',TN_+'「れんしゅう したんだぜ！\nクールな ライバルっぽいだろ？」',TN_+'「つぎは まけねえ！\nおれは さいきょー！ だからな！」',TN_+'「じゃあな！ もりの おくで\nまいごに なるなよ～！」'),
+  npcRun(e,['up','up','up','up','up','up'],2),F(()=>{S.flags.tatsu1=1;delete S.flags.tfShow;delete S.flags.tfCall;save()})]}
+function tatsuYunohama(){const e=MAPS.town4.npcs.find(n=>n.id==='tatsu6');S.flags.t6Call=1;
+ Q.push(...T('？？？「おーい！ いた いたー！」'),F(()=>{tatsuNear(e);S.flags.t6Show=1;e.alert=40;AU.sfx('alert')}),Wt(()=>e.alert<=0),
+  ...T(TN_+'「よっ！ ひさしぶり！\nげんきに してたか？」',TN_+'「なあなあ！ いまの はなし\nぜんぶ きいてたぜ！」',TN_+'「じゃしん ミネゾーウ！\nくろい ほのおの とり！」',TN_+'「もりの かみ、\nそらの かみ、 うみの かみ……」',TN_+'「くーっ！ そういう\nでんせつ たまんねえ！！」',TN_+'「よし、 きめた！」',TN_+'「じゃしんを たおすのは\nおれだ！！」',TN_+'「まずは うでだめしだ！\nいくぜ、 さいきょー バトル！」'),
+  F(()=>{B={trainer:e};mode='trans';trans=0}))}
+function tatsuYunohamaWin(){const e=MAPS.town4.npcs.find(n=>n.id==='tatsu6');e.hx=e.x;e.hy=e.y;
+ return[delay(10),...T(TN_+'「くーっ！ また まけた！\nおまえ つよく なったな。」',TN_+'「……とうちゃんと\nにいちゃんの てがかりは？」',TN_+'「そっか……\nおれも たびの さきで さがすよ。」',TN_+'「さきに どうくつ ぬけて\nまってるぜ！」',TN_+'「さいきょー！」'),
+  npcRun(e,['up','up','up','up','up','up','up'],2),F(()=>{S.flags.tatsu2=1;delete S.flags.t6Show;delete S.flags.t6Call;save()})]}
 /* ---------- しれん: logic ---------- */
 const T1_ORDER='rwpb',T1_COL={red:'r',white:'w',pink:'p',blue:'b'},T1_NAME={red:'あか',white:'しろ',pink:'もも',blue:'あお'};
 const T1_DIR={r:['ひがし','right'],w:['きた','up'],p:['きた','up'],b:['にし','left']};
@@ -2312,6 +2342,7 @@ const NEWS=[
  {id:'2026.10.30b',title:'あたらしい ぼうけんの おしらせ',body:['いつも あそんでくれて ありがとう！','こんかいの こうしん：','・ユノハマシティの さきへ\n すすめるように なった','・6ばんどうろ、 ひびきの どうくつ、\n タカネシティを ついか','・いわ と ノーマルの モンスターが\n 13しゅるい ふえた','・5つめの ジムが オープン！','・ストーリーが すこし すすむ……！','これからも くさむらモンスターを\nよろしくね！']},
  {id:'2026.10.30c',title:'ひびきの どうくつの うわさ',body:['ひびきの どうくつの どこかに\nふしぎな きかいが ねむっている\nらしい……','こだまに みみを すませて みよう。','なにかが みつかる かも しれないよ！']},
  {id:'2026.10.31a',title:'ストーリーの おしらせ',body:['ふるさとの むらの なまえが\n「とよっちょむら」に なったよ。','しゅじんこうの たびだちの\nおはなしも あたらしく なったよ。\n（さいしょから あそぶと みられるよ）','ハナサキジムの リーダーが\n「イワイ」に なったよ。','1ばんどうろの モンスターが\nすこし よわく なったよ。']},
+ {id:'2026.10.31b',title:'ライバル とうじょう！',body:['おさななじみの タツヤが\nとうじょう！','「さいきょー！」が くちぐせの\nにぎやかな あいつが\nたびの さきざきで まっている……！','バトルの うごきも\nなめらかに なったよ。']},
 ];
 let toast=null;
 function deliverNews(st){st.mail=st.mail||[];const ids=NEWS.map(n=>n.id);let from=st.newsSeen?ids.indexOf(st.newsSeen)+1:Math.max(0,NEWS.length-1);let n=0;
@@ -2378,7 +2409,7 @@ const SCN=[
  ['キヨシ イベントの まえ',()=>{devBase(30,3,{uppy:1});loadMap('town3',2,14,'left')}],
  ['ユノハマシティ',()=>{devBase(32,3,{uppy:1,ev5done:1,elderGone:1,kiyoshi:true});S.items.oldmap=1;loadMap('town4',13,15,'up')}],
  ['ユノハマジム',()=>{devBase(34,3,{uppy:1,ev5done:1,elderGone:1,kiyoshi:true});loadMap('gym4',5,12,'up')}],
- ['ユノハマの したっぱ',()=>{devBase(34,3,{uppy:1,ev5done:1,elderGone:1});S.items.oldmap=1;loadMap('town4',2,16,'left')}],
+ ['コダマ（ユノハマ）',()=>{devBase(34,3,{uppy:1,ev5done:1,elderGone:1});S.items.oldmap=1;loadMap('town4',2,16,'left')}],
  ['ミネゾーウ イベント',()=>{devBase(36,4,{uppy:1,ev5done:1,elderGone:1});S.items.oldmap=1;loadMap('town4',5,5,'down')}],
  ['ひびきの どうくつ',()=>{devBase(36,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1});S.items.oldmap=1;loadMap('cave1',14,20,'up')}],
  ['イシモリの まえ',()=>{devBase(38,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1});S.items.oldmap=1;loadMap('cave3',17,9,'down')}],
@@ -2387,6 +2418,8 @@ const SCN=[
  ['すいしょうの とびら',()=>{devBase(40,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1});S.items.oldmap=1;loadMap('cave2',13,26,'down')}],
  ['ひかりの パネル',()=>{devBase(40,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1,tonedone:1});S.items.oldmap=1;loadMap('cave4',6,11,'up')}],
  ['ショウノーンの だいざ',()=>{devBase(40,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1,tonedone:1,lightdone:1});S.items.oldmap=1;loadMap('cave4',6,3,'up')}],
+ ['タツヤ（まよいのもり）',()=>{devBase(14,1,{});loadMap('forest',14,38,'up')}],
+ ['タツヤ（ユノハマ）',()=>{devBase(38,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1});S.items.oldmap=1;loadMap('town4',13,14,'up')}],
  ['しれん① とうろう',()=>{devBase(16,1,{uppy:1});loadMap('forest',5,5,'up')}],
  ['しれん② いわ',()=>{devBase(16,1,{uppy:1,t1done:1});loadMap('trial2',6,7,'up')}],
  ['しれん③ めいろ',()=>{devBase(16,1,{uppy:1,t1done:1,t2done:1});loadMap('trial3',6,9,'up')}],
@@ -2404,7 +2437,7 @@ function devMenu(){const push=L=>menu.dev.push(L),onoff=v=>v?'ON':'OFF';
  const level={title:'レベル へんこう',i:0,hint:'A：えらぶ　B：もどる',items:()=>S.party.map(m=>({t:nm(m),v:()=>'Lv'+m.lv,a:()=>{let lv=m.lv;
    push({title:nm(m)+' の レベル',i:0,items:()=>[...lvAdj(()=>lv,v=>{lv=v}),{t:'これに する',a:()=>{const om=m.mhp;m.lv=lv;m.exp=expAt(m,lv);calc(m);m.hp=m.mhp;AU.jingle('lvup');menu.dev.pop()}}]})}}))};
  const badge={title:'バッジ',i:0,items:()=>BADGES.map(b=>({t:b,v:()=>onoff(S.badges.includes(b)),a:()=>{if(S.badges.includes(b))S.badges=S.badges.filter(x=>x!==b);else S.badges.push(b)}}))};
- const EVF=[['uppy','ウッピーの イベント'],['t1done','しれん① とうろう'],['t2done','しれん② いわ'],['t3done','しれん③ めいろ'],['hisuiGot','ヒスイコを てにいれた'],['ev5done','キヨシ イベント'],['elderGone','おじいちゃんが いない'],['fishCandy','つりの ごほうび'],['ygruntGone','ユノハマの したっぱ'],['ev6done','ミネゾーウ イベント'],['ishimoriGone','イシモリに かった'],['caveOpen','かくし つうろ'],['tonedone','すいしょうの とびら'],['lightdone','ひかりの パネル'],['shounonGot','ショウノーンを てにいれた']];
+ const EVF=[['uppy','ウッピーの イベント'],['t1done','しれん① とうろう'],['t2done','しれん② いわ'],['t3done','しれん③ めいろ'],['hisuiGot','ヒスイコを てにいれた'],['ev5done','キヨシ イベント'],['elderGone','おじいちゃんが いない'],['fishCandy','つりの ごほうび'],['ygruntGone','コダマ（ユノハマ）'],['ev6done','ミネゾーウ イベント'],['ishimoriGone','イシモリに かった'],['caveOpen','かくし つうろ'],['tonedone','すいしょうの とびら'],['lightdone','ひかりの パネル'],['shounonGot','ショウノーンを てにいれた'],['tatsu1','タツヤ（もり）'],['tatsu2','タツヤ（ユノハマ）']];
  const events={title:'イベントの じょうたい',i:0,items:()=>EVF.map(([k,t])=>({t,v:()=>onoff(S.flags[k]),a:()=>{if(S.flags[k])delete S.flags[k];else S.flags[k]=1}}))};
  return{title:'かいはつしゃ メニュー',i:0,items:()=>[
   {t:'ワープ',a:()=>push(warp)},
@@ -2436,6 +2469,8 @@ function updWorld(){
  if(Q.length){stepQ();return}
  if(S.map==='route5'&&!S.flags.ev5done&&!S.flags.ev5call&&P.mv===0&&!menu&&!shop&&!boxui){ev5Start();return}
  if(S.map==='town4'&&S.badges.includes('ヒバナバッジ')&&!S.flags.ev6done&&!S.flags.ev6call&&P.mv===0&&!menu&&!shop&&!boxui){ev6Start();return}
+ if(S.map==='town4'&&S.flags.ev6done&&!S.flags.tatsu2&&!S.flags.t6Call&&P.mv===0&&!menu&&!shop&&!boxui){tatsuYunohama();return}
+ if(S.map==='forest'&&!S.flags.tatsu1&&!S.flags.tfCall&&S.badges.length<2&&hasStarter()&&P.mv===0&&!menu&&!shop&&!boxui){tatsuForest();return}
  if(!menu&&!shop&&P.mv===0&&S.party.some(x=>x.evoPending)){startEvo();return}
  if(boxui){updBox();return}
  if(shop){updShop();return}
@@ -2593,7 +2628,7 @@ function resolve(att,def,mv,isP,who){const sd=side(isP),od=side(!isP),dwho=lab(d
    let d=Math.max(1,Math.floor((((2*att.lv/5+2)*mv.p*A/Df)/50+2)*stab*e*crit*(0.85+Math.random()*0.15)));if(DEV&&DEV.ohko&&isP)d=Math.max(d,hp);hp=Math.max(B.god?1:0,hp-d);dm.push(d);total+=d;n++}
   const alive=hp>0;
   // each hit of a multi-hit move gets its own lunge + effect + damage animation
-  dm.forEach((d,k)=>{if(k>0)r.push(F(()=>{B.lunge={who:sd,t:0};AU.sfx('swing')}),Wt(()=>B.lunge.t>=10),F(()=>{B.lunge=null;B.fx={type:mv.t,t:0,to:od};AU.sfx('fx'+mv.t)}),Wt(()=>B.fx.t>=22),F(()=>{B.fx=null}));
+  dm.forEach((d,k)=>{if(k>0)r.push(F(()=>{B.lunge={who:sd,t:0,d:10};AU.sfx('swing')}),Wt(()=>B.lunge.t>=10),F(()=>{B.lunge=null;B.fx={type:mv.t,t:0,to:od};AU.sfx('fx'+mv.t)}),Wt(()=>B.fx.t>=22),F(()=>{B.fx=null}));
    r.push(F(()=>{def.hp=Math.max(B.god?1:0,def.hp-d);B.blink={who:od,t:24};B.shake=e>1?12:7;AU.sfx(e>1?'super':'hit')}),Wt(settled))});
   if(hits>1)r.push(...T(`${n}かい あたった！`));
   if(crit1)r.push(...T('きゅうしょに あたった！'));
@@ -2729,7 +2764,7 @@ function uppyAfter(){Q.push(delay(30),...T('……どこからか こえが き�
  F(()=>{healAll();AU.jingle('heal')}),delay(30),...T('モンスターたちは\nげんきを とりもどした！','（いつか もっと つよく なって\nかならず また ここへ こよう……！）'),F(save))}
 function checkFaint(){const foe=B.foe,m=me();if(B.god){if(m.hp<=0)m.hp=1;if(foe.hp<=0)foe.hp=1}
  if(foe.hp<=0&&!B.over){
-  const r=[F(()=>{B.sinkF=1;AU.sfx('faint')}),Wt(()=>B.sinkF>=16),F(()=>{B.foeGone=true}),delay(6),...T(`${lab(foe,false)}は たおれた！`),F(()=>gainExp(m,foe,B.trainer?1.5:1))];
+  const r=[F(()=>{B.sinkF=1;AU.sfx('faint')}),Wt(()=>B.sinkF>=SINK),F(()=>{B.foeGone=true}),delay(6),...T(`${lab(foe,false)}は たおれた！`),F(()=>gainExp(m,foe,B.trainer?1.5:1))];
   if(!B.trainer){B.over=true;r.splice(r.length-1,0,F(()=>AU.jingle('win')));r.push(F(endBattle));return r}
   const ni=B.team.findIndex(x=>x.hp>0);
   if(ni>=0){const nx=B.team[ni];r.push(F(()=>{B.foe=nx;B.dF=nx.hp;B.foeGone=false;B.sinkF=0;B.st.foe=newSt();B.dot.foe=null;B.rech.foe=false;if(!S.seen.includes(nx.id))S.seen.push(nx.id)}),...T(`${B.trainer.tname}は\n${nm(nx)}を くりだした！`));return r}
@@ -2739,7 +2774,7 @@ function checkFaint(){const foe=B.foe,m=me();if(B.god){if(m.hp<=0)m.hp=1;if(foe.
     Q.push(F(()=>{tr.alert=0;AU.jingle('win')}),...T(...(tr.badgeTalk||[]),`${bn}を もらった！`),...(S.badges.length>=BADGES.length?T('— しさくばんは ここまで！ —\nあそんでくれて ありがとう！'):[]),F(save))}}));
   return r}
  if(m.hp<=0){const ni=S.party.findIndex(x=>x.hp>0);
-  const r=[F(()=>{B.sinkM=1;AU.sfx('faint')}),Wt(()=>B.sinkM>=16),F(()=>{B.meIn=false;B.sinkM=0}),delay(6),...T(`${nm(m)}は たおれた！`)];
+  const r=[F(()=>{B.sinkM=1;AU.sfx('faint')}),Wt(()=>B.sinkM>=SINK),F(()=>{B.meIn=false;B.sinkM=0}),delay(6),...T(`${nm(m)}は たおれた！`)];
   if(ni<0){B.over=true;r.push(...T('たたかえる モンスターが いない…','めのまえが まっくらに なった！'),F(blackout))}
   else r.push(F(()=>{B.forced=true;B.menu='party';B.pcur=ni}),Wt(()=>!B.forced),F(()=>{const i=B.pcur;B.menu='main';B.mi=i;B.dM=S.party[i].hp;B.dExp=S.party[i].exp;B.st.me=newSt();B.dot.me=null;B.rech.me=false}),delay(10),F(()=>{B.meIn=true;return T(`ゆけっ！ ${nm(me())}！`)}));
   return r}
@@ -2792,18 +2827,18 @@ function run(){const m=me(),foe=B.foe;
 function doSwitch(i){const old=me();B.menu='main';
  Q.push(...T(`もどれ！ ${nm(old)}！`),F(()=>{B.meIn=false}),delay(12),F(()=>{B.mi=i;B.dM=me().hp;B.dExp=me().exp;B.st.me=newSt();B.dot.me=null;B.rech.me=false}),delay(6),F(()=>{B.meIn=true}),...T(`ゆけっ！ ${nm(S.party[i])}！`),...foeTurn())}
 function endBattle(){Q.length=0;B=null;mode='world';save()}
-function blackout(){Q.length=0;healAll();if(S.flags.ev5raid||S.flags.ev5call){delete S.flags.ev5raid;delete S.flags.ev5call}const lost=Math.floor(S.money/2);S.money-=lost;B=null;mode='world';loadMap(...S.respawn);save();
+function blackout(){Q.length=0;healAll();for(const k of TATSU_TEMP)delete S.flags[k];if(S.flags.ev5raid||S.flags.ev5call){delete S.flags.ev5raid;delete S.flags.ev5call}const lost=Math.floor(S.money/2);S.money-=lost;B=null;mode='world';loadMap(...S.respawn);save();
  say('あわてて かいふくした ばしょへ\nもどった…',lost>0?`おかねを ${lost}えん おとしてしまった…`:'モンスターたちは げんきに なった。')}
 function grid(cur,n){let k=cur;if(btnp('left')&&k%2===1)k--;if(btnp('right')&&k%2===0&&k+1<n)k++;if(btnp('up')&&k>=2)k-=2;if(btnp('down')&&k+2<n)k+=2;return k}
 function updBattle(){
- B.dF=approach(B.dF,B.foe.hp,Math.max(.25,B.foe.mhp/28));B.dM=approach(B.dM,me().hp,Math.max(.25,me().mhp/28));
+ B.dF=approach(B.dF,B.foe.hp,Math.max(.25,B.foe.mhp/90,Math.abs(B.foe.hp-B.dF)*.09));B.dM=approach(B.dM,me().hp,Math.max(.25,me().mhp/90,Math.abs(me().hp-B.dM)*.09));
  if(B.blink&&--B.blink.t<=0)B.blink=null;
  if(B.forced){const n=S.party.length;if(btnp('up')){B.pcur=(B.pcur+n-1)%n;AU.sfx('cur')}if(btnp('down')){B.pcur=(B.pcur+1)%n;AU.sfx('cur')}btnp('b');
   if(btnp('a')){if(S.party[B.pcur].hp>0){B.forced=false;AU.sfx('sel')}else AU.sfx('bump')}return}
- if(B.intro<40)B.intro++;
+ if(B.intro<INTRO)B.intro++;
  if(B.lunge)B.lunge.t++;if(B.fx)B.fx.t++;if(B.shake>0)B.shake--;
  if(B.godFade>0&&B.godFade<40)B.godFade++;
- if(B.sinkF>0&&B.sinkF<16)B.sinkF++;if(B.sinkM>0&&B.sinkM<16)B.sinkM++;if(B.lvfx&&++B.lvfx.t>110)B.lvfx=null;
+ if(B.sinkF>0&&B.sinkF<SINK)B.sinkF++;if(B.sinkM>0&&B.sinkM<SINK)B.sinkM++;B.meT=B.meIn?(B.meT||0)+1:0;if(B.foe!==B.foeRef){B.foeRef=B.foe;B.foeT=0}else B.foeT=(B.foeT||0)+1;if(B.lvfx&&++B.lvfx.t>110)B.lvfx=null;
  if(Q.length){stepQ();return}
  const m=me();
  if(B.menu==='main'&&B.rech.me){turnMove(m.moves[0]);return}
@@ -3189,8 +3224,11 @@ function platform(x,y,rx,ry){if(CUR.cave){ell(x,y+3,rx,ry,'#3a2e24');ell(x,y,rx,
  if(!CUR.out){ell(x,y+3,rx,ry,'#a89470');ell(x,y,rx,ry,'#cbb894');ell(x-rx*.2,y-ry*.25,rx*.6,ry*.45,'#dccaa8');return}
  ell(x,y+3,rx,ry,'#6fae52');ell(x,y,rx,ry,'#9ed77a');ell(x-rx*.2,y-ry*.25,rx*.62,ry*.45,'#b6e690');
  for(let i=0;i<8;i++){const a=i/8*Math.PI*2+.2,px=x+Math.cos(a)*rx*.8,py=y+Math.sin(a)*ry*.62;R(px,py-3,2,4,'#5f9e46');R(px+3,py-2,2,3,'#5f9e46')}}
-function lo(who){const l=B.lunge;if(!l||l.who!==who)return[0,0];const t=l.t,k=t<6?t/6:t<12?(12-t)/6:0;return who==='me'?[18*k,-8*k]:[-18*k,8*k]}
+function lo(who){let x=0,y=0;const l=B.lunge;if(l&&l.who===who){const p=l.t/(l.d||12),k=p<.12?-.25*easeOut(p/.12):p<.42?-.25+1.25*easeOut((p-.12)/.3):1-easeIO((p-.42)/.58);x=who==='me'?20*k:-20*k;y=who==='me'?-9*k:9*k}
+ const b=B.blink;if(b&&b.who===who){const q=1-b.t/24,kb=Math.sin(Math.PI*Math.min(1,q*1.6))*(1-q*.5)*7;x+=who==='me'?-kb:kb;y+=who==='me'?kb*.4:-kb*.4}return[x,y]}
 const clamp01=v=>v<0?0:v>1?1:v;
+const easeOut=q=>1-Math.pow(1-clamp01(q),3),easeIn=q=>Math.pow(clamp01(q),3),easeIO=q=>{q=clamp01(q);return q<.5?4*q*q*q:1-Math.pow(-2*q+2,3)/2};
+const SINK=22,INTRO=48;
 function drawFx(){const f=B.fx;if(!f)return;const p=Math.min(1,f.t/24),[tx,ty]=f.to==='foe'?[236,58]:[76,152],[ax,ay]=f.to==='foe'?[90,140]:[230,60];
  const lerp=(a,b,q)=>a+(b-a)*q;
  switch(f.type){
@@ -3214,22 +3252,23 @@ function drawFx(){const f=B.fx;if(!f)return;const p=Math.min(1,f.t/24),[tx,ty]=f
  default:{const s=4+p*22;c.globalAlpha=1-p*.6;for(const[w,cl]of[[5,'#e0a020'],[3,'#fff7c0']]){c.strokeStyle=cl;c.lineWidth=w;for(let i=0;i<8;i++){const a=i*Math.PI/4+.3;c.beginPath();c.moveTo(tx+Math.cos(a)*s*.4,ty+Math.sin(a)*s*.4);c.lineTo(tx+Math.cos(a)*s,ty+Math.sin(a)*s);c.stroke()}}
   ell(tx,ty,8*(1-p)+2,8*(1-p)+2,'#ffffff');c.globalAlpha=1}}}
 function drawBattle(){
- const f=B.foe,m=me(),slide=Math.max(0,40-B.intro)*5;
+ const f=B.foe,m=me(),slide=200*(1-easeOut(B.intro/INTRO));
  drawBattleBG();
- const sh=B.shake||0,ox=sh?((frame*7)%5-2)*sh*.45:0,oy=sh?((frame*3)%3-1)*sh*.35:0;
+ const sh=B.shake||0,ox=sh?Math.sin(sh*1.7)*sh*.5:0,oy=sh?Math.cos(sh*2.3)*sh*.25:0;
  c.save();c.translate(ox,oy);
  platform(236-slide,100,62,13);platform(76+slide,192,68,13);
  if(B.god&&!B.godFade){c.globalAlpha=.28+.1*Math.sin(frame/12);ell(236-slide,58,48,42,'#f0ffc0');c.globalAlpha=1}
  const flash=w=>!!(B.blink&&B.blink.who===w&&(B.blink.t>>2)%2===0);
  const[fx_,fy_]=lo('foe'),[mx_,my_]=lo('me');
  if(B.fshow==='trainer'){const tr=B.trainer;spr(SPRS[tr.spr].down[0],196-slide,20,5,false,tr.pal)}
- else if(!B.foeGone&&!B.ball){c.save();c.beginPath();c.rect(-20,-20,W+40,126);c.clip();c.globalAlpha=B.godFade?Math.max(0,1-B.godFade/40):1;drawMon(f.id,196-slide+fx_,18+B.sinkF*6+fy_,false,flash('foe'));c.globalAlpha=1;c.restore()}
+ else if(!B.foeGone&&!B.ball){c.save();c.beginPath();c.rect(-20,-20,W+40,126);c.clip();c.globalAlpha=B.godFade?Math.max(0,1-B.godFade/40):1;{const sk=B.sinkF/SINK,pop=B.intro>=INTRO&&B.foeT<14?B.foeT/14:1,bob=B.sinkF||B.lunge?0:Math.sin(frame/16)*1.2;if(sk>0)c.globalAlpha*=1-easeIn(sk)*.85;if(pop<1)c.globalAlpha*=easeOut(pop);drawMon(f.id,196-slide+fx_,18+easeIn(sk)*100+fy_+bob-(1-easeOut(pop))*14,false,flash('foe')||(pop<1&&B.foeT<5))}c.globalAlpha=1;c.restore()}
  if(B.ball){let bx,by;if(B.ballT<30){const t=B.ballT/30;bx=90+(236-90)*t;by=170+(84-170)*t-Math.sin(t*Math.PI)*70}
   else{const ph=Math.floor((B.ballT-30)/30),lt=((B.ballT-30)%30)/30;bx=236+(ph<B.shakes?Math.sin(lt*Math.PI*2)*5:0);by=88}
   drawBall(bx,by)}
- if(B.meIn){const lf=B.lvfx;c.save();c.beginPath();c.rect(-20,-20,W+40,218);c.clip();drawMon(m.id,36+mx_+slide,112+B.sinkM*6+my_,true,flash('me')||!!(lf&&lf.t<32&&(lf.t>>2)%2===0));c.restore()}
+ if(B.meIn){const lf=B.lvfx;c.save();c.beginPath();c.rect(-20,-20,W+40,218);c.clip();const sk=B.sinkM/SINK,pop=Math.min(1,(B.meT||0)/14),bob=B.sinkM||B.lunge?0:Math.sin(frame/16+1.5)*1.2;if(sk>0)c.globalAlpha=1-easeIn(sk)*.85;if(pop<1)c.globalAlpha=easeOut(pop);drawMon(m.id,36+mx_+slide,112+easeIn(sk)*100+my_+bob+(1-easeOut(pop))*18,true,flash('me')||(pop<1&&B.meT<5)||!!(lf&&lf.t<32&&(lf.t>>2)%2===0));c.globalAlpha=1;c.restore()}
  drawFx();
  c.restore();
+ if(B.intro<12){c.globalAlpha=1-easeOut(B.intro/12);R(0,0,W,H,'#181828');c.globalAlpha=1}
  if(B.fx&&B.fx.type==='elec'&&B.fx.t%6<2){c.globalAlpha=.18;R(0,0,W,H,'#fff6a0');c.globalAlpha=1}
  if(B.lvfx&&B.meIn)drawLvFx(B.lvfx.t);
  if(B.fshow==='mon')infoBox(12,14,f,B.dF,false);
@@ -3264,11 +3303,11 @@ function drawStarter(){skyBG(120);hills(88,130);R(0,124,W,H-124,'#a6da74');
  if(sconf!==null){txt(`${sp.name}に きめるかね？`,18,218);box(212,124,108,72);['はい','いいえ'].forEach((t2,i)=>{hit(212,134+i*26,108,26,()=>{sconf=i});txt(t2,248,140+i*26);if(i===sconf)txt('▶',230,140+i*26)});return}
  txt(`${sp.name}　${TN[sp.type]}タイプ`,18,218);txt(sp.desc,18,250,3,14);txt('◀ ▶ えらぶ　A けってい　B やめる',W/2,186,'#3f6d45',11,'center')}
 function drawTrans(){drawWorld();
- if(trans<24){if(trans%8<4){c.globalAlpha=.75;R(0,0,W,H,'#181828');c.globalAlpha=1}}
- else{const w=Math.min(1,(trans-24)/22)*W;for(let i=0;i<9;i++){if(i%2)R(0,i*32,w,32,'#181828');else R(W-w,i*32,w,32,'#181828')}}}
+ if(trans<24){c.globalAlpha=.7*Math.pow(Math.sin(Math.PI*trans/12),2);R(0,0,W,H,trans%12<6?'#f8f8ff':'#181828');c.globalAlpha=1}
+ else{for(let i=0;i<9;i++){const w=easeIO((trans-24-i*1.3)/16)*W;if(i%2)R(0,i*32,w,32,'#181828');else R(W-w,i*32,w,32,'#181828')}}}
 
 /* ---------- loop ---------- */
-function bgmFor(){if(mode==='evolve')return null;if(mode==='mini')return'minamo';if(mode==='trans'||mode==='battle')return B&&B.over?null:(B&&B.trainer&&B.trainer.boss?'boss':'battle');if(mode==='title'||mode==='starter')return'field';
+function bgmFor(){if(mode==='evolve')return null;if(mode==='mini')return'minamo';if(mode==='trans'||mode==='battle')return B&&B.over?null:(B&&B.trainer&&B.trainer.rival?'rival':B&&B.trainer&&B.trainer.boss?'boss':'battle');if(mode==='title'||mode==='starter')return'field';
  if(S&&S.flags.ev6call)return SKY?'danger':'shinpi';if(S&&S.map==='cave4')return'shinpi';if(S&&['trial2','trial3','grove'].includes(S.map))return'shinpi';const rg=S&&(REGION[S.map]||S.map);if(rg==='village'&&S.flags.ev5raid)return'danger';return {village:'village',town:'town',town2:'minamo',town3:'mirai',town4:'yunohama',sea5:'umi',cave:'doukutsu',town5:'takane'}[rg]||'field'}
 function update(){frame++;
  const ui=Q.length||menu||shop||mode!=='world';
@@ -3276,7 +3315,7 @@ function update(){frame++;
  if(DIRS.some(k=>pressed[k])&&!Q.length&&(menu||shop||mode==='title'||mode==='starter'||mode==='battle'))AU.sfx('cur');
  AU.play(bgmFor());
  if(mode==='title')updTitle();else if(mode==='starter')updStarter();else if(mode==='world')updWorld();
- else if(mode==='trans'){for(const e of CUR.npcs)if(e.alert>0)e.alert--;if(++trans>=46)initBattle()}else if(mode==='battle')updBattle();else if(mode==='evolve')updEvolve();else if(mode==='mini')updMini()}
+ else if(mode==='trans'){for(const e of CUR.npcs)if(e.alert>0)e.alert--;if(++trans>=52)initBattle()}else if(mode==='battle')updBattle();else if(mode==='evolve')updEvolve();else if(mode==='mini')updMini()}
 function draw(){c.imageSmoothingEnabled=false;HITS.length=0;
  if(mode==='title')drawTitle();else if(mode==='starter')drawStarter();else if(mode==='world')drawWorld();else if(mode==='trans')drawTrans();else if(mode==='battle'&&B)drawBattle();else if(mode==='evolve')drawEvolve();else if(mode==='mini'&&MG)drawMini();drawDevInfo()}
 let last=0,acc=0;
