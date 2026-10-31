@@ -1898,11 +1898,13 @@ function tmsg(lines,after){TT={pg:'msg',lines,k:0,after:after||null,i:0}}
 function titleOpts(){
  if(TT.pg==='new')return[{t:'はい',fn:()=>{TT={pg:'main',i:0};newGame()}},{t:'いいえ',fn:()=>{TT={pg:'main',i:1}}}];
  if(TT.pg==='imp')return[{t:'はい',fn:()=>{try{localStorage.setItem(KEY,JSON.stringify(TT.data));saved=true;TMAIL=null;AU.jingle('item');tmsg(['セーブを とりこみました！','「つづきから」で あそべます。'])}catch(e){tmsg(['ほぞんに しっぱい しました。'])}}},{t:'いいえ',fn:()=>{TT={pg:'main',i:0}}}];
- if(TT.pg==='out')return[{t:'QRコードを だす',fn:showQR},{t:'リンクを おくる',fn:shareLink,direct:true},{t:'ファイルで うつす',fn:exportSave,direct:true},{t:'もどる',fn:()=>{TT={pg:'main',i:3}}}];
- if(TT.pg==='in')return[{t:'QRコードを よみとる',fn:startScan,direct:true},{t:'リンクを はりつける',fn:pasteLink,direct:true},{t:'ファイルから',fn:pickSave,direct:true},{t:'もどる',fn:()=>{TT={pg:'main',i:saved?4:1}}}];
+// developer hub (after the passcode): scenarios and moving saves between devices
+ if(TT.pg==='devhub')return[{t:'シナリオから はじめる',fn:()=>{TT={pg:'devscn',dl:devScenarioList()}}},{t:'セーブを うつす',fn:()=>{if(!saved){tmsg(['うつす セーブが ありません。'],()=>{TT={pg:'devhub',i:1}});return}TT={pg:'out',i:0};prepCode()}},{t:'セーブを とりこむ',fn:()=>{TT={pg:'in',i:0}}},{t:'もどる',fn:()=>{TT={pg:'main',i:0}}}];
+ if(TT.pg==='out')return[{t:'QRコードを だす',fn:showQR},{t:'リンクを おくる',fn:shareLink,direct:true},{t:'ファイルで うつす',fn:exportSave,direct:true},{t:'もどる',fn:()=>{TT={pg:'devhub',i:1}}}];
+ if(TT.pg==='in')return[{t:'QRコードを よみとる',fn:startScan,direct:true},{t:'リンクを はりつける',fn:pasteLink,direct:true},{t:'ファイルから',fn:pickSave,direct:true},{t:'もどる',fn:()=>{TT={pg:'devhub',i:2}}}];
  const tm=saved?tmail():null,un=tm?unread(tm):0;
- const o=saved?[{t:'つづきから',fn:contGame},{t:'はじめから',fn:()=>{TT={pg:'new',i:1}}},{t:'メール'+(un?' ●'+un:''),fn:()=>{const d=tmail();if(d)TT={pg:'mail',u:{pg:'list',i:0},d}}},{t:'セーブを うつす',fn:()=>{TT={pg:'out',i:0};prepCode()}},{t:'セーブを とりこむ',fn:()=>{TT={pg:'in',i:0}}}]
-  :[{t:'はじめから',fn:newGame},{t:'セーブを とりこむ',fn:()=>{TT={pg:'in',i:0}}}];
+ const o=saved?[{t:'つづきから',fn:contGame},{t:'はじめから',fn:()=>{TT={pg:'new',i:1}}},{t:'メール'+(un?' ●'+un:''),fn:()=>{const d=tmail();if(d)TT={pg:'mail',u:{pg:'list',i:0},d}}}]
+  :[{t:'はじめから',fn:newGame}];
  if(isWebHost()&&!isStandalone())o.push({t:'ホームがめんに ついか',fn:showHomeHelp});
  return o}
 function showHomeHelp(){const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
@@ -1956,14 +1958,14 @@ const shareURL=code=>shareBase()+'#save='+code;
 function askImport(d){TT={pg:'imp',i:1,data:d,lines:[(saved?'いまの セーブに うわがきして\n':'')+'とりこみますか？',saveSummary(d)]}}
 // DOM overlay used for the QR code, the camera and pasting a link (crisp, larger than the 320px game screen)
 let OVL=null;
-function closeOverlay(){if(!OVL)return;try{OVL.stop&&OVL.stop()}catch(e){}OVL.el.remove();OVL=null;if(TT.pg==='ovl')TT={pg:'main',i:0}}
+function closeOverlay(){if(!OVL)return;try{OVL.stop&&OVL.stop()}catch(e){}OVL.el.remove();const prev=OVL.prev;OVL=null;if(TT.pg==='ovl')TT=prev||{pg:'main',i:0}}
 function overlay(title,note){closeOverlay();const el=document.createElement('div');
  el.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(10,14,12,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;box-sizing:border-box;color:#f4f4ec;font-family:'+FONT+';text-align:center';
  const h=document.createElement('div');h.textContent=title;h.style.cssText='font-size:20px';el.appendChild(h);
  const body=document.createElement('div');body.style.cssText='display:flex;flex-direction:column;align-items:center;gap:10px;max-width:100%';el.appendChild(body);
  if(note){const p=document.createElement('div');p.style.cssText='font-size:14px;line-height:1.7;white-space:pre-line;opacity:.9';p.textContent=note;el.appendChild(p)}
  const b=document.createElement('button');b.textContent='とじる';b.style.cssText='font:inherit;font-size:16px;padding:10px 28px;border-radius:10px;border:2px solid #f4f4ec;background:transparent;color:#f4f4ec';b.onclick=()=>closeOverlay();el.appendChild(b);
- el.addEventListener('keydown',e=>e.stopPropagation());document.body.appendChild(el);OVL={el,body};TT={pg:'ovl'};return OVL}
+ el.addEventListener('keydown',e=>e.stopPropagation());document.body.appendChild(el);OVL={el,body,prev:TT};TT={pg:'ovl'};return OVL}
 addEventListener('keydown',e=>{if(OVL&&(e.key==='Escape'||e.key==='Backspace'&&e.target.tagName!=='TEXTAREA')){e.preventDefault();closeOverlay()}},true);
 function showQR(){const code=TT.code;if(!code){tmsg(['じゅんび ちゅう です。\nもういちど えらんでね。']);return}
  let q=null;try{q=qrcode(0,'L');q.addData(shareURL(code));q.make()}catch(e){q=null}
@@ -1971,7 +1973,7 @@ function showQR(){const code=TT.code;if(!code){tmsg(['じゅんび ちゅう で
  const n=q.getModuleCount(),qz=4,cv2=document.createElement('canvas');cv2.width=cv2.height=n+qz*2;const g=cv2.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,n+qz*2,n+qz*2);g.fillStyle='#000';
  for(let y=0;y<n;y++)for(let x=0;x<n;x++)if(q.isDark(y,x))g.fillRect(x+qz,y+qz,1,1);
  cv2.style.cssText='width:min(78vw,62vh);height:min(78vw,62vh);image-rendering:pixelated;image-rendering:crisp-edges;background:#fff;border-radius:6px';
- const o=overlay('QRコードで うつす','うけとる スマホの カメラで よみとってね。\nホームがめんの アプリや PCに うつすときは\nアプリの「セーブを とりこむ → QRコードを よみとる」で。');o.body.appendChild(cv2)}
+ const o=overlay('QRコードで うつす','うけとる スマホの カメラで よみとってね。\nホームがめんの アプリや PCに うつすときは\nかいはつしゃモードの「セーブを とりこむ」で。');o.body.appendChild(cv2)}
 function shareLink(){const code=TT.code;if(!code){tmsg(['じゅんび ちゅう です。\nもういちど えらんでね。']);return}const url=shareURL(code);
  const copied=()=>tmsg(['リンクを コピーしました！','LINEや メールで じぶんに おくって\nうつしたい たんまつで ひらいてね。']);
  const manual=()=>{const o=overlay('リンクで うつす','この リンクを コピーして\nLINEや メールで じぶんに おくってね。');const ta=document.createElement('textarea');ta.value=url;ta.readOnly=true;ta.style.cssText='width:min(86vw,520px);height:120px;font-size:12px;border-radius:8px;padding:8px';o.body.appendChild(ta);setTimeout(()=>{ta.focus();ta.select()},50)};
@@ -2002,12 +2004,12 @@ function checkLinkImport(){const m=/save=([A-Za-z0-9_-]+)/.exec(location.hash||'
 function updTitle(){
  if(TT.pg==='ovl')return;
  if(TT.pg==='pass'){updPass();return}
- if(TT.pg==='devscn'){updList(TT.dl,()=>{TT={pg:'main',i:0}});return}
+ if(TT.pg==='devscn'){updList(TT.dl,()=>{TT={pg:'devhub',i:0}});return}
  if(TT.pg==='mail'){updMailUI(TT.u,TT.d.mail,()=>{TT={pg:'main',i:2};TMAIL=null},()=>{try{localStorage.setItem(KEY,JSON.stringify(TT.d))}catch(e){}});return}
  if(TT.pg==='msg'){if(btnp('a')||btnp('b')){TT.k++;if(TT.k>=TT.lines.length){const a=TT.after;TT={pg:'main',i:0};if(a)a()}}return}
  const o=titleOpts(),n=o.length;if(TT.i>=n)TT.i=0;
  if(btnp('up')){TT.i=(TT.i+n-1)%n;AU.sfx('cur')}if(btnp('down')){TT.i=(TT.i+1)%n;AU.sfx('cur')}
- if(btnp('b')){if(TT.pg!=='main'){TT={pg:'main',i:0};return}devTap();return}
+ if(btnp('b')){if(TT.pg==='out'||TT.pg==='in'){TT={pg:'devhub',i:TT.pg==='out'?1:2};return}if(TT.pg!=='main'){TT={pg:'main',i:0};return}devTap();return}
  if(btnp('a')){AU.sfx('sel');o[TT.i].fn()}}
 const WELCOME_MAIL={title:'ようこそ！',body:['くさむらモンスターへ ようこそ！','こうしんが あると ここに\nメールが とどくよ。','メニューの「メール」で\nいつでも よめるよ。','たのしんでね！']};
 function newGame(){S={party:[],box:[],items:{ball:0,potion:2},money:1000,badges:[],seen:[],caught:[],flags:{},respawn:['home',4,5,'up'],map:'home',mail:[{id:'welcome',from:'かいはつしゃ',title:WELCOME_MAIL.title,body:WELCOME_MAIL.body,read:false}],newsSeen:NEWS[NEWS.length-1].id};
@@ -2358,7 +2360,7 @@ let DEV=null,devTaps=[];
 const DEV_CODE=String.fromCharCode(49,50,48,50);
 function devTap(){const now=Date.now();devTaps=devTaps.filter(t=>now-t<4000);devTaps.push(now);if(devTaps.length>=7){devTaps=[];TT={pg:'pass',code:'',k:0};AU.sfx('sel')}}
 function passKey(ch){if(TT.pg!=='pass')return;if(ch==='del'){TT.code=TT.code.slice(0,-1);return}if(TT.code.length>=4)return;TT.code+=ch;AU.sfx('cur');
- if(TT.code.length===4){if(TT.code===DEV_CODE){AU.jingle('item');TT={pg:'devscn',dl:devScenarioList()}}else{AU.sfx('bump');tmsg(['あいことばが ちがいます。'])}}}
+ if(TT.code.length===4){if(TT.code===DEV_CODE){AU.jingle('item');TT={pg:'devhub',i:0}}else{AU.sfx('bump');tmsg(['あいことばが ちがいます。'])}}}
 addEventListener('keydown',e=>{if(mode!=='title'||TT.pg!=='pass')return;const m=/^(?:Digit|Numpad)(\d)$/.exec(e.code);if(m){e.preventDefault();passKey(m[1])}else if(e.code==='Backspace'){e.preventDefault();passKey('del')}});
 const PASS_KEYS=['1','2','3','4','5','6','7','8','9','del','0','ok'];
 function updPass(){const k=TT.k;if(btnp('left')&&k%3>0)TT.k--;if(btnp('right')&&k%3<2)TT.k++;if(btnp('up')&&k>=3)TT.k-=3;if(btnp('down')&&k<9)TT.k+=3;
