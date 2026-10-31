@@ -1754,6 +1754,8 @@ const HITS=[];function hit(x,y,w,h,fn,q,noA){HITS.push({x,y,w,h,fn,q,noA})}
 c.canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;const r=c.canvas.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;
  for(let i=HITS.length-1;i>=0;i--){const h=HITS[i];if(x>=h.x&&x<h.x+h.w&&y>=h.y&&y<h.y+h.h){if(Q.length&&!h.q)return;e.preventDefault();h.fn();if(!h.noA&&!gestureA())pressed.a=true;return}}});
 const btnp=k=>{if(pressed[k]){pressed[k]=false;return true}return false};
+/* ながおし リピート：おした しゅんかん 1、ながおしで 2（18フレーム ごから 4フレームごと、1びょう いじょうで 2フレームごと） */
+const holdT={};const btnr=k=>{if(btnp(k)){holdT[k]=0;return 1}if(!held[k]){holdT[k]=0;return 0}const t=++holdT[k];if(t<18)return 0;return (t-18)%(t>60?2:4)===0?2:0};
 /* ---------- sound: tiny chiptune sequencer (square lead + triangle bass) ---------- */
 const NOTE={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
 const n2f=n=>{const m=/^([A-G])([#b]?)(\d)$/.exec(n);const s=NOTE[m[1]]+(m[2]==='#'?1:m[2]==='b'?-1:0);return 440*Math.pow(2,((+m[3]+1)*12+s-69)/12)};
@@ -2599,7 +2601,7 @@ function updMenu(){const m=menu;
  if(m.pg==='mail'){updMailUI(m.mu,S.mail||(S.mail=[]),()=>{m.pg='root'},null);return}
  if(m.pg==='quit'){if(btnp('up')||btnp('down'))m.q^=1;if(btnp('b')){m.pg='root';return}
   if(btnp('a')){if(m.q===0){save();DEV=null;menu=null;shop=null;boxui=null;Q.length=0;mode='title';TT={pg:'main',i:0}}else m.pg='root'}return}
- if(m.pg==='dex'||m.pg==='dexd'){const n=DEX.length;m.dx=m.dx||0;if(btnp('up'))m.dx=(m.dx+n-1)%n;if(btnp('down'))m.dx=(m.dx+1)%n;if(m.pg==='dex'&&btnp('left'))m.dx=Math.max(0,m.dx-5);if(m.pg==='dex'&&btnp('right'))m.dx=Math.min(n-1,m.dx+5);
+ if(m.pg==='dex'||m.pg==='dexd'){const n=DEX.length;m.dx=m.dx||0;{const u=btnr('up'),d=btnr('down');if(u===1)m.dx=(m.dx+n-1)%n;else if(u===2&&m.dx>0){m.dx--;AU.sfx('cur')}if(d===1)m.dx=(m.dx+1)%n;else if(d===2&&m.dx<n-1){m.dx++;AU.sfx('cur')}}if(m.pg==='dex'&&btnp('left'))m.dx=Math.max(0,m.dx-5);if(m.pg==='dex'&&btnp('right'))m.dx=Math.min(n-1,m.dx+5);
   if(btnp('b')){m.pg=m.pg==='dexd'?'dex':'root';return}
   if(m.pg==='dex'&&btnp('a')){if(S.seen.includes(DEX[m.dx]))m.pg='dexd';else AU.sfx('bump')}return}
  if(m.pg==='items'){const n=visItems().length;if(btnp('up'))m.k=(m.k+n-1)%n;if(btnp('down'))m.k=(m.k+1)%n;
