@@ -25,7 +25,7 @@ SW = ("<script>if('serviceWorker' in navigator&&(location.protocol==='https:'||l
 EXPORT = ("window.__t={packSave,unpackSave,makeSaveCode,readSaveCode,shareURL,showQR,startScan,closeOverlay,get OVL(){return OVL},set TT(v){TT=v},MAPS,WALK,mon,loadMap,update,draw,pressed,setKey,SP,ART,startFish,spawnDrop,reachSet,bgmFor,AU,openBox,"
           "get S(){return S},set S(v){S=v},get Q(){return Q},get mode(){return mode},set mode(v){mode=v},"
           "get B(){return B},set B(v){B=v},get menu(){return menu},set menu(v){menu=v},get CUR(){return CUR},"
-          "get P(){return P},get MG(){return MG},get shop(){return shop},set shop(v){shop=v},get boxui(){return boxui},get TT(){return TT},get DEV(){return DEV},DEX,WMAP};})();")
+          "get P(){return P},get MG(){return MG},get shop(){return shop},set shop(v){shop=v},get boxui(){return boxui},get TT(){return TT},get DEV(){return DEV},DEX,WMAP,get onBike(){return onBike},get JET(){return JET},get fade(){return fade},get toast(){return toast}};})();")
 
 def main():
     shell, game = src('shell.html'), src('game.js').rstrip()
