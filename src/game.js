@@ -2147,7 +2147,8 @@ function tatsuForestWin(){const e=MAPS.forest.npcs.find(n=>n.id==='tatsuF');e.hx
   npcRun(e,['up','up','up','up','up','up'],2),F(()=>{S.flags.tatsu1=1;delete S.flags.tfShow;delete S.flags.tfCall;save()})]}
 function tatsuYunohama(){const e=MAPS.town4.npcs.find(n=>n.id==='tatsu6');S.flags.t6Call=1;
  Q.push(...T('？？？「おーい！ いた いたー！」'),F(()=>{tatsuNear(e);S.flags.t6Show=1;e.alert=40;AU.sfx('alert')}),Wt(()=>e.alert<=0),
-  ...T(TN_+'「よっ！ ひさしぶり！\nげんきに してたか？」',TN_+'「なあなあ！ いまの はなし\nぜんぶ きいてたぜ！」',TN_+'「じゃしん ミネゾーウ！\nくろい ほのおの とり！」',TN_+'「もりの かみ、\nそらの かみ、 うみの かみ……」',TN_+'「くーっ！ そういう\nでんせつ たまんねえ！！」',TN_+'「よし、 きめた！」',TN_+'「じゃしんを たおすのは\nおれだ！！」',TN_+'「まずは うでだめしだ！\nいくぜ、 さいきょー バトル！」'),
+  ...T(TN_+'「よっ！ ひさしぶり！\nげんきに してたか？」',TN_+'「なあなあ！ いまの はなし\nぜんぶ きいてたぜ！」',TN_+'「じゃしん ミネゾーウ！\nくろい ほのおの とり！」',TN_+'「もりの かみ、\nそらの かみ、 うみの かみ……」',TN_+'「くーっ！ そういう\nでんせつ たまんねえ！！」',TN_+'「よし、 きめた！」',TN_+'「じゃしんを たおすのは\nおれだ！！」',TN_+'「まずは うでだめしだ！\nいくぜ、 さいきょー バトル！」',TN_+'「……っと、 まった！\nジムの あとで へとへとだろ？」',TN_+'「ほら、 げんきに してやるよ！\nさいきょーは フェアに いくぜ！」'),
+  F(()=>{healAll();AU.jingle('heal');S.respawn=['center4',4,4,'up']}),delay(40),...T('モンスターたちは\nげんきに なった！'),
   F(()=>{B={trainer:e};mode='trans';trans=0}))}
 function tatsuYunohamaWin(){const e=MAPS.town4.npcs.find(n=>n.id==='tatsu6');e.hx=e.x;e.hy=e.y;
  return[delay(10),...T(TN_+'「くーっ！ また まけた！\nおまえ つよく なったな。」',TN_+'「……とうちゃんと\nにいちゃんの てがかりは？」',TN_+'「そっか……\nおれも たびの さきで さがすよ。」',TN_+'「さきに どうくつ ぬけて\nまってるぜ！」',TN_+'「さいきょー！」'),
@@ -3060,8 +3061,11 @@ function drawParty(sel,title,hint,setSel){HITS.length=0;box(8,8,304,272);txt(tit
   if(i===sel)txt('▶',18,y+6)});
  if(S.party.length<6&&hint)txt(hint,160,258,2,12,'center')}
 function drawItems(sel,L=visItems(),setSel){HITS.length=0;box(8,8,304,272);txt('どうぐ',24,20);txt(`おかね ${S.money}えん`,296,24,3,12,'right');
- L.forEach((k,i)=>{const y=50+i*30;if(setSel)hit(16,y-8,288,30,()=>setSel(i));txt(IT[k].n,44,y);txt(`×${S.items[k]||0}`,290,y,3,16,'right');if(i===sel)txt('▶',24,y)});
- R(20,204,280,2,1);txt(IT[L[sel]].d,24,216,3,13);txt('A：つかう　B：もどる',160,252,2,12,'center')}
+ // at most 6 rows are shown; the list scrolls so the cursor stays visible
+ const VIS=6,rh=26,top=Math.max(0,Math.min(L.length-VIS,sel-2));
+ for(let r=0;r<VIS&&top+r<L.length;r++){const i=top+r,k=L[i],y=48+r*rh;if(setSel)hit(16,y-6,288,rh,()=>setSel(i));txt(IT[k].n,44,y);txt(`×${S.items[k]||0}`,290,y,3,16,'right');if(i===sel)txt('▶',24,y)}
+ if(top>0)txt('▲',300,38,2,10,'right');if(top+VIS<L.length)txt('▼',300,190,2,10,'right');
+ R(20,206,280,2,1);if(L[sel])wrapTxt(IT[L[sel]].d,24,214,272,13,17,3);txt('A：つかう　B：もどる',160,256,2,12,'center')}
 
 function drawRoot(){box(8,8,164,78);txt(`おかね ${S.money}えん`,22,22,3,14);txt(`バッジ ${S.badges.length}こ`,22,50,3,14);
  if(S.badges.length){c.fillStyle='#8c8c98';c.beginPath();c.arc(140,58,8,0,7);c.fill();c.fillStyle='#c8c8d0';c.beginPath();c.arc(138,56,3,0,7);c.fill()}
