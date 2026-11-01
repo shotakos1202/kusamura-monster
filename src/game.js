@@ -3015,7 +3015,7 @@ function drawBike(sx,sy,dir){const hz=dir==='left'||dir==='right',wb=(frame>>2)%
  else{ell(sx+16,sy+28,4,6,'#202028');ell(sx+16,sy+28,2,4,'#9aa4b0');R(sx+6,sy+16,20,2,'#303038');R(sx+14,sy+18,4,8,'#e03838')}}
 function drawJet(sx,sy){const f=Math.sin(frame/2);R(sx+9,sy+12,4,10,'#6a7686');R(sx+19,sy+12,4,10,'#6a7686');for(const x of[11,21]){ell(sx+x,sy+25+f,3,6+f,'#ff8a28');ell(sx+x,sy+24,1.6,3.5,'#fff2a0')}}
 // landing spot: in front of the town's monster center (home for the village)
-function landingFor(id){const m=MAPS[id];for(const pre of[/^center/,/^home$/])for(const k in(m.warps||{}))if(pre.test(m.warps[k][0])){const[x,y]=k.split(',').map(Number);return[x,y+1]}const w=warpPoint(id);return[w[0],w[1]]}
+function landingFor(id){const m=MAPS[id];for(const pre of[/^center|Center$/,/^home$/])for(const k in(m.warps||{}))if(pre.test(m.warps[k][0])){const[x,y]=k.split(',').map(Number);return[x,y+1]}const w=warpPoint(id);return[w[0],w[1]]}
 function jetTo(n){const curR=REGION[S.map]||S.map;menu=null;
  if(curR===n.id)return say('いま この まちに いるよ！');
  if(!CUR.out||CUR.cave||CUR.boat||P.surf)return say('ここでは ジェットパックを\nつかえない！');
@@ -3125,7 +3125,7 @@ function updMenu(){const m=menu;
   if(btnp('a')){const k=visItems()[m.k];if((S.items[k]||0)<=0)say(`${IT[k].n}を もっていない。`);else if(k==='oldmap')say('なぞの ちずを ひらいた。','「アジト：オオアミシティ」\nと しるしが ついている……');else if(k==='cavemap')say('どうくつの ちずを ひらいた。','ひびきの どうくつの みちが\nこまかく かかれている。');else if(useTool(k,m)){}else if(k==='ball'||k==='ballplus')say('いまは つかえない！');else if(!S.party.length)say('つかう あいてが いない。');else{m.pg='party';m.use=k;m.j=0}}
   return}
  if(m.pg==='wmap'){const n=WMAP.length;if(btnp('up')||btnp('right'))m.w=(m.w+1)%n;if(btnp('down')||btnp('left'))m.w=(m.w+n-1)%n;if(btnp('b')){m.pg=m.jet?'items':'root';m.jet=false;return}
-  if(btnp('a')){const w=WMAP[m.w];if(S.items.jetpack&&(S.visited||{})[w.id]&&(w.k==='town'||w.k==='city'))jetTo(w);else{m.pg=m.jet?'items':'root';m.jet=false}}return}
+  if(btnp('a')){const w=WMAP[m.w];if(S.items.jetpack&&(S.visited||{})[w.id]&&(w.k==='town'||w.k==='city'||w.k==='tower'))jetTo(w);else{m.pg=m.jet?'items':'root';m.jet=false}}return}
  if(m.pg==='pmenu'){if(btnp('up'))m.sub=(m.sub+2)%3;if(btnp('down'))m.sub=(m.sub+1)%3;
   if(btnp('b')){m.pg='party';return}
   if(btnp('a')){const t=S.party[m.j];
