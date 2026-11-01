@@ -14741,7 +14741,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.02-0103';
+const BUILD='2026.11.02-0104';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -16191,9 +16191,9 @@ const WMAP=[{id:'village',n:'とよっちょむら',d:'みどりが いっぱい
  {id:'route6',n:'6ばんどうろ',d:'ユノハマシティの きたの やまみち',x:56,y:76,k:'mount'},
  {id:'cave',n:'ひびきの どうくつ',d:'こえが よく ひびく ながい どうくつ',x:42,y:100,k:'cave'},
  {id:'town5',n:'タカネシティ',d:'かぜの ふく こうげんの まち。 ジムは ひこうタイプ',x:40,y:130,k:'town',roof:'#e8b830'},
- {id:'route7',n:'7ばんどうろ',d:'タカネシティと オオアミシティを むすぶ こうげんの みち',x:94,y:144,k:'road'},
- {id:'oami',n:'オオアミシティ',d:'ブラックタワーが そびえる おおきな まち。 ジムは でんき・ノーマルタイプ',x:150,y:150,k:'tower'}];
-const WFOG=[[262,150],[236,204],[154,198],[40,196],[290,118]];
+ {id:'route7',n:'7ばんどうろ',d:'タカネシティと オオアミシティを むすぶ こうげんの みち',x:40,y:163,k:'road'},
+ {id:'oami',n:'オオアミシティ',d:'ブラックタワーが そびえる おおきな まち。 ジムは でんき・ノーマルタイプ',x:38,y:198,k:'tower'}];
+const WFOG=[[262,150],[236,204],[154,198],[150,148],[290,118]];
 const WLINKS=[['village','route'],['route','town'],['town','forest'],['forest','route3'],['route3','town2'],['town2','coast'],['town2','route4'],['route4','town3'],['town3','hill'],['town3','route5'],['route5','sea5'],['sea5','town4'],['town4','route6'],['route6','cave'],['cave','town5'],['town5','route7'],['route7','oami']];
 function fog(x,y,s){c.globalAlpha=.85;for(let i=0;i<7;i++){const a=i/7*Math.PI*2+frame/240,r=12*s+Math.sin(frame/40+i)*2;ell(x+Math.cos(a)*r,y+Math.sin(a)*r*.6,11*s,8*s,i%2?'#e4e8ee':'#d0d6e0')}ell(x,y,14*s,10*s,'#dde2ea');c.globalAlpha=1}
 const WM_LAND=[[70,226],[44,180],[26,140],[24,104],[40,80],[46,66],[78,70],[120,42],[190,40],[256,44],[286,80],[284,140],[270,200],[238,226]];
