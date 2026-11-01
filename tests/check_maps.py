@@ -9,7 +9,7 @@ async def main():
         print(await pg.evaluate("""()=>{const{MAPS,WALK}=__t;const out=[];
  for(const id in MAPS){const m=MAPS[id];const at=(x,y)=>(x<0||y<0||x>=m.w||y>=m.h)?'#':m.rows[y][x];
   const block=new Set(m.npcs.filter(e=>!e.hideFlag).map(e=>e.x+','+e.y));
-  const ok=(x,y)=>(m.boat?'Wn'.includes(at(x,y)):WALK.has(at(x,y)))&&!block.has(x+','+y);
+  const ok=(x,y)=>(m.boat?'Wn'.includes(at(x,y)):(WALK.has(at(x,y))||(m.gates||'').includes(at(x,y))))&&!block.has(x+','+y); // gates: スイッチで ひらく ゲート
   const arr=[];for(const o in MAPS)for(const k in (MAPS[o].warps||{})){const w=MAPS[o].warps[k];if(w[0]===id)arr.push([w[1],w[2]])}
   if(m.start)arr.push(m.start);if(!arr.length){out.push(id+' no arrivals');continue}
   const s0=arr[0];const seen=new Set([s0+'']);const st=[s0];
