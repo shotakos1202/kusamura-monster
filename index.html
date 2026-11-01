@@ -13727,9 +13727,9 @@ SP.yoroigani={name:'ヨロイガニ',type:'water',b:{hp:62,atk:92,def:98,spd:48}
  desc:'こうらに かたい よろいを まとう。 はさみの とげは いわも つらぬく。'};
 SP.daiogani={name:'ダイオウガニ',type:'water',b:{hp:84,atk:118,def:122,spd:52},exp:230,cr:.05,moves:['hasamu','mizushibuki'],learn:{...SP.yoroigani.learn,36:'daiobasami',42:'ooiwaotoshi',48:'gansekiho'},
  desc:'おうかんの ような こうらを もつ かいの おう。 かたほうの はさみが とても おおきい。'};
-SP.yadoiwa={name:'ヤドイワ',type:'rock',b:{hp:50,atk:58,def:88,spd:30},exp:90,cr:.4,moves:['hasamu','katakunaru'],learn:{18:'iwanadare',22:'gorogoro',26:'gansekiyoroi'},desc:'いわの かいがらを せおう ヤドカリ。 きけんを かんじると からに こもる。'};
-SP.umidory={name:'ウミドリー',type:'flying',b:{hp:48,atk:52,def:44,spd:80},exp:88,cr:.45,moves:['kuchibashi','sunakake'],learn:{18:'kazekiribane',21:'mizushibuki',24:'kyukoka',28:'hanefubuki'},desc:'うみの うえを とぶ かもめ。 ぼうしは じまんの たからもの。'};
-SP.puraguru={name:'プラグル',type:'elec',b:{hp:44,atk:58,def:48,spd:84},exp:92,cr:.4,moves:['butsukaru','biribiri'],learn:{19:'denkiito',22:'shibiredenpa',25:'biritackle',30:'raimei'},desc:'コンセントが だいすき。 でんきを たべて げんきに なる。'};
+SP.yadoiwa={name:'ヤドイワ',type:'rock',b:{hp:64,atk:74,def:100,spd:34},exp:90,cr:.4,moves:['hasamu','katakunaru'],learn:{18:'iwanadare',22:'gorogoro',26:'gansekiyoroi',30:'iwakudaki',34:'ishinoyari',39:'ooiwaotoshi'},desc:'いわの かいがらを せおう ヤドカリ。 きけんを かんじると からに こもる。'};
+SP.umidory={name:'ウミドリー',type:'flying',b:{hp:60,atk:66,def:52,spd:88},exp:88,cr:.45,moves:['kuchibashi','sunakake'],learn:{18:'kazekiribane',21:'mizushibuki',24:'kyukoka',28:'hanefubuki',32:'kazenoyaiba',36:'toppu',40:'hitoyasumi'},desc:'うみの うえを とぶ かもめ。 ぼうしは じまんの たからもの。'};
+SP.puraguru={name:'プラグル',type:'elec',b:{hp:56,atk:72,def:54,spd:90},exp:92,cr:.4,moves:['butsukaru','biribiri'],learn:{19:'denkiito',22:'shibiredenpa',25:'biritackle',30:'raimei',34:'denkounohane',39:'kaminarinohane'},desc:'コンセントが だいすき。 でんきを たべて げんきに なる。'};
 SP.hononyan={name:'ホノニャン',type:'fire',b:{hp:50,atk:70,def:46,spd:78},exp:92,cr:.4,moves:['hinoiki','niramitsukeru'],learn:{19:'honoonokiba',22:'kirisaku',25:'hinokomai',30:'kaenguruma'},desc:'しっぽの ほのおで ひなたぼっこ。 きまぐれな まちの ねこ。'};
 for(const[base,...ev]of[['namitama','uzushion'],['homurakon','glencon'],['tsubomiru','hanamiru'],['kamaleaf','kamasamurai'],['kagebasa','yamibasa','maobasa'],['rakkoro','rakkoole'],['hasagani','yoroigani','daiogani']])DEX.splice(DEX.indexOf(base)+1,0,...ev);
 DEX.push('yadoiwa','umidory','puraguru','hononyan');
@@ -13763,11 +13763,11 @@ DEX.push('yumemi','bakumu','powan','lunapowan');
 Object.assign(WHERE,{yumemi:'ミライの おか',powan:'ミライの おか',bakumu:'ユメミが Lv28で しんか',lunapowan:'ポワンが Lv26で しんか'});
 
 /* ---------- chapter: 5ばんどうろ / うみ / ユノハマシティ ---------- */
-SP.fuwakura={name:'フワクラ',type:'water',b:{hp:58,atk:62,def:52,spd:74},exp:120,cr:.3,moves:['mizushibuki','awanotate'],learn:{28:'uzumaki',30:'shibiredenpa',33:'mizunohado',37:'iyashi'},
+SP.fuwakura={name:'フワクラ',type:'water',b:{hp:76,atk:78,def:68,spd:90},exp:120,cr:.3,moves:['mizushibuki','awanotate'],learn:{28:'uzumaki',30:'shibiredenpa',33:'mizunohado',37:'iyashi',40:'honryu'},
  desc:'なみに ゆられて ふわふわ ただよう。 しょくしゅに ふれると すこし しびれる。'};
-SP.namigame={name:'ナミガメ',type:'water',b:{hp:92,atk:68,def:100,spd:38},exp:130,cr:.25,moves:['aquatackle','katakunaru'],learn:{29:'honryu',33:'iyashi',38:'tsunami'},
+SP.namigame={name:'ナミガメ',type:'water',b:{hp:104,atk:76,def:110,spd:40},exp:130,cr:.25,moves:['aquatackle','katakunaru'],learn:{29:'honryu',33:'iyashi',38:'tsunami',41:'awanotate'},
  desc:'こうらの もようは なみの かたち。 のんびり うみを わたって せかいを たびする。'};
-SP.tobiuon={name:'トビウオン',type:'water',b:{hp:60,atk:86,def:54,spd:102},exp:125,cr:.3,moves:['aquatackle','kazekiribane'],learn:{29:'kyukoka',32:'shizukudama',36:'honryu'},
+SP.tobiuon={name:'トビウオン',type:'water',b:{hp:68,atk:96,def:62,spd:104},exp:125,cr:.3,moves:['aquatackle','kazekiribane'],learn:{29:'kyukoka',32:'shizukudama',36:'honryu',40:'kazenoyaiba'},
  desc:'ひれを つばさの ように ひろげて うみの うえを とぶ。 ふねと きょうそう するのが すき。'};
 DEX.push('fuwakura','namigame','tobiuon');
 Object.assign(MV,{
@@ -13787,7 +13787,7 @@ MV.kazandan={n:'かざんだん',t:'fire',p:95,acc:85,d:'めいちゅうが す�
 SP.hononyan.evo={lv:32,to:'hyouen'};
 SP.hyouen={name:'ヒョウエン',type:'fire',b:{hp:70,atk:100,def:62,spd:104},exp:180,cr:.12,moves:['hinoiki','niramitsukeru'],learn:{...SP.hononyan.learn,32:'atsukaze',36:'homuranomai',41:'glenho'},
  desc:'たてがみの ほのおを なびかせて はしる。 きまぐれだが みとめた あいてには いちずに つくす。'};
-SP.kazandori={name:'カザンドリ',type:'fire',b:{hp:66,atk:90,def:58,spd:96},exp:170,cr:.12,moves:['hinoiki','kazekiribane'],learn:{30:'atsukaze',33:'kyukoka',37:'kazandan',42:'glenho'},
+SP.kazandori={name:'カザンドリ',type:'fire',b:{hp:72,atk:100,def:66,spd:102},exp:170,cr:.12,moves:['hinoiki','kazekiribane'],learn:{30:'atsukaze',33:'kyukoka',37:'kazandan',42:'glenho'},
  desc:'かざんの けむりの なかを とぶ めずらしい とり。 とさかから ひのこを ふりまく。'};
 DEX.splice(DEX.indexOf('hononyan')+1,0,'hyouen');DEX.push('kazandori');
 Object.assign(WHERE,{hyouen:'ホノニャンが Lv32で しんか',kazandori:'5ばんどうろ（まれ）'});
@@ -13827,7 +13827,7 @@ Object.assign(MV,{
  psychoburst:{n:'サイコバースト',t:'psychic',p:110,acc:85,d:'めいちゅうが すこし ひくい'},
  hisuinokakusei:{n:'ひすいのかくせい',t:'dragon',p:0,self:true,stats:[['atk',1],['def',1],['spd',1]],d:'こうげき・ぼうぎょ・すばやさ↑'},
 });
-const LATE_LEARN={"kazekirio": {"61": "tenkuuzan"}, "gansekidon": {"56": "daichiware"}, "raidenga": {"57": "ikazuchi"}, "glencon": {"54": "yougantackle", "58": "inferno"}, "uzushion": {"62": "daikaishou"}, "hanamiru": {"55": "midoriissen", "60": "shinrinnoikari"}, "kamasamurai": {"44": "oosuitori", "47": "sakurafubuki", "52": "daichinomegumi", "59": "shinrinnoikari"}, "maobasa": {"52": "toppu", "57": "ootatsumaki", "65": "tenkuuzan"}, "rakkoole": {"44": "mizunohado", "47": "oouzushio", "53": "daikaishou"}, "daiogani": {"52": "honryu", "54": "tsunami", "57": "oouzushio", "61": "daikaishou"}, "yadoiwa": {"44": "gansekiho", "48": "daichiware"}, "umidory": {"44": "ootatsumaki", "47": "tenkuuzan"}, "puraguru": {"44": "rinpun", "49": "kaminarinohane", "57": "ikazuchi"}, "bakumu": {"68": "psychoburst"}, "lunapowan": {"44": "yumekui", "48": "psychoburst"}, "fuwakura": {"44": "oouzushio", "48": "daikaishou"}, "namigame": {"44": "mizunohado", "49": "oouzushio", "57": "daikaishou"}, "tobiuon": {"44": "mizunohado", "48": "tsunami", "55": "oouzushio", "64": "daikaishou"}, "kagaribi": {"45": "yougantackle", "50": "kaenguruma", "58": "inferno"}, "magumajiro": {"44": "kaenguruma", "47": "atsukaze", "52": "inferno"}, "hyouen": {"45": "yougantackle", "49": "inferno"}, "kazandori": {"47": "kaenguruma", "52": "inferno"}, "hisuijin": {"66": "hisuinokakusei"}};
+const LATE_LEARN={"kazekirio": {"61": "tenkuuzan"}, "gansekidon": {"56": "daichiware"}, "raidenga": {"57": "ikazuchi"}, "glencon": {"54": "yougantackle", "58": "inferno"}, "uzushion": {"62": "daikaishou"}, "hanamiru": {"55": "midoriissen", "60": "shinrinnoikari"}, "kamasamurai": {"44": "oosuitori", "47": "sakurafubuki", "52": "daichinomegumi", "59": "shinrinnoikari"}, "maobasa": {"52": "toppu", "57": "ootatsumaki", "65": "tenkuuzan"}, "rakkoole": {"44": "mizunohado", "47": "oouzushio", "53": "daikaishou"}, "daiogani": {"52": "honryu", "54": "tsunami", "57": "oouzushio", "61": "daikaishou"}, "yadoiwa": {"44": "gansekiho", "48": "daichiware"}, "umidory": {"44": "ootatsumaki", "47": "tenkuuzan"}, "puraguru": {"44": "ikazuchi", "50": "inazumanoya"}, "bakumu": {"68": "psychoburst"}, "lunapowan": {"44": "yumekui", "48": "psychoburst"}, "fuwakura": {"44": "oouzushio", "48": "daikaishou"}, "namigame": {"44": "mizunohado", "49": "oouzushio", "57": "daikaishou"}, "tobiuon": {"44": "mizunohado", "48": "tsunami", "55": "oouzushio", "64": "daikaishou"}, "kagaribi": {"45": "yougantackle", "50": "kaenguruma", "58": "inferno"}, "magumajiro": {"44": "kaenguruma", "47": "atsukaze", "52": "inferno"}, "hyouen": {"45": "yougantackle", "49": "inferno"}, "kazandori": {"47": "kaenguruma", "52": "inferno"}, "hisuijin": {"66": "hisuinokakusei"}};
 for(const id in LATE_LEARN)if(SP[id])SP[id].learn=Object.assign({...SP[id].learn},LATE_LEARN[id]);
 
 /* ---------- ひびきの どうくつ: rock x4 lines, normal x2 lines ---------- */
@@ -14551,7 +14551,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.01-2348';
+const BUILD='2026.11.02-0003';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
