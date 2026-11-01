@@ -2200,6 +2200,21 @@ function giveStarter(id){const m=mon(id,5);S.party.push(m);S.seen.push(id);S.cau
   'おじいちゃん「モンスターは\nたたかう ほどに つよく なる。」','おじいちゃん「そうじゃ、 これも\nもっていきなさい。」'),
   F(()=>{S.items.ball+=5;AU.jingle('item')}),...T('ボールを 5こ もらった！','おじいちゃん「くさむらの あいては\nよわらせてから ボールじゃ。」','おじいちゃん「1ばんどうろを\nぬけると ハナサキタウンじゃ。」','おじいちゃん「まちの ジムで\nうでだめし するが よい！」'),...tatsuVillage(),F(save))}
 
+/* ---------- 4ばんどうろ: あせる くろふくの おとこ（しょうたいは テルイ。ここでは なのらない） ---------- */
+const TERUI_PAL=['#dfe2ea','#26262e','#18181e','#3a3040'];
+MAPS.route4.npcs.push({id:'r4terui',x:13,y:22,dir:'up',spr:'boy',pal:TERUI_PAL,showIf:'r4tShow',text:['……']});
+function r4Terui(){const e=MAPS.route4.npcs.find(n=>n.id==='r4terui');S.flags.r4tCall=1;
+ let sp=[P.x+3,P.y];for(const[dx,dy]of[[3,0],[-3,0],[2,-1],[-2,-1],[3,-1],[-3,-1]]){const x=P.x+dx,y=P.y+dy;if(canWalk(at(x,y))&&!entityAt(x,y)){sp=[x,y];break}}
+ e.x=e.fx=sp[0];e.y=e.fy=sp[1];e.dir='up';e.mv=0;
+ const path=[],row=Math.max(P.y+1,23);for(let y=e.y;y<row;y++)path.push('down');for(let x=e.x;x!==10;x+=x>10?-1:1)path.push(x>10?'left':'right');for(let y=row;y<26;y++)path.push('down');
+ const R4='くろふくの おとこ';
+ Q.push(F(()=>{S.flags.r4tShow=1}),delay(20),
+  ...T('……くろい ふくの おとこが\nなにか ぶつぶつ いっている。',`${R4}「……まずい。\nまずいぞ……」`,`${R4}「あいつ ほんきで\nやる つもりか……」`,`${R4}「はやく しないと\nまにあわない……」`,`${R4}「くそっ…… どうすれば……」`),
+  F(()=>{e.dir=e.x>P.x?'left':'right';P.dir=e.x>P.x?'right':'left';e.alert=40;AU.sfx('alert')}),Wt(()=>e.alert<=0),
+  ...T(`${R4}「……！」`,`${R4}「……な、\nなに みてんだよ！」`),
+  F(()=>AU.sfx('fxflying')),npcRun(e,path,3),F(()=>{delete S.flags.r4tShow;S.flags.r4terui=1;save()}),delay(20),
+  ...T('（なんだ？ いまの ひとは……？）'))}
+
 /* ---------- 5ばんどうろ event ---------- */
 const GR='くろふくの おとこ',GR2='くろふくの おんな';
 function ev5Start(){S.flags.ev5call=1;const v=MAPS.route5.npcs.find(e=>e.id==='messenger');
@@ -2565,7 +2580,8 @@ const SCN=[
  ['おじいちゃんの まえ',()=>{devBase(0,0,{});loadMap('nbr',6,4,'up')}],
  ['ウッピー戦の まえ',()=>{devBase(16,1,{});loadMap('forest',5,6,'up')}],
  ['ミナモジム',()=>{devBase(20,1,{uppy:1});loadMap('gym2',5,12,'up')}],
- ['ミライジム',()=>{devBase(26,2,{uppy:1});loadMap('gym3',5,12,'up')}],
+ ['4ばんどうろ（くろふくの おとこ）',()=>{devBase(22,2,{uppy:1});loadMap('route4',10,24,'up')}],
+  ['ミライジム',()=>{devBase(26,2,{uppy:1});loadMap('gym3',5,12,'up')}],
  ['キヨシ イベントの まえ',()=>{devBase(30,3,{uppy:1});loadMap('town3',2,14,'left')}],
  ['ユノハマシティ',()=>{devBase(32,3,{uppy:1,ev5done:1,elderGone:1,kiyoshi:true});S.items.oldmap=1;loadMap('town4',13,15,'up')}],
  ['ユノハマジム',()=>{devBase(34,3,{uppy:1,ev5done:1,elderGone:1,kiyoshi:true});loadMap('gym4',5,12,'up')}],
@@ -2629,7 +2645,8 @@ function updWorld(){
  if(nameT>0)nameT--;
  if(fade){fade.t++;if(fade.t===12){loadMap(...fade.to);save()}if(fade.t>=24)fade=null;return}
  if(Q.length){stepQ();return}
- if(S.map==='route5'&&!S.flags.ev5done&&!S.flags.ev5call&&P.mv===0&&!menu&&!shop&&!boxui){ev5Start();return}
+ if(S.map==='route4'&&!S.flags.r4tCall&&!S.flags.ev5done&&P.y<=22&&P.y>=17&&P.mv===0&&!menu&&!shop&&!boxui){r4Terui();return}
+  if(S.map==='route5'&&!S.flags.ev5done&&!S.flags.ev5call&&P.mv===0&&!menu&&!shop&&!boxui){ev5Start();return}
  if(S.map==='town4'&&S.badges.includes('ヒバナバッジ')&&!S.flags.ev6done&&!S.flags.ev6call&&P.mv===0&&!menu&&!shop&&!boxui){ev6Start();return}
  if(S.map==='town4'&&S.flags.ev6done&&!S.flags.tatsu2&&!S.flags.t6Call&&P.mv===0&&!menu&&!shop&&!boxui){tatsuYunohama();return}
  if(S.map==='forest'&&!S.flags.tatsu1&&!S.flags.tfCall&&S.badges.length<2&&hasStarter()&&P.mv===0&&!menu&&!shop&&!boxui){tatsuForest();return}
