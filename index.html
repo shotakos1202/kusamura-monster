@@ -14011,7 +14011,7 @@ IT.cavemap={n:'どうくつの ちず',price:0,d:'ひびきの どうくつの �
 IT.bike={n:'じてんしゃ',price:15000,once:true,d:'2ばい はやく うごける。 Aボタンを 2かい れんだで のる／おりる'};
 IT.boat={n:'かんいボート',price:20000,once:true,d:'みずの ほうを むいて Aボタンで のれる'};
 IT.jetpack={n:'ジェットパック',price:50000,once:true,d:'マップで いったことの ある まちを えらぶと とんで いける'};
-IT.fuel={n:'ジェットねんりょう',price:800,d:'ジェットパックで 1かい とぶための ねんりょう'};
+IT.fuel={n:'ジェットねんりょう',price:800,d:'ジェットパック 1かいぶんの ねんりょう'};
 ITEMS.push('bike','boat','jetpack','fuel');
 const KEYIT=['oldmap','cavemap','bike','boat','jetpack','fuel'],visItems=()=>ITEMS.filter(k=>!KEYIT.includes(k)||(S&&S.items[k]));
 
@@ -14479,7 +14479,7 @@ Object.assign(MAPS,{
    {x:7,y:5,dir:'left',spr:'girl',pal:['#f8d0a8','#80d0f0','#3a3a8a','#2a1a14'],text:['オオアミシティは おおきな まち。\nいろんな ひとが あつまるのよ。']}]},
  oamiShop:{rows:["kkkkkkkkkk","kbbbffbbbk","kffffffffk","kccfffffpk","kffffffffk","kfffttfffk","kffffffffk","kkkkmmkkkk"],
   warps:{'4,7':['oami',19,11,'down'],'5,7':['oami',19,11,'down']},
-  npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','potion','superpotion','revive']},
+  npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','potion','superpotion','revive','jetpack']},
    {x:6,y:4,dir:'down',spr:'boy',pal:['#f8d0a8','#f0a020','#4a4a52','#1c1820'],text:['ブラックタワーに のぼるなら\nくすりを たくさん もっていきな！']}]},
  gym6:{gates:'+*',rows:["kkkkkkkkkkkk", "kpffffffffpk", "kffffffffffk", "kkkkk+kkkkkk", "kfff@ffffffk", "kffffffffffk", "kffffffffffk", "kkkkkkkk*kkk", "kffffffffffk", "kffffff@fffk", "kkk+kkkkkkkk", "kffffffff@fk", "kffffffffffk", "kkkkkmmkkkkk"],
   warps:{'5,13':['oami',4,16,'down'],'6,13':['oami',4,16,'down']},
@@ -14741,7 +14741,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.02-0107';
+const BUILD='2026.11.02-0119';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -14761,7 +14761,10 @@ function titleOpts(){
  const o=saved?[{t:'つづきから',fn:contGame},{t:'はじめから',fn:()=>{TT={pg:'new',i:1}}},{t:'メール'+(un?' ●'+un:''),fn:()=>{const d=tmail();if(d)TT={pg:'mail',u:{pg:'list',i:0},d}}}]
   :[{t:'はじめから',fn:newGame}];
  if(isWebHost()&&!isStandalone())o.push({t:'ホームがめんに ついか',fn:showHomeHelp});
+ o.push({t:'ゲームを おわる',fn:quitGame});
  return o}
+// end the game: close the window when the browser allows it, otherwise show a goodbye screen
+function quitGame(){TT={pg:'bye',t:0};try{window.close()}catch(e){}}
 function showHomeHelp(){const ios=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
  tmsg(ios?['iPhoneの ばあい：\nSafariで この ページを ひらく。','したの きょうゆうボタン（□に↑）を おして\n「ホームがめんに ついか」を えらぶ。','ホームがめんの アイコンから あそぶと\nセーブが きえにくく なるよ！']
   :['Androidの ばあい：\nChromeで この ページを ひらく。','みぎうえの メニュー（︙）から\n「ホームがめんに ついか」を えらぶ。','「アプリを インストール」と でたら\nそれを えらんでも OK！','ホームがめんの アイコンから あそぶと\nオフラインでも あそべるよ！'])}
@@ -14861,6 +14864,7 @@ function updTitle(){
  if(TT.pg==='pass'){updPass();return}
  if(TT.pg==='devscn'){updList(TT.dl,()=>{TT={pg:'devhub',i:0}});return}
  if(TT.pg==='mail'){updMailUI(TT.u,TT.d.mail,()=>{TT={pg:'main',i:2};TMAIL=null},()=>{try{localStorage.setItem(KEY,JSON.stringify(TT.d))}catch(e){}});return}
+ if(TT.pg==='bye'){TT.t++;if(TT.t>30&&(btnp('a')||btnp('b')||DIRS.some(k=>btnp(k)))){TT={pg:'main',i:0}}return}
  if(TT.pg==='msg'){if(btnp('a')||btnp('b')){TT.k++;if(TT.k>=TT.lines.length){const a=TT.after;TT={pg:'main',i:0};if(a)a()}}return}
  const o=titleOpts(),n=o.length;if(TT.i>=n)TT.i=0;
  if(btnp('up')){TT.i=(TT.i+n-1)%n;AU.sfx('cur')}if(btnp('down')){TT.i=(TT.i+1)%n;AU.sfx('cur')}
@@ -15342,6 +15346,7 @@ const NEWS=[
  {id:'2026.10.31f',title:'ものがたりの ひみつ',body:['こんかいの こうしん：','・とよっちょむら、ユノハマシティ、\n ひびきの どうくつ などで\n あたらしい セリフが ふえたよ','・ものがたりの なぞに つながる\n ことばが かくれて いるかも……？','まえに あそんだ ばしょも\nもういちど はなしかけて みてね！']},
  {id:'2026.11.01a',title:'あたらしい モンスター',body:['こんかいの こうしん：','・6ばんどうろと ひびきの どうくつに\n でんき・くさ・エスパーの\n あたらしい モンスターが ふえたよ','・たびの うしろの ほうの ばしょでは\n しんかした モンスターが\n でて くるように なったよ','ずかんを うめに いってみてね！']},
  {id:'2026.11.02a',title:'あたらしい エリアが ひらけた！',body:['こんかいの こうしん：','・タカネシティの きたの\n がけくずれが なおって\n 7ばんどうろへ いけるように！','・その さきには\n オオアミシティ が あるよ','・オオアミジムも まってるよ','・どこかで めずらしい\n ドラゴンタイプの モンスターが\n みつかる かも……？','ものがたりも おおきく うごくよ。\nたのしんでね！']},
+ {id:'2026.11.02b',title:'ジェットパック はつばい！',body:['こんかいの こうしん：','・オオアミシティの ショップで\n ジェットパックが かえるように！\n （5まんえん）','・マップで いったことの ある\n まちを えらぶと とんで いけるよ','・とぶには ジェットねんりょうが いるよ。\n ジェットパックを かうと\n どの ショップでも かえるように なるよ','・タイトルに「ゲームを おわる」を\n ついか したよ']},
 ];
 let toast=null;
 function deliverNews(st){st.mail=st.mail||[];const ids=NEWS.map(n=>n.id);let from=st.newsSeen?ids.indexOf(st.newsSeen)+1:Math.max(0,NEWS.length-1);let n=0;
@@ -15823,7 +15828,14 @@ function drawEvolve(){R(0,0,W,H,'#0e1424');const cx=160,cy=104;
 
 /* ---------- dex with detail pages ---------- */
 function stPill(m,x,y){if(!m.status)return;const[l,cl]=STL[m.status];R(x,y,40,14,cl);txt(l,x+20,y+1,'#ffffff',11,'center')}
-function wrapTxt(s,x,y,maxW,size,lh,cl){c.font=`${size}px ${FONT}`;let line='',yy=y;for(const ch of s){if(c.measureText(line+ch).width>maxW){txt(line,x,yy,cl,size);line=ch.trim();yy+=lh}else line+=ch}if(line)txt(line,x,yy,cl,size)}
+// wraps at spaces (between words) when it can, otherwise between characters
+function wrapTxt(s,x,y,maxW,size,lh,cl){c.font=`${size}px ${FONT}`;const W2=t=>c.measureText(t).width;let line='',yy=y;
+ const out=()=>{txt(line,x,yy,cl,size);line='';yy+=lh};
+ for(const para of String(s).split('\n')){for(const tok of para.split(/(?<=[ 　])/)){
+  if(W2(line+tok.trimEnd())<=maxW){line+=tok;continue}
+  if(line.trim())out();
+  let w=tok.trimStart();while(W2(w.trimEnd())>maxW){let k=1;while(k<w.length&&W2(w.slice(0,k+1))<=maxW)k++;line=w.slice(0,k);out();w=w.slice(k)}line=w}
+  if(line.trim())out();line=''}}
 function rrect(x,y,w,h,r,fill,stroke,lw){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();if(fill){c.fillStyle=fill;c.fill()}if(stroke){c.strokeStyle=stroke;c.lineWidth=lw||1;c.stroke()}}
 function typePill(t,x,y,w=50,h=14,size=10){rrect(x,y,w,h,4,TCOL[t]||'#5870b0');txt(TN[t],x+w/2,y+(h-size)/2,'#ffffff',size,'center')}
 function ballIcon(x,y,r=5){ell(x,y,r,r,'#181818');c.fillStyle='#e83838';c.beginPath();c.arc(x,y,r-1,Math.PI,0);c.fill();c.fillStyle='#f8f8f8';c.beginPath();c.arc(x,y,r-1,0,Math.PI);c.fill();R(x-r+1,y-.5,2*r-2,1.4,'#181818');ell(x,y,1.6,1.6,'#f8f8f8')}
@@ -16295,7 +16307,7 @@ function drawRoot(){box(8,8,164,78);txt(`おかね ${S.money}えん`,22,22,3,14)
 function drawQuit(){HITS.length=0;box(0,200,320,88);txt(DEV?'かいはつしゃモードを おわって':'セーブして タイトルに',18,218);txt('もどりますか？',18,250);box(212,124,108,72);['はい','いいえ'].forEach((t,i)=>{hit(212,134+i*26,108,26,()=>{menu.q=i});txt(t,248,140+i*26);if(i===menu.q)txt('▶',230,140+i*26)})}
 function drawShop(){box(8,8,92,58);txt('おかね',20,19,3,12);txt(`${S.money}えん`,90,38,3,S.money>=10000?12:14,'right');
  // list fits above the message box (y<200): one row per item, price on the same line
- const ST=shop.stock,rows=ST.length+1,rh=Math.min(30,Math.floor(170/rows));box(104,8,208,22+rows*rh);[...ST.map(k=>IT[k].n),'やめる'].forEach((s,i)=>{const y=20+i*rh;hit(104,y-6,208,rh,()=>{shop.i=i});txt(s,130,y,3,14);if(i<ST.length){const it=IT[ST[i]];txt(it.once&&S.items[ST[i]]?'かった':`${it.price}えん`,300,y+2,it.once&&S.items[ST[i]]?'#a0aab8':2,12,'right')}if(i===shop.i)txt('▶',114,y,3,14)});
+ const ST=shop.stock,rows=ST.length+1,rh=Math.min(30,Math.floor(170/rows));box(104,8,208,22+rows*rh);[...ST.map(k=>IT[k].n),'やめる'].forEach((s,i)=>{const y=20+i*rh,fs=s.length>=8?12:14;hit(104,y-6,208,rh,()=>{shop.i=i});txt(s,130,y+(14-fs)/2,3,fs);if(i<ST.length){const it=IT[ST[i]];txt(it.once&&S.items[ST[i]]?'かった':`${it.price}えん`,300,y+2,it.once&&S.items[ST[i]]?'#a0aab8':2,12,'right')}if(i===shop.i)txt('▶',114,y,3,14)});
  if(!Q.length){box(0,200,320,88);if(shop.i<ST.length){const k=ST[shop.i];wrapTxt(IT[k].d,18,212,284,13,17,3);txt(IT[k].once?(S.items[k]?'もっている':'1かいだけ かえる'):`もっている かず ×${S.items[k]||0}`,18,252,2,13)}else txt('かいものを おわる',18,218,3,14)}}
 function epos(e){const k=e.mv/STEP;return[(e.x+(e.fx-e.x)*k)*TS,(e.y+(e.fy-e.y)*k)*TS]}
 function drawWorld(){
@@ -16558,7 +16570,11 @@ function drawBattle(){
   ['たたかう','どうぐ','てもち','にげる'].forEach((s,i)=>{const x=i%2?250:170,y=i<2?218:250;hit(x-20,y-10,80,32,()=>{B.cur=i});txt(s,x,y);if(i===B.cur)txt('▶',x-16+((frame>>4)%2),y)});
   if(B.menu==='party')drawParty(B.pcur,'いれかえ','A：いれかえる　B：もどる',i=>{B.pcur=i});
   if(B.menu==='items')drawItems(B.icur,BITEMS,i=>{B.icur=i})}}
-function drawTitle(){skyBG(150);hills(104,150);R(0,150,W,H-150,'#a6da74');
+function drawBye(){R(0,0,W,H,'#101828');const a=Math.min(1,TT.t/30);c.globalAlpha=a;
+ logo('くさむら',W/2,60,32,'#6cc848','#173a18');logo('モンスター',W/2,98,24,'#ffa040','#4a1a0a');
+ txt('あそんで くれて ありがとう！',W/2,160,'#ffffff',14,'center');txt('この がめんを とじて だいじょうぶだよ。',W/2,186,'#c8d4e8',11,'center');
+ if(TT.t>30&&(frame>>5)%2)txt('ボタンを おすと タイトルに もどる',W/2,250,'#8898b8',10,'center');c.globalAlpha=1;hit(0,0,W,H,()=>{if(TT.t>30)TT={pg:'main',i:0}})}
+function drawTitle(){if(TT.pg==='bye'){HITS.length=0;drawBye();return}skyBG(150);hills(104,150);R(0,150,W,H-150,'#a6da74');
  for(let i=0;i<10;i++)tile('G',i*32,166,i,30);
  logo('くさむら',W/2,18,40,'#6cc848','#173a18');logo('モンスター',W/2,64,30,'#ffa040','#4a1a0a');
  {const no=!['msg','mail','pass','devscn','ovl'].includes(TT.pg)?titleOpts().length:0,up=no>5?22:no>4?12:0;STARTERS.forEach((id,i)=>{const bob=Math.sin(frame/14+i*2)*3;c.globalAlpha=.25;ell(60+i*100,190-up,24,5,'#000');c.globalAlpha=1;drawMon(id,20+i*100,106-up+bob,false)})}
@@ -16585,7 +16601,7 @@ function drawTrans(){drawWorld();
  else{for(let i=0;i<9;i++){const w=easeIO((trans-24-i*1.3)/16)*W;if(i%2)R(0,i*32,w,32,'#181828');else R(W-w,i*32,w,32,'#181828')}}}
 
 /* ---------- loop ---------- */
-function bgmFor(){if(mode==='evolve')return null;if(mode==='mini')return'minamo';if(mode==='trans'||mode==='battle')return B&&B.over?null:(B&&B.trainer&&B.trainer.rival?'rival':B&&B.trainer&&B.trainer.boss?'boss':'battle');if(mode==='title'||mode==='starter')return'field';
+function bgmFor(){if(mode==='evolve')return null;if(mode==='mini')return'minamo';if(mode==='trans'||mode==='battle')return B&&B.over?null:(B&&B.trainer&&B.trainer.rival?'rival':B&&B.trainer&&B.trainer.boss?'boss':'battle');if(mode==='title'&&TT.pg==='bye')return null;if(mode==='title'||mode==='starter')return'field';
  if(MZ)return'danger';if(S&&S.flags.ev6call)return SKY?'danger':'shinpi';if(S&&/^bt/.test(S.map||''))return'tower';if(S&&S.map==='cave4')return'shinpi';if(S&&['trial2','trial3','grove'].includes(S.map))return'shinpi';const rg=S&&(REGION[S.map]||S.map);if(rg==='village'&&S.flags.ev5raid)return'danger';const MUS={village:'village',town:'town',town2:'minamo',town3:'mirai',town4:'yunohama',sea5:'umi',cave:'doukutsu',town5:'takane',oami:'oami'};if(mode==='world'&&P.surf)return'umi';if(mode==='world'&&onBike)return'bike';return MUS[rg]||'field'}
 function update(){frame++;
  const ui=Q.length||menu||shop||mode!=='world';
