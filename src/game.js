@@ -2112,7 +2112,7 @@ MAPS.cave4={name:'ひびきの どうくつ ひみつのま',tech:true,grid:[5,7
 const TATSU_PAL=['#f8d0a8','#f08a20','#2a2a3a','#1c1820'],TN_='タツヤ';
 const RIVAL_OF={hinokon:'mizutama',mizutama:'happaru',happaru:'hinokon'},EVO2={hinokon:'homurakon',mizutama:'namitama',happaru:'tsubomiru'},EVO3={hinokon:'glencon',mizutama:'uzushion',happaru:'hanamiru'};
 MAPS.nbr.npcs.push({id:'tatsuV',x:4,y:6,dir:'up',spr:'boy',pal:TATSU_PAL,showIf:'tvShow',hideFlag:'tvDone',text:['……']});
-MAPS.forest.npcs.push({id:'tatsuF',x:14,y:37,dir:'down',spr:'boy',pal:TATSU_PAL,showIf:'tfShow',hideFlag:'tatsu1',rival:true,tname:'ライバルの タツヤ',get team(){const b=rivalBase();return[['tsubametto',12],['koroishi',12],[EVO2[b],15]]},money:50,say:[],lose:['タツヤ「……へえ。\nやるじゃん。」'],after:['……'],onWin:()=>tatsuForestWin()});
+MAPS.forest.npcs.push({id:'tatsuF',x:14,y:37,dir:'down',spr:'boy',pal:TATSU_PAL,showIf:'tfShow',hideFlag:'tatsu1',rival:true,tname:'ライバルの タツヤ',get team(){const b=rivalBase();return[['tsubametto',11],['koroishi',11],[b,12]]},money:50,say:[],lose:['タツヤ「……へえ。\nやるじゃん。」'],after:['……'],onWin:()=>tatsuForestWin()});
 MAPS.town4.npcs.push({id:'tatsu6',x:13,y:15,dir:'up',spr:'boy',pal:TATSU_PAL,showIf:'t6Show',hideFlag:'tatsu2',rival:true,tname:'ライバルの タツヤ',get team(){const b=rivalBase();return[['kazekirio',37],['gansekidon',37],['raidenga',38],[EVO3[b],40]]},money:90,say:[],lose:['タツヤ「うおっ……\nまじかよ！」'],after:['……'],onWin:()=>tatsuYunohamaWin()});
 // みずの うえ（かんいボート）の やせいの モンスター
 Object.assign(MAPS.route3,{wildW:()=>[['rakkoro',18,21,30],['rakkoole',22,22,5],['hasagani',18,19,25],['yoroigani',20,22,8],['umidory',18,22,20],['tsubametto',18,21,10]]});
