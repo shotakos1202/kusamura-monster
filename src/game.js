@@ -2864,7 +2864,7 @@ function gateT(g,v,C,open,fr){floorT(g,v);if(open){pr(g,0,0,16,1,C[0]);pr(g,0,15
 function switchT(g,v,on){floorT(g,v);pr(g,3,2,10,13,'#3a3a46');pr(g,4,3,8,11,'#5a5a68');pr(g,5,4,6,4,on?'#3aa0f0':'#f0d020');pr(g,6,5,4,2,'#ffffff');pr(g,7,9,2,4,'#1a1a20');pr(g,on?8:6,9,2,2,'#e8e8f0')}
 
 /* ---------- ぼうそうむら → カモガワシティ → マウントフジ → エンディング ---------- */
-let FLY=null,GODS=null,ENDSCR=null,KAISOU=null;
+let FLY=null,GODS=null,ENDSCR=null,KAISOU=null,MZF=null;
 const hasSaza=()=>S.party.some(m=>m.id==='sazanami');
 // フェリー（ミライポート ⇄ カモガワシティ かいじょう）
 function ferryRide(to){Q.push(F(()=>{AU.sfx('door')}),delay(10),F(()=>{BLACKOUT=0}),mzStep(30,q=>{BLACKOUT=q}),
@@ -2959,6 +2959,11 @@ function teruiFujiWin(){const e=MAPS.fuji2.npcs.find(n=>n.id==='teruiF'),k=MAPS.
   F(()=>{B={trainer:k};mode='trans';trans=0})]}
 function kiyoshiFujiWin(){const k=MAPS.fuji2.npcs.find(n=>n.id==='kiyoF'),f=MAPS.fuji2.npcs.find(n=>n.id==='fatherF'),AN='あのかた',TO='とうさん';
  return[delay(10),...T('キヨシ「……そんな…… ミネゾーウ\nまで…… かてない……？」','キヨシ「……あのかた……\nもうしわけ ありません……」'),delay(20),
+  F(()=>{MZF={t:0};AU.sfx('fxdragon');shakeT=20}),...T('……ミネゾーウの からだが\nひかりはじめた……！'),
+  F(()=>AU.sfx('fxstatus')),Wt(()=>{MZF.t++;if(MZF.t===70)shakeT=24;return MZF.t>=100}),Wt(()=>{MZF.t++;return MZF.t>=140}),
+  ...T('くろい ほのおが\nはがれおちて いく……','ミネゾーウは むかしの\nうつくしい すがたに もどった……！','おじいちゃん「……おお……！\nあれこそが そらの かみ……」','おじいちゃん「わしが わかい ころに\nみた ほんとうの すがたじゃ……」','ミネゾーウ「キュオオオ……ン……」','ミネゾーウは こちらを\nしずかに みつめた……'),
+  F(()=>AU.sfx('fxflying')),Wt(()=>{MZF.t++;if(MZF.t%50===0)AU.sfx('fxflying');return MZF.t>=330}),F(()=>{MZF=null;S.flags.mzFree=1}),
+  ...T('ミネゾーウは じゆうな そらへ\nかえって いった……','キヨシ「……ミネゾーウ……\nまってくれ……」'),delay(20),
   F(()=>{shakeT=40;AU.sfx('fxdragon')}),...T('……くらやみが ふきあがった！'),
   F(()=>{S.flags.fatherShow=1;f.alert=50;AU.sfx('alert')}),Wt(()=>f.alert<=0),
   ...T(`？？？「……もう よい、 キヨシ。\nさがって いろ。」`,'キヨシ「は…… はい……」',`？？？「…………」`,`？？？「……おおきく なったな。」`,'（え……？ この こえ……）','おじいちゃん「……やはり……\nおまえ だったのか……」','にいちゃん「……とうさん。」','（とう…… さん……！？）',
@@ -2973,7 +2978,7 @@ function fatherWin(){const f=MAPS.fuji2.npcs.find(n=>n.id==='fatherF'),TO='と�
   delay(20),F(()=>{AU.jingle('flute')}),delay(80),...T('たてぶえの しらべが\nやまじゅうに ひびきわたる……'),
   F(()=>{GODS={t:0};AU.sfx('fxstatus')}),Wt(()=>{GODS.t++;return GODS.t>=90}),
   ...T('もりの かみ ウッピー……','そらの かみ ミネゾーウ……','うみの かみ さざなみ……','さんしんが しずかに かがやいた！'),
-  F(()=>{S.flags.fujiCalm=1;AU.sfx('fxwater')}),...T('ミネゾーウの くろい ほのおが\nきえて いく……','あれくるって いた そらが\nしずかに はれて いく……','さんしんは くらやみの なかへ\nまいおりて いった……'),
+  F(()=>{S.flags.fujiCalm=1;AU.sfx('fxwater')}),...T('あれくるって いた そらが\nしずかに はれて いく……','さんしんは くらやみの なかへ\nまいおりて いった……'),
   delay(40),...T('……！','さんしんが とうさんを つれて\nもどって きた！','とうさんは しずかに\nねむって いる……'),
   ...T('キヨシ「……これが…… こころの\nちから…… なのか……」','にいちゃん「……かえろう。\nとよっちょむらへ。」'),
   F(()=>{BLACKOUT=0}),mzStep(60,q=>{BLACKOUT=q}),F(()=>{GODS=null}),delay(30),...T('…………'),
@@ -3006,7 +3011,7 @@ function areaFx(cx,cy){
   if(!calm){c.globalAlpha=.35;for(let i=0;i<14;i++){const x=((i*53+frame*5)%(W+80))-40,y=(i*41+frame*1.5)%H;R(x,y,22,1,'#f0f0ff')}c.globalAlpha=1;
    const lt=frame%260;if(lt<8){c.globalAlpha=(8-lt)/10;R(0,0,W,H,'#f4f0ff');c.globalAlpha=1;if(lt<5){const bx=60+((frame/260|0)*97)%200;c.strokeStyle='#fffbe0';c.lineWidth=2;c.beginPath();c.moveTo(bx,0);let y=0,x=bx;while(y<120){x+=(Math.sin(y*7+frame)*14);y+=16;c.lineTo(x,y)}c.stroke()}}
    if(lt===0)AU.sfx('fxrock')}
-  if(S.map==='fuji2'&&S.flags.fujiKiyo&&!calm)drawMinezou(15.5*TS-cx,6*TS-cy+8+Math.sin(frame/14)*3,Math.sin(frame/9),0)}}
+  if(S.map==='fuji2'&&S.flags.fujiKiyo&&!calm&&!S.flags.mzFree&&!MZF)drawMinezou(13.5*TS-cx,6*TS-cy+8+Math.sin(frame/14)*3,Math.sin(frame/9),0)}}
 // タイル
 function areaTileX(ch,v,gx,gy){
  if((CUR.elev||CUR.dome||CUR.abyss)){if(ch==='9'){const fr=(frame>>4)%2;return['e9'+fr,g=>elevT(g,fr)]}if(ch==='$')return['e$',g=>{domeFloorT(g,0);stairsT(g,false)}];if(ch==='3')return['e3',g=>{abyssFloorT(g,0);stairsT(g,true)}]}
@@ -3080,7 +3085,7 @@ function drawSkyEv(){if(!SKY)return;const t=SKY.t,dk=SKY.fade!==undefined?Math.m
  // shadow sweeping the ground
  c.globalAlpha=.35;ell(x+30,y+118,70,14,'#000000');c.globalAlpha=1;
  drawMinezou(x,y,fl)}
-function drawMinezou(x,y,fl,rd=1){const B1='#120a16',B2='#2a1430',GL='#8a1a3a';
+function drawMinezou(x,y,fl,rd=1,pure=0){const B1=pure?'#eef4ff':'#120a16',B2=pure?'#9cc8f4':'#2a1430',GL=pure?'#ffd860':'#8a1a3a',EY=pure?'#38c8ff':'#ff3048';
  const P2=(pts,col)=>{c.fillStyle=col;c.beginPath();c.moveTo(x+pts[0],y+pts[1]);for(let i=2;i<pts.length;i+=2)c.lineTo(x+pts[i],y+pts[i+1]);c.closePath();c.fill()};
  // tail streamers
  for(let i=0;i<3;i++){const sw=Math.sin(frame/9+i)*6;P2([40,6,70+i*4,-4+i*8+sw,104+i*8,-10+i*14+sw,100+i*8,-4+i*14+sw,68+i*4,4+i*8+sw,40,12],i===1?B2:B1)}
@@ -3090,12 +3095,22 @@ function drawMinezou(x,y,fl,rd=1){const B1='#120a16',B2='#2a1430',GL='#8a1a3a';
  // body, neck, head with crest
  ell(x+22,y+4,24,9,B1);ell(x+18,y+2,16,6,B2);P2([0,0,-14,-8,-26,-10,-30,-6,-20,-2,-6,6],B1);ell(x-28,y-8,7,5,B1);
  P2([-30,-11,-40,-24,-30,-16,-26,-26,-24,-14,-16,-22,-22,-10],B1);P2([-34,-8,-46,-6,-34,-4],GL);
- R(x-31,y-10,3,2,'#ff3048');c.globalAlpha=.4+.3*Math.sin(frame/4);ell(x-30,y-9,5,4,'#ff3048');c.globalAlpha=1;
+ R(x-31,y-10,3,2,EY);c.globalAlpha=.4+.3*Math.sin(frame/4);ell(x-30,y-9,5,4,EY);c.globalAlpha=1;
  // rider silhouette with fluttering cape
  if(rd>=1){R(x+16,y-14,6,10,'#08060a');ell(x+19,y-17,3.4,3.4,'#08060a');P2([20,-12,32+Math.sin(frame/5)*3,-10,30,-3,20,-5],'#08060a')}
  if(rd>=2){R(x+27,y-11,5,8,'#08060a');ell(x+29.5,y-13.6,3,3,'#08060a');R(x+26,y-15,7,2,'#2a2a2a')}
  // embers
- for(let i=0;i<6;i++){const q=((frame/30)+i/6)%1;c.globalAlpha=1-q;R(x+40+q*60+i*4,y+6+q*30+Math.sin(i*3+frame/8)*6,3,3,i%2?GL:'#ff6040')}c.globalAlpha=1}
+ for(let i=0;i<6;i++){const q=((frame/30)+i/6)%1;c.globalAlpha=1-q;R(x+40+q*60+i*4,y+6+q*30+Math.sin(i*3+frame/8)*6,3,3,i%2?GL:(pure?'#ffffff':'#ff6040'))}c.globalAlpha=1}
+// キヨシに かったあと：ミネゾーウが むかしの すがたに もどり そらへ かえる
+function drawMZF(cx,cy){const t=MZF.t,bx=13.5*TS-cx,by=6*TS-cy+8+Math.sin(frame/14)*3,pure=t>=100,fly=Math.max(0,t-190),x=bx+fly*1.1,y=by-fly*fly*.012-fly*.6;
+ if(t<100){const a=t/100;c.save();c.globalAlpha=a*.7;const g=c.createRadialGradient(bx-6,by-8,4,bx-6,by-8,40+a*70);g.addColorStop(0,'rgba(255,255,240,1)');g.addColorStop(1,'rgba(255,255,240,0)');c.fillStyle=g;c.fillRect(0,0,W,H);
+  c.globalAlpha=a*.5;c.fillStyle='#fffbe0';for(let i=0;i<8;i++){const r=frame/30+i*Math.PI/4;c.beginPath();c.moveTo(bx-6,by-8);c.lineTo(bx-6+Math.cos(r)*160,by-8+Math.sin(r)*160);c.lineTo(bx-6+Math.cos(r+.08)*160,by-8+Math.sin(r+.08)*160);c.fill()}c.restore();
+  drawMinezou(bx+(t>60?Math.sin(frame)*2:0),by,Math.sin(frame/9),0,0);
+  for(let i=0;i<10;i++){const q=((t/40)+i/10)%1;c.globalAlpha=(1-q)*a;R(bx-40+i*9+Math.sin(i+frame/6)*4,by-10-q*50,4,4,i%2?'#120a16':'#3a1a3a')}c.globalAlpha=1}
+ else{c.save();c.globalAlpha=.35+.15*Math.sin(frame/10);const g=c.createRadialGradient(x+10,y-8,6,x+10,y-8,90);g.addColorStop(0,'rgba(200,235,255,1)');g.addColorStop(1,'rgba(200,235,255,0)');c.fillStyle=g;c.fillRect(0,0,W,H);c.restore();
+  for(let i=0;i<14;i++){const q=((frame/40)+i/14)%1,sx=x+60-q*(40+fly*1.3)+Math.sin(i*5)*30,sy=y+q*(30+fly*1.6)+Math.cos(i*3)*16;c.globalAlpha=(1-q)*.9;R(sx,sy,2,2,i%3?'#ffffff':'#ffd860');if(i%4===0){R(sx-2,sy,6,1,'#ffffff');R(sx+1,sy-2,1,6,'#ffffff')}}c.globalAlpha=1;
+  drawMinezou(x,y,Math.sin(frame/(fly?5:9)),0,1)}
+ if(t>=80&&t<130){c.globalAlpha=1-Math.abs(t-100)/30;R(0,0,W,H,'#ffffff');c.globalAlpha=1}}
 function ishimoriWin(){const e=MAPS.cave3.npcs.find(n=>n.id==='ishimori');e.hx=e.x;e.hy=e.y;const n=Math.max(1,24-e.x);
  return[delay(10),...T('イシモリ「……まあ いい。」','イシモリ「どれだけ あがこうと\nあのかたの けいかくは」','イシモリ「けっして とまらん。」','イシモリ「この どうくつは\nまさに めいきゅう。」','イシモリ「でぐちを さがして\nえいえんに さまようが いい！」','イシモリ「さらばだ！」'),
   F(()=>AU.sfx('fxflying')),npcRun(e,Array(n).fill('right'),3),F(()=>{S.flags.ishimoriGone=1;AU.sfx('door')}),delay(20),...T('イシモリは どうくつの\nやみに きえて いった……','……ん？ イシモリの いた\nばしょに なにか おちている……'),F(save)]}
@@ -4359,7 +4374,7 @@ function drawWorld(){
  if(CUR.forest){const vg=c.createRadialGradient(W/2,H/2,70,W/2,H/2,210);vg.addColorStop(0,'rgba(8,30,10,0)');vg.addColorStop(1,'rgba(8,30,10,.5)');c.fillStyle=vg;c.fillRect(0,0,W,H)}
  if(CUR.cave){const vg=c.createRadialGradient(W/2,H/2-8,60,W/2,H/2,200);vg.addColorStop(0,'rgba(14,8,4,0)');vg.addColorStop(1,'rgba(14,8,4,.62)');c.fillStyle=vg;c.fillRect(0,0,W,H)}
  drawSkyEv();
- areaFx(cx,cy);if(MZ)drawMZ(cx,cy);if(GODS)drawGods();if(FLY)drawFly();if(KAISOU)drawKaisou();if(BLACKOUT>0){c.globalAlpha=BLACKOUT;R(0,0,W,H,'#000000');c.globalAlpha=1}if(ENDSCR)drawEnd();
+ areaFx(cx,cy);if(MZ)drawMZ(cx,cy);if(MZF)drawMZF(cx,cy);if(GODS)drawGods();if(FLY)drawFly();if(KAISOU)drawKaisou();if(BLACKOUT>0){c.globalAlpha=BLACKOUT;R(0,0,W,H,'#000000');c.globalAlpha=1}if(ENDSCR)drawEnd();
  if(nameT>0&&CUR.name&&!Q.length){const w=CUR.name.length*16+28;box(8,8,w,40);txt(CUR.name,22,20)}
  if(menu){if(menu.pg==='root')drawRoot();else if(menu.pg==='dev')drawList(menu.dev[menu.dev.length-1]);else if(menu.pg==='mail')drawMailUI(menu.mu,S.mail||[]);else if(menu.pg==='quit'){drawRoot();drawQuit()}else if(menu.pg==='party'||menu.pg==='pmenu'){drawParty(menu.j,menu.use?'だれに つかう？':'てもち',menu.use?'A：つかう　B：もどる':'A：えらぶ　B：もどる',i=>{menu.j=i});if(menu.pg==='pmenu')drawPMenu()}else if(menu.pg==='stat')drawStatus(menu.j,menu.mv,menu.pick);else if(menu.pg==='wmap')drawWorldMap(menu.w||0);else if(menu.pg==='items')drawItems(menu.k,visItems(),i=>{menu.k=i});else if(menu.pg==='dex')drawDex(menu.dx||0);else if(menu.pg==='dexd')drawDexDetail(menu.dx||0)}
  if(shop)drawShop();
