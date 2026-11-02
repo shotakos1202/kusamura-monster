@@ -3895,7 +3895,9 @@ function checkFaint(){const foe=B.foe,m=me();if(B.god){if(m.hp<=0)m.hp=1;if(foe.
   else r.push(F(()=>{B.forced=true;B.menu='party';B.pcur=ni}),Wt(()=>!B.forced),F(()=>{const i=B.pcur;B.menu='main';B.mi=i;B.dM=S.party[i].hp;B.dExp=S.party[i].exp;B.st.me=newSt();B.dot.me=null;B.rech.me=false}),delay(10),F(()=>{B.meIn=true;return T(`ゆけっ！ ${nm(me())}！`)}));
   return r}
  return[]}
-function gainExp(m,foe,mult){const diff=foe.lv-m.lv,bonus=diff>0?1+diff*.15:1,g=Math.max(1,Math.floor((SP[foe.id].exp||300)*foe.lv/4.5*mult*bonus));
+// late game: stronger foes give more (Lv45 +0%, Lv55 +40%, Lv65 +80%, Lv70 +100%) so the last areas need less grinding
+const lateExp=lv=>1+Math.max(0,lv-45)/25;
+function gainExp(m,foe,mult){const diff=foe.lv-m.lv,bonus=diff>0?1+diff*.15:1,g=Math.max(1,Math.floor((SP[foe.id].exp||300)*foe.lv/4.5*mult*bonus*lateExp(foe.lv)));
  return[...T(`${nm(m)}は ${g}けいけんちを\nもらった！`),F(()=>{m.exp+=g}),...expSteps(m),F(()=>shareExp(m,g))]}
 function shareExp(m,g){const others=S.party.filter(o=>o!==m&&o.hp>0&&o.lv<LVMAX);if(!others.length)return[];const sh=Math.max(1,Math.floor(g/3));const r=[...T(`なかまも ${sh}けいけんちを\nもらった！`)];
  for(const o of others){o.exp+=sh;while(o.lv<LVMAX&&o.exp>=expAt(o,o.lv+1)){const om=o.mhp;o.lv++;calc(o);o.hp+=o.mhp-om;r.push(...T(`${nm(o)}は\nレベル ${o.lv}に あがった！`));
