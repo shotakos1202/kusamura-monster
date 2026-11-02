@@ -39,6 +39,8 @@ const rnd=a=>a[Math.random()*a.length|0];
 const TN={fire:'ほのお',water:'みず',grass:'くさ',rock:'いわ',elec:'でんき',normal:'ノーマル',flying:'ひこう',psychic:'エスパー',dragon:'ドラゴン'};
 const TC={fire:{grass:2,water:.5,rock:.5},water:{fire:2,rock:2,grass:.5},grass:{water:2,rock:2,fire:.5,flying:.5},rock:{fire:2,elec:2,flying:2},elec:{water:2,grass:.5,rock:.5,flying:2},normal:{rock:.5},flying:{grass:2,elec:.5,rock:.5,psychic:2},psychic:{rock:2,psychic:.5}};TC.elec.psychic=2;TC.dragon={dragon:2};for(const t of['fire','water','grass','elec'])TC[t].dragon=.5;
 const eff=(a,d)=>(TC[a]&&TC[a][d])||1;
+// ダブルタイプ（さんしんだけ）：SP.type2 が あれば あいしょうは 2つの かけざん、タイプいっちも どちらかで OK
+const typesOf=id=>{const s=SP[id];return s&&s.type2?[s.type,s.type2]:[s&&s.type]},effOn=(t,id)=>typesOf(id).reduce((m,x)=>m*eff(t,x),1),stabOf=(t,id)=>typesOf(id).includes(t);
 const MV={
  butsukaru:{n:'ぶつかる',t:'normal',p:35},hinoiki:{n:'ひのいき',t:'fire',p:40},mizushibuki:{n:'みずしぶき',t:'water',p:40},
  happa:{n:'はっぱとばし',t:'grass',p:42},kuchibashi:{n:'くちばし',t:'normal',p:38},tsumuji:{n:'つむじかぜ',t:'normal',p:50},
@@ -1139,6 +1141,136 @@ Object.assign(ARTDEF,{
   LN(g,[8.2,6.4,13,5],'#151c40',1.1);
  },['#2a2a3a','#5a6280','#c8d0e4','#f4f6ff','#d02a40','#151c40','#2c3c86','#5874d0','#7a84a0','#080c1e','#ffffff','#ffd040'],'#060818',{'#2c3c86':['#5874d0','#151c40'],'#c8d0e4':['#f4f6ff','#7a84a0']}],
 });
+/* ---------- とがった いわの やまの ドラゴン・さんしん（さざなみ・ミネゾーウ） ---------- */
+Object.assign(ARTDEF,{
+ // ミズチ：しろい へびの ような りゅう（しんか なし）
+ mizuchi:[g=>{
+  E(g,20,38.2,12,1.6,'#2a3a4a');
+  LN(g,[33,34,36,29,33,24.6,27,24,22,27,17,32,12,33,7.6,30],'#6aa8d8',5.6);
+  LN(g,[33,34,36,29,33,24.6,27,24,22,27,17,32,12,33,7.6,30],'#eaf4fb',3.6);
+  for(const[x,y]of[[34.6,29],[28.6,24.2],[21,28.4],[14,32.6]])LN(g,[x-1.2,y-1,x,y-2.4,x+1.2,y-1],'#6aa8d8',.8);
+  PG(g,[36,30,39.6,32.6,37,34.4,35,33],'#6aa8d8');PG(g,[36.2,30.6,38.6,32.4,36.8,33.6],'#bfe6ff');
+  LN(g,[8.4,30,6.6,24,8.6,17.6,13,13.4],'#6aa8d8',5.8);LN(g,[8.4,30,6.6,24,8.6,17.6,13,13.4],'#eaf4fb',3.8);
+  for(const[x,y]of[[6.2,24],[8,18.6]])PG(g,[x,y,x-3.4,y+1.4,x,y+2.2],'#6aa8d8');
+  SE(g,15,11,6.6,5,'#6aa8d8','#eaf4fb','#ffffff');
+  PG(g,[18,9.6,25.4,10.6,25,13.6,18.6,14],'#eaf4fb');PG(g,[19,13.6,25,13.4,24.4,14.6,19,15],'#bfe6ff');
+  LN(g,[24.6,12.2,30,9.2,34,10.8],'#e8b830',.9);LN(g,[24.6,13.6,29.6,16,33.6,15],'#e8b830',.9);
+  PG(g,[12,6.6,9.4,1.2,14.6,5.6],'#e8b830');PG(g,[15.4,6.2,15.6,0.6,18.4,5.8],'#e8b830');
+  for(const[x,y]of[[10,10],[9,13]])PG(g,[x,y,x-3.6,y-1,x-1,y+2],'#bfe6ff');
+  E(g,19.8,10.6,1.5,1.7,'#1a2a6a');E(g,19.4,10,.55,.55,'#ffffff');E(g,24.2,11.8,.5,.4,'#3a5a8a');
+ },['#2a3a4a','#6aa8d8','#eaf4fb','#ffffff','#bfe6ff','#e8b830','#1a2a6a','#3a5a8a'],'#1c3048'],
+ // ハネトカゲ：はねの はえた すばしこい とかげ
+ hanetokage:[g=>{
+  E(g,20,38,10,1.6,'#2a3a3a');
+  LN(g,[25,32,31,34,36,31,38,27],'#2a8c86',3);PG(g,[37,28.6,40,24,39.4,30.6],'#ff7a5a');
+  PG(g,[22,18,26,8,30,6,28,12,33,10,30,16,34,16,28,21],'#ff7a5a');PG(g,[23,18.4,26.6,10,28.4,9.2,27,13.6,30.6,12.6,28.4,16.8,30.6,17.2,27,20],'#ffc2a0');
+  PG(g,[13,30,12.4,36.4,17,36.4,17.4,30.6],'#2a8c86');PG(g,[21,30.6,21,36.4,25.6,36.4,25.4,30],'#2a8c86');
+  for(const x of[11.6,14,16.2,20.6,23,25.2])PG(g,[x,37.2,x+.7,35.6,x+1.4,37.2],'#f4e8c8');
+  SE(g,19,26,7.6,7,'#1e6c68','#2a8c86','#5cc4b8');
+  E(g,17.4,27.4,4.4,4.6,'#f4e8c8');
+  LN(g,[13.4,23,9.6,25.6,10.2,28.6],'#2a8c86',2.2);
+  PG(g,[13.6,20,12.4,14,16.6,10.6,20,17],'#2a8c86');
+  SE(g,13.4,11.4,6.6,5.2,'#1e6c68','#2a8c86','#5cc4b8');
+  PG(g,[8,11,2,12.8,2.6,15,8.6,14.4],'#2a8c86');PG(g,[2.8,14.2,2.8,15.2,8.2,15,8.4,14],'#f4e8c8');
+  for(const[x,y,c2]of[[14,6.6,'#ff7a5a'],[17,7,'#ffc2a0'],[19.4,8.6,'#ff7a5a']])PG(g,[x,y+1.6,x+2.6,y-3.6,x+2.4,y+2.4],c2);
+  E(g,10.8,10.4,1.7,1.9,'#102a2a');E(g,10.3,9.8,.6,.6,'#ffffff');
+ },['#2a3a3a','#2a8c86','#ff7a5a','#ffc2a0','#f4e8c8','#1e6c68','#5cc4b8','#102a2a','#ffffff'],'#0c2624',{'#2a8c86':['#5cc4b8','#1e6c68']}],
+ // ソウテンリュウ：あおぞらの はねを もつ おおきな りゅう
+ soutenryuu:[g=>{
+  E(g,20,38.6,13,1.8,'#2a3a4a');
+  PG(g,[21,17,22,3,27,0.6,31,3,36,2,39,6,37,10,40,13,36,17,39,21,32,23,27,22],'#ff7a5a');
+  PG(g,[22,17.4,23.6,5,27,2.6,30.4,5,34.6,4,37,6.8,35,10.4,37.4,13,34,16.6,36.6,20,31,21.6,27,21],'#ffc2a0');
+  PG(g,[24.6,17,26.4,11,29,9.6,31,12,29.6,15.4,27.4,18.6],'#ffffff');
+  LN(g,[26,32,32,35.4,37.4,33,39.4,28.4],'#2a6aa0',3.6);PG(g,[38,29.6,40,24,39.8,31.4],'#ff7a5a');
+  PG(g,[11.6,29,10.6,37,17,37,17.8,30],'#2a6aa0');PG(g,[21.6,30,21.4,37,27.6,37,26.6,29],'#2a6aa0');
+  for(const x of[10.2,12.6,15,21,23.4,25.8])PG(g,[x,38,x+.8,36,x+1.6,38],'#f4f0e0');
+  SE(g,19.4,25,9.6,9.4,'#1e4c7a','#2a6aa0','#5c9ad8');
+  PG(g,[13.4,17.4,20.6,16,22.6,22,21.6,32,16.4,33,12.6,26],'#f4f0e0');for(const y of[20,23,26,29])LN(g,[13,y,22,y-.4],'#c8c0a0',.8);
+  LN(g,[13,21.4,8.4,24.6,9,28.8],'#2a6aa0',2.8);
+  PG(g,[14,18.8,12,10.6,18.6,7.6,21.4,16.4],'#2a6aa0');
+  SE(g,13.4,8.8,7.4,5.8,'#1e4c7a','#2a6aa0','#5c9ad8');
+  PG(g,[8,7.6,1,10.6,1.4,13.4,8.6,12.8],'#2a6aa0');PG(g,[1.6,12.4,1.6,13.6,8,13.2,8.2,12.2],'#f4f0e0');
+  E(g,2.6,10.6,.6,.45,'#0c2440');LN(g,[2,12.6,7.6,12.4],'#0c2440',.8);
+  for(const[x,y,c2]of[[13,4.4,'#ff7a5a'],[16.4,3.6,'#ffc2a0'],[19.6,5,'#ff7a5a'],[21.6,8,'#ffc2a0']])PG(g,[x,y+2,x+3.4,y-3.6,x+2.6,y+3],c2);
+  PG(g,[9,7.6,12.8,6.6,12.4,9.2,9.4,9.4],'#0c2440');PG(g,[9.6,7.8,12.2,7,12,8.8,9.8,9],'#7ae0ff');E(g,11.6,7.4,.45,.4,'#ffffff');
+ },['#2a3a4a','#ff7a5a','#ffc2a0','#ffffff','#2a6aa0','#f4f0e0','#1e4c7a','#5c9ad8','#c8c0a0','#0c2440','#7ae0ff'],'#0a1a30',{'#2a6aa0':['#5c9ad8','#1e4c7a']}],
+ // ツノリュウ：がんじょうな ツノの こがた りゅう（4ほんあし）
+ tsunoryuu:[g=>{
+  E(g,20,37.6,13,1.8,'#2a2a2a');
+  LN(g,[29,28,34,30,37.6,27.6],'#7a5a8a',3.4);PG(g,[36.4,27,40,25,38.4,29.6],'#e8dcc0');
+  for(const x of[11,16,24,29])PG(g,[x-2,29,x-2.4,36,x+2.6,36,x+2.4,29],'#7a5a8a');
+  for(const x of[9,11.4,14,16.4,22,24.4,27,29.4])PG(g,[x,37,x+.7,35.4,x+1.4,37],'#e8dcc0');
+  SE(g,21,26,11,6.6,'#5a3e6a','#7a5a8a','#a888b8');
+  for(const[x,y]of[[16,20],[21,19.4],[26,20.4],[30,22.6]])PG(g,[x-2.4,y+1.6,x,y-2.6,x+2.4,y+1.6],'#e8dcc0');
+  E(g,20,29.6,7,2.4,'#c8b8a8');
+  SE(g,9.6,22.6,7,5.6,'#5a3e6a','#7a5a8a','#a888b8');
+  PG(g,[4,22,1,25,3,27.6,8,27],'#7a5a8a');E(g,2.4,24.6,.6,.5,'#2a1a2a');
+  PG(g,[6,19,3.4,8,9,17.6],'#e8dcc0');PG(g,[6.4,18,4.4,10.4,8.2,17.4],'#ffffff');
+  PG(g,[11,17.6,13,11,14,18.4],'#e8dcc0');
+  E(g,8.6,21.6,1.5,1.6,'#1a0a2a');E(g,8.2,21,.55,.55,'#ffffff');
+ },['#2a2a2a','#7a5a8a','#e8dcc0','#5a3e6a','#a888b8','#c8b8a8','#2a1a2a','#ffffff','#1a0a2a'],'#1a0e22',{'#7a5a8a':['#a888b8','#5a3e6a']}],
+ // オオツノリュウ：いわを くだく おおきな ツノの りゅう
+ ootsunoryuu:[g=>{
+  E(g,20,38.4,15,2,'#2a2a2a');
+  LN(g,[30,27,35,29,38.4,25],'#6a4a7a',4.4);PG(g,[37,24.6,40,20,39.6,27.4],'#e8dcc0');
+  for(const x of[9,15,25,31])PG(g,[x-3,28,x-3.4,37,x+3.4,37,x+3,28],'#6a4a7a');
+  for(const x of[7,9.6,12.2,15,22.6,25.4,28.6,31.4])PG(g,[x,38,x+.8,36,x+1.6,38],'#e8dcc0');
+  SE(g,21,23.6,13,9,'#4a2e5a','#6a4a7a','#9a78aa');
+  for(const[x,y,s]of[[14,15,1],[20,13.4,1.2],[26,14.4,1.1],[31,17.6,.9]]){PG(g,[x-3*s,y+3,x,y-4.4*s,x+3*s,y+3],'#e8dcc0');PG(g,[x-1.4*s,y+2,x,y-2.6*s,x+1.2*s,y+2],'#ffffff')}
+  PG(g,[12,24,28,24,30,30,10,30],'#c8b8a8');for(const x of[14,18,22,26])LN(g,[x,24.4,x,29.6],'#9a8a7a',.7);
+  SE(g,8,21,7.6,6.4,'#4a2e5a','#6a4a7a','#9a78aa');
+  PG(g,[2.4,21,0.2,25,2,28,7,27.4],'#6a4a7a');E(g,1.6,24.4,.6,.5,'#2a1a2a');
+  PG(g,[4,18,0.4,3,8.6,16.6],'#e8dcc0');PG(g,[4.6,17,1.8,6,7.8,16.4],'#ffffff');
+  PG(g,[9,16.6,10.6,6,13,17.4],'#e8dcc0');PG(g,[2,15.6,-1,10,4.4,16.6],'#c8b8a8');
+  E(g,7,19.8,1.6,1.7,'#e83a3a');E(g,6.6,19.2,.55,.55,'#ffffff');
+ },['#2a2a2a','#6a4a7a','#e8dcc0','#4a2e5a','#9a78aa','#ffffff','#c8b8a8','#9a8a7a','#2a1a2a','#e83a3a'],'#160a1e',{'#6a4a7a':['#9a78aa','#4a2e5a']}],
+ // さざなみ：はねの はえた ジンベエザメ（うみの かみ）
+ sazanami:[g=>{
+  E(g,20,38.4,14,1.8,'#1a3a5a');
+  // feather wings (back)
+  PG(g,[20,15,16,4,20,0.6,24,3,27,0.4,30,3,33,2,34,6,31,9,27,13],'#a8d8f0');PG(g,[21,14.4,18.4,5,21,2.4,24,4.6,27,2.4,29.4,4.6,32,4,32,6.4,29.6,8.6,26,12],'#ffffff');
+  // tail fin
+  PG(g,[33,22,40,13.6,38,22,40,31,33,27],'#2a6aa8');PG(g,[34,22.4,38.6,16,37,22,38.6,28.6,34,26.4],'#4a8ac8');
+  // whale shark body
+  PG(g,[2,22,6,15,16,12.6,28,15,35,20,35,27,28,31,14,32.6,5,30],'#2a6aa8');
+  PG(g,[3,24,6,17,16,14.6,27,16.6,33,21,33,24,22,23,10,24],'#4a8ac8');
+  PG(g,[3.4,25,10,26.6,22,26,33,25,30,29,16,31,6,29],'#e8f4ff');
+  for(const[x,y]of[[10,18],[14,16.6],[18,17.4],[22,18],[26,19.4],[12,21.4],[17,21],[21,21.6],[25,22],[29,22.6],[8,22]])E(g,x,y,.9,.9,'#e8f4ff');
+  for(const x of[24,26,28])LN(g,[x,20,x+.4,25],'#1a4a80',.6);
+  // pectoral fin
+  PG(g,[13,27,10,35,17,30.6],'#2a6aa8');
+  // dorsal + front wing
+  PG(g,[18,13,22,6,24,14],'#2a6aa8');
+  PG(g,[12,15,4,3,9,5,14,2,17,9],'#a8d8f0');PG(g,[12.4,14,6,5,10,6.4,14,4.4,16,9.4],'#ffffff');
+  // face
+  LN(g,[2.6,25.4,8.6,26.2],'#0e2a50',.9);E(g,6.2,19.6,1.4,1.4,'#0e2a50');E(g,5.8,19.2,.5,.5,'#ffffff');
+  E(g,4.6,23,.5,.4,'#0e2a50');
+  // sparkling water droplets
+  for(const[x,y]of[[1,9],[36,6],[38,35]])E(g,x,y,.8,.8,'#c8f0ff');
+ },['#1a3a5a','#a8d8f0','#ffffff','#2a6aa8','#4a8ac8','#e8f4ff','#1a4a80','#0e2a50','#c8f0ff'],'#0a1e3a',{'#2a6aa8':['#4a8ac8','#1a4a80']}],
+ // ミネゾーウ：くろい ふしちょう（そらの かみ）
+ minezou:[g=>{
+  E(g,20,38.4,13,1.6,'#2a1020');
+  // tail streamers
+  for(let i=0;i<3;i++)PG(g,[24,26,30+i*2,30+i*3,36+i,36+i*1.4,33+i*2,33+i*2,26,29],i===1?'#4a1a3a':'#1e0c1a');
+  // wings up
+  PG(g,[18,18,10,6,4,0.6,6,8,1,10,6,15,2,20,12,22],'#1e0c1a');PG(g,[17,18.4,10.6,8,6.6,4,8,9.6,4.4,11.6,8,15.4,6,18.6,12.6,20.6],'#3a1630');
+  PG(g,[22,18,30,6,36,0.6,34,8,39,10,34,15,38,20,28,22],'#1e0c1a');PG(g,[23,18.4,29.4,8,33.4,4,32,9.6,35.6,11.6,32,15.4,34,18.6,27.4,20.6],'#3a1630');
+  for(const[x,y]of[[5,8],[4.4,12],[35,8],[35.6,12]])E(g,x,y,.8,.8,'#d02848');
+  // body
+  SE(g,20,25,7,8,'#1e0c1a','#3a1630','#5a2a4a');
+  PG(g,[17,22,23,22,22,31,18,31],'#5a2a4a');
+  // legs
+  LN(g,[17,32,16,36.4],'#c8a030',1.2);LN(g,[23,32,24,36.4],'#c8a030',1.2);
+  // neck/head + crest
+  PG(g,[17,19,18,11,22,11,23,19],'#1e0c1a');SE(g,20,10,4.4,3.8,'#1e0c1a','#3a1630');
+  PG(g,[16,10,12,12,16,11.6],'#c8a030');
+  for(const[x,y]of[[19,7],[21,6],[23,7.4]])PG(g,[x,y,x+1,y-5,x+2,y],'#d02848');
+  E(g,18.2,9.4,1,.9,'#ff3048');E(g,18,9.2,.4,.4,'#ffffff');
+  // black-flame embers
+  for(const[x,y]of[[10,26],[31,26],[13,33],[28,34]])E(g,x,y,1,1.3,'#d02848');
+ },['#2a1020','#1e0c1a','#4a1a3a','#3a1630','#d02848','#5a2a4a','#c8a030','#ff3048','#ffffff'],'#080208'],
+});
 const ART={};for(const k in ARTDEF){const[fn,cols,o,bv]=ARTDEF[k];ART[k]=bake(fn,cols,o,bv)}
 function drawMon(id,x,y,flip,white){const a=ART[id],img=white?a.white:a.img;c.imageSmoothingEnabled=false;
  if(flip){c.save();c.translate(Math.round(x)+80,Math.round(y));c.scale(-1,1);c.drawImage(img,0,0,80,80);c.restore()}else c.drawImage(img,Math.round(x),Math.round(y),80,80)}
@@ -1206,7 +1338,7 @@ SP.kazekirio={name:'カゼキリオー',type:'flying',b:{hp:72,atk:82,def:66,spd
 SP.piyotto.evo={lv:10,to:'tsubametto'};
 DEX.splice(DEX.indexOf('piyotto')+1,0,'tsubametto','kazekirio');
 MV.morinoibuki={n:'もりの いぶき',t:'grass',p:120,d:'もりの かみの いぶき'};
-SP.uppy={name:'ウッピー',type:'grass',b:{hp:100,atk:110,def:100,spd:95},exp:0,cr:0,moves:['morinoibuki','hanafubuki','nekkokarame','hinatabokko'],learn:{},desc:'まよいの もりを まもる かみさま。 その すがたを みた ものは すくない。'};
+SP.uppy={type2:'flying',name:'ウッピー',type:'grass',b:{hp:100,atk:110,def:100,spd:95},exp:0,cr:0,moves:['morinoibuki','hanafubuki','nekkokarame','hinatabokko'],learn:{},desc:'まよいの もりを まもる かみさま。 その すがたを みた ものは すくない。'};
 Object.assign(MV,{
  happagiri:{n:'はっぱぎり',t:'grass',p:55,crit:true,d:'きゅうしょに あたりやすい'},
  kyuketsu:{n:'きゅうけつ',t:'flying',p:45,drain:true,d:'HPを すいとる'},
@@ -1503,8 +1635,34 @@ SP.zantetsuryu={name:'ザンテツリュウ',type:'dragon',b:{hp:86,atk:124,def:
  desc:'はがねの つばさと けんの しっぽを もつ りゅう。 ひと ふりで おおきな いわも まっぷたつに する。'};
 DEX.push('tsurugidora','zantetsuryu');
 Object.assign(WHERE,{tsurugidora:'7ばんどうろ（まれ）',zantetsuryu:'ツルギドラが Lv46で しんか'});
+/* ---------- とがった いわの やまの ドラゴン（ミズチ／ハネトカゲ→ソウテンリュウ／ツノリュウ→オオツノリュウ）と さんしん ----------
+   やまの やせいは Lv51〜54。 しんかLvは 57・58（さいこうLv＋3いじょう）。 つかまえてから しんかまでに 55 で わざを おぼえる */
+Object.assign(MV,{
+ kumokiri:{n:'くもきり',t:'flying',p:80,crit:true,d:'きゅうしょに あたりやすい'},
+ tsunodokkou:{n:'つのどっこう',t:'dragon',p:85,acc:95,flinch:.2,d:'たまに ひるませる'},
+ mizuchishibuki:{n:'みずちしぶき',t:'water',p:80,hitStat:{stat:'acc',st:-1,chance:.3},d:'たまに あいての めいちゅう↓'},
+ ryuujinha:{n:'りゅうじんは',t:'dragon',p:100,acc:90,d:'めいちゅうが すこし ひくい'},
+ oounabara:{n:'おおうなばら',t:'water',p:120,acc:90,hitStat:{stat:'spd',st:-1,chance:.5},d:'さざなみ せんよう。 はんぶんの かくりつで あいての すばやさ↓'},
+ kokuenha:{n:'こくえんは',t:'dragon',p:120,acc:90,status:'brn',chance:.3,d:'ミネゾーウ せんよう。 たまに やけど'},
+});
+SP.mizuchi={name:'ミズチ',type:'dragon',b:{hp:82,atk:80,def:72,spd:78},exp:190,cr:.12,grow:1.15,moves:['kamitsuku','mizuchishibuki'],learn:{48:'ryuujinnotsume',52:'mizuchishibuki',56:'ryuujinha',61:'tenryuuzan'},
+ desc:'とがった いわの やまの みずべに すむ しろい りゅう。 ひげが ひかると あめが ふりだす という。'};
+SP.hanetokage={name:'ハネトカゲ',type:'dragon',b:{hp:58,atk:76,def:56,spd:96},exp:140,cr:.3,grow:1.15,moves:['kamitsuku','kyukoka'],learn:{44:'ryuujinnotsume',49:'kumokiri',55:'ryuunokamae'},evo:{lv:57,to:'soutenryuu'},
+ desc:'いわから いわへ はねで とびうつる とかげ。 はねの いろで きもちが わかる。'};
+SP.soutenryuu={name:'ソウテンリュウ',type:'dragon',b:{hp:84,atk:112,def:84,spd:130},exp:265,cr:.05,grow:1.15,moves:['kamitsuku','kyukoka'],learn:{...SP.hanetokage.learn,57:'ryuujinha',61:'tenkuuzan',66:'tenryuuzan'},
+ desc:'あおぞらの いろの はねで くもの うえを とぶ。 その すがたを みた ひは いちにち はれる という。'};
+SP.tsunoryuu={name:'ツノリュウ',type:'dragon',b:{hp:76,atk:86,def:90,spd:38},exp:140,cr:.3,grow:1.15,moves:['zutsuki','kamitsuku'],learn:{44:'tsunodokkou',49:'katakunaru',55:'ryuunokamae'},evo:{lv:58,to:'ootsunoryuu'},
+ desc:'がんじょうな ツノで いわを つついて あそぶ。 せなかの とげは いわの かけら。'};
+SP.ootsunoryuu={name:'オオツノリュウ',type:'dragon',b:{hp:106,atk:126,def:118,spd:56},exp:265,cr:.05,grow:1.15,moves:['zutsuki','kamitsuku'],learn:{...SP.tsunoryuu.learn,58:'ryuujinha',62:'daichiware',67:'tenryuuzan'},
+ desc:'ひと つきで とがった いわを くだく。 やまの いわの かたちは この こが つくったとも いわれる。'};
+SP.sazanami={name:'さざなみ',type:'water',type2:'flying',b:{hp:120,atk:108,def:108,spd:104},exp:0,cr:0,grow:1.2,moves:['mizunohado','kyukoka'],learn:{40:'tsunami',50:'tenkuuzan',58:'oounabara'},
+ desc:'うみの かみ。 ふかい うみの そこで ねむり、 せかいの うみを みまもる。 その こころを みとめた ものだけを せなかに のせる。'};
+SP.minezou={name:'ミネゾーウ',type:'dragon',type2:'flying',b:{hp:118,atk:124,def:100,spd:110},exp:0,cr:0,grow:1.2,moves:['yaminohado','kyukoka'],learn:{40:'kagenotsubasa',50:'tenkuuzan',58:'kokuenha'},
+ desc:'そらの かみ。 くろい ほのおを まとう ふしちょう。 むかしは ひかり かがやく とりだったと いう。'};
+DEX.push('mizuchi','hanetokage','soutenryuu','tsunoryuu','ootsunoryuu','minezou','sazanami');
+Object.assign(WHERE,{mizuchi:'とがった いわの やま（まれ）',hanetokage:'とがった いわの やま',soutenryuu:'ハネトカゲが Lv57で しんか',tsunoryuu:'とがった いわの やま',ootsunoryuu:'ツノリュウが Lv58で しんか',minezou:'そらの かみ（キヨシが したがえている）',sazanami:'カモガワシティ しんかいの いせき'});
 /* でんせつ・まぼろしは ずかんの さいご（この じゅんで ならぶ）。まぼろし → さんしん（もり・そら・うみ）の じゅん。そらの かみ・うみの かみは ウッピーの うしろに たす */
-const LEGEND=['hisuiko','hisuiryu','hisuijin','shounon','uppy'];
+const LEGEND=['hisuiko','hisuiryu','hisuijin','shounon','uppy','minezou','sazanami'];
 for(const id of LEGEND){const k=DEX.indexOf(id);if(k>=0)DEX.splice(k,1)}DEX.push(...LEGEND.filter(id=>SP[id]));
 const STARTERS=['hinokon','mizutama','happaru'];
 const IT={ball:{n:'ボール',price:100,d:'やせいの モンスターを つかまえる'},potion:{n:'くすり',price:150,d:'モンスターの HPを 20 かいふくする'}};
@@ -3161,13 +3319,15 @@ function updMenu(){const m=menu;
 const me=()=>S.party[B.mi];
 const approach=(a,b,s)=>a<b?Math.min(b,a+s):Math.max(b,a-s);
 const settled=()=>!B.blink&&B.dF===B.foe.hp&&B.dM===me().hp;
-const lab=(m,isP)=>isP?nm(m):(B.trainer?`あいての ${nm(m)}`:B.god?nm(m):`やせいの ${nm(m)}`);
-function initBattle(){const god=!!B.god,tr=B.trainer||null,team=tr?tr.team.map(([id,l])=>mon(id,l)):[B.foe],mi=S.party.findIndex(m=>m.hp>0);
- B={god,trainer:tr,team,foe:team[0],mi,menu:'main',cur:0,mcur:0,pcur:mi,icur:0,dF:team[0].hp,dM:S.party[mi].hp,blink:null,foeGone:false,ball:false,ballT:0,shakes:0,over:false,meIn:false,fshow:tr?'trainer':'mon',runs:0,intro:0,dExp:S.party[mi].exp,sinkF:0,sinkM:0,lvfx:null,st:{me:newSt(),foe:newSt()},dot:{me:null,foe:null},flinch:{me:false,foe:false},rech:{me:false,foe:false}};
+const lab=(m,isP)=>isP?nm(m):(B.trainer?`あいての ${nm(m)}`:(B.god||B.legend)?nm(m):`やせいの ${nm(m)}`);
+function initBattle(){const god=!!B.god,leg=B.legend||null,tr=B.trainer||null,team=tr?tr.team.map(([id,l])=>mon(id,l)):[B.foe],mi=S.party.findIndex(m=>m.hp>0);
+ B={god,trainer:tr,team,foe:team[0],mi,menu:'main',cur:0,mcur:0,pcur:mi,icur:0,dF:team[0].hp,dM:S.party[mi].hp,blink:null,foeGone:false,ball:false,ballT:0,shakes:0,over:false,meIn:false,fshow:tr?'trainer':'mon',runs:0,intro:0,dExp:S.party[mi].exp,sinkF:0,sinkM:0,lvfx:null,st:{me:newSt(),foe:newSt()},dot:{me:null,foe:null},flinch:{me:false,foe:false},rech:{me:false,foe:false},legend:leg};
+ if(leg){const f=B.foe;f.mhp=Math.round(f.mhp*(leg.hpx||2.2));f.hp=f.mhp;B.dF=f.hp}
  if(!S.seen.includes(B.foe.id))S.seen.push(B.foe.id);
  mode='battle';Q=[];
  if(tr)Q.push(...T(`${tr.tname}が\nしょうぶを しかけてきた！`),F(()=>{B.fshow='mon'}),...T(`${tr.tname}は\n${nm(B.foe)}を くりだした！`));
  else if(god)say('もりの かみ ウッピーが\nたちはだかった！');
+ else if(leg)say(leg.intro||`${nm(B.foe)}が\nたちはだかった！`);
  else say(`あっ！ やせいの ${nm(B.foe)}が\nとびだしてきた！`);
  Q.push(F(()=>{B.meIn=true}),...T(`ゆけっ！ ${nm(me())}！`))}
 
@@ -3183,12 +3343,12 @@ function statChange(sd,who,stat,n){return[F(()=>{const cur=B.st[sd][stat];
  if((n>0&&cur>=6)||(n<0&&cur<=-6))return T(`${who}の ${STN[stat]}は\nもう ${n>0?'あがらない':'さがらない'}！`);
  B.st[sd][stat]=Math.max(-6,Math.min(6,cur+n));AU.sfx(n>0?'statup':'statdown');
  return T(`${who}の ${STN[stat]}が\n${Math.abs(n)>=2?(n>0?'ぐーんと ':'がくっと '):''}${n>0?'あがった':'さがった'}！`)})]}
-function inflict(def,kind,who,fromHit){return[F(()=>{const ty=SP[def.id].type;
- if(def.status||def.hp<=0||(kind==='brn'&&ty==='fire')||(kind==='par'&&ty==='elec'))return fromHit?[]:T('しかし うまく きまらなかった！');
+function inflict(def,kind,who,fromHit){return[F(()=>{const ty=typesOf(def.id);
+ if(def.status||def.hp<=0||(kind==='brn'&&ty.includes('fire'))||(kind==='par'&&ty.includes('elec')))return fromHit?[]:T('しかし うまく きまらなかった！');
  def.status=kind;if(kind==='slp')def.slp=2+(Math.random()*3|0);
  return T(kind==='brn'?`${who}は やけどを おった！`:kind==='par'?`${who}は まひして\nわざが でにくくなった！`:`${who}は\nねむってしまった！`)})]}
 function resolve(att,def,mv,isP,who){const sd=side(isP),od=side(!isP),dwho=lab(def,!isP),r=[];
- if(mv.p){const hits=mv.hits?mv.hits[0]+(Math.random()*(mv.hits[1]-mv.hits[0]+1)|0):1,e=eff(mv.t,SP[def.id].type),stab=mv.t===SP[att.id].type?1.5:1;let total=0,n=0,crit1=false,hp=def.hp;const dm=[];
+ if(mv.p){const hits=mv.hits?mv.hits[0]+(Math.random()*(mv.hits[1]-mv.hits[0]+1)|0):1,e=effOn(mv.t,def.id),stab=stabOf(mv.t,att.id)?1.5:1;let total=0,n=0,crit1=false,hp=def.hp;const dm=[];
   for(let h=0;h<hits&&hp>0;h++){const crit=Math.random()<(mv.crit?1/4:1/16)?1.5:1;if(crit>1)crit1=true;
    const A=att.atk*smul(B.st[sd].atk)*(att.status==='brn'?.5:1),Df=def.def*smul(B.st[od].def);
    let d=Math.max(1,Math.floor((((2*att.lv/5+2)*mv.p*A/Df)/50+2)*stab*e*crit*(0.85+Math.random()*0.15)));if(DEV&&DEV.ohko&&isP)d=Math.max(d,hp);hp=Math.max(B.god?1:0,hp-d);dm.push(d);total+=d;n++}
@@ -3212,7 +3372,7 @@ function resolve(att,def,mv,isP,who){const sd=side(isP),od=side(!isP),dwho=lab(d
   if(mv.cure)r.push(F(()=>{if(att.status){att.status=null;att.slp=0;return T(`${who}の じょうたいいじょうが\nなおった！`)}return[]}));
   if(mv.selfSleep)r.push(F(()=>{att.status='slp';att.slp=3;return T(`${who}は ねむりはじめた！`)}));
   if(mv.status)r.push(...inflict(def,mv.status,dwho,false));
-  if(mv.seed){if((B.dot[od]&&B.dot[od].kind==='seed')||SP[def.id].type==='grass')r.push(...T('しかし うまく きまらなかった！'));
+  if(mv.seed){if((B.dot[od]&&B.dot[od].kind==='seed')||typesOf(def.id).includes('grass'))r.push(...T('しかし うまく きまらなかった！'));
    else r.push(F(()=>{B.dot[od]={kind:'seed'}}),...T(`${dwho}に\nねっこが からみついた！`))}
  }
  r.push(F(checkFaint));return r}
@@ -3232,7 +3392,7 @@ function foeMove(){const f=B.foe,tg=me();
  const ok=f.moves.filter(id=>{const v=MV[id];if(v.heal)return f.hp<f.mhp*.5;if(!v.p&&v.status)return!tg.status;if(v.seed)return!B.dot.me;if(!v.p&&v.stat)return Math.abs(B.st[v.self?'foe':'me'][v.stat])<3;return true});
  const pool=ok.length?ok:f.moves;
  if(!B.trainer||Math.random()<.3)return rnd(pool);
- let best=pool[0],bv=-1;for(const id of pool){const v=MV[id];const val=v.p?v.p*eff(v.t,SP[tg.id].type)*(v.t===SP[f.id].type?1.5:1)*(v.hits?(v.hits[0]+v.hits[1])/2:1):(v.heal?60:30);if(val>bv){bv=val;best=id}}return best}
+ let best=pool[0],bv=-1;for(const id of pool){const v=MV[id];const val=v.p?v.p*effOn(v.t,tg.id)*(stabOf(v.t,f.id)?1.5:1)*(v.hits?(v.hits[0]+v.hits[1])/2:1):(v.heal?60:30);if(val>bv){bv=val;best=id}}return best}
 const foeAtk=()=>atk(B.foe,false,foeMove());
 function endTurn(){return[F(()=>{if(!B||B.over)return[];B.flinch={me:false,foe:false};const r=[];
  for(const sd of ['me','foe']){const m=sd==='me'?me():B.foe,who=lab(m,sd==='me'),od=sd==='me'?'foe':'me';
@@ -3347,6 +3507,8 @@ function wrapTxt(s,x,y,maxW,size,lh,cl){c.font=`${size}px ${FONT}`;const W2=t=>c
   if(line.trim())out();line=''}}
 function rrect(x,y,w,h,r,fill,stroke,lw){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();if(fill){c.fillStyle=fill;c.fill()}if(stroke){c.strokeStyle=stroke;c.lineWidth=lw||1;c.stroke()}}
 function typePill(t,x,y,w=50,h=14,size=10){rrect(x,y,w,h,4,TCOL[t]||'#5870b0');txt(TN[t],x+w/2,y+(h-size)/2,'#ffffff',size,'center')}
+// 1つ または 2つの タイプを ならべて かく（w は ぜんたいの はば）
+function typePills(id,x,y,w=50,h=14,size=10){const ts=typesOf(id);if(ts.length<2)return typePill(ts[0],x,y,w,h,size);const hw=(w-3)/2;typePill(ts[0],x,y,hw,h,Math.min(size,9));typePill(ts[1],x+hw+3,y,hw,h,Math.min(size,9))}
 function ballIcon(x,y,r=5){ell(x,y,r,r,'#181818');c.fillStyle='#e83838';c.beginPath();c.arc(x,y,r-1,Math.PI,0);c.fill();c.fillStyle='#f8f8f8';c.beginPath();c.arc(x,y,r-1,0,Math.PI);c.fill();R(x-r+1,y-.5,2*r-2,1.4,'#181818');ell(x,y,1.6,1.6,'#f8f8f8')}
 function panelHead(title,col,right){R(14,14,292,22,col);R(14,34,292,2,'rgba(0,0,0,.18)');txt(title,24,17,'#ffffff',14);if(right)txt(right,298,20,'#ffffff',10,'right')}
 const dexNo=i=>'No.'+String(i+1).padStart(3,'0');
@@ -3359,7 +3521,7 @@ function drawDex(sel){HITS.length=0;box(8,8,304,272);panelHead('ずかん','#d84
   hit(16,y,282,RH-4,()=>{if(menu.dx===i&&seen)menu.pg='dexd';menu.dx=i});
   rrect(18,y,278,RH-4,6,on?'#fff4cc':(k%2?'#eef3f9':'#f7f9fc'),on?'#e0a820':null,2);
   txt(dexNo(i),26,y+13,on?'#a06a10':'#8090a8',10);
-  if(seen){c.imageSmoothingEnabled=false;c.drawImage(cg?ART[id].img:ART[id].dark,64,y,38,38);txt(sp.name,108,y+4,3,14);if(cg)typePill(sp.type,108,y+21,48,13,9);else txt('みつけた',108,y+22,2,10)}
+  if(seen){c.imageSmoothingEnabled=false;c.drawImage(cg?ART[id].img:ART[id].dark,64,y,38,38);txt(sp.name,108,y+4,3,14);if(cg)typePills(id,108,y+21,sp.type2?90:48,13,9);else txt('みつけた',108,y+22,2,10)}
   else{rrect(68,y+5,28,28,6,'#dde4ee');txt('？',82,y+11,'#a0aab8',14,'center');txt('？？？？？',108,y+11,'#a0aab8',14)}
   if(cg)ballIcon(282,y+19,6)}
  const th=Math.max(16,(N/DEX.length)*206),ty=42+(206-th)*(top/Math.max(1,DEX.length-N));R(300,42,4,206,'#dde4ee');R(300,ty,4,th,'#d84848');
@@ -3371,7 +3533,7 @@ function drawDexDetail(i){HITS.length=0;const id=DEX[i],sp=SP[id],cg=S.caught.in
  rrect(20,42,104,104,8,'#f2f6fb','#c8d4e2',1.5);if(cg){c.globalAlpha=.16;rrect(20,42,104,104,8,col);c.globalAlpha=1}
  c.globalAlpha=.22;ell(72,130,34,7,'#2a3a50');c.globalAlpha=1;c.imageSmoothingEnabled=false;c.drawImage(cg?ART[id].img:ART[id].dark,32,46,80,80);
  // type + stats
- const x=134;if(cg){typePill(sp.type,x,44,60,16,11);txt(TN[sp.type]+'タイプ',x+68,46,2,10)}else txt('タイプ：？？？',x,46,2,11);
+ const x=134;if(cg){if(sp.type2){typePills(id,x,44,100,16,11);txt('タイプ',x+106,46,2,10)}else{typePill(sp.type,x,44,60,16,11);txt(TN[sp.type]+'タイプ',x+68,46,2,10)}}else txt('タイプ：？？？',x,46,2,11);
  const B2=sp.b;[['HP','hp','#40b848'],['こうげき','atk','#e86048'],['ぼうぎょ','def','#4c84e0'],['すばやさ','spd','#e8b820']].forEach(([l,k,cl],j)=>{const y=70+j*19;
   txt(l,x,y,3,10);rrect(x+46,y+2,94,8,4,'#e2e8f0');if(cg){rrect(x+46,y+2,Math.max(8,Math.round(94*Math.min(1,B2[k]/130))),8,4,cl);txt(String(B2[k]),300,y,3,10,'right')}else txt('？',300,y,2,10,'right')});
  // description
@@ -3395,13 +3557,14 @@ function uppyAfter(){Q.push(delay(30),...T('……どこからか こえが き�
 function checkFaint(){const foe=B.foe,m=me();if(B.god){if(m.hp<=0)m.hp=1;if(foe.hp<=0)foe.hp=1}
  if(foe.hp<=0&&!B.over){
   const r=[F(()=>{B.sinkF=1;AU.sfx('faint')}),Wt(()=>B.sinkF>=SINK),F(()=>{B.foeGone=true}),delay(6),...T(`${lab(foe,false)}は たおれた！`),F(()=>gainExp(m,foe,B.trainer?1.5:1))];
+  if(!B.trainer&&B.legend){B.over=true;const lg=B.legend;r.splice(r.length-1,0,F(()=>AU.jingle('win')));r.push(F(()=>{endBattle();if(lg.onWin)Q.push(...lg.onWin())}));return r}
   if(!B.trainer){B.over=true;r.splice(r.length-1,0,F(()=>AU.jingle('win')));r.push(F(endBattle));return r}
   const ni=B.team.findIndex(x=>x.hp>0);
   if(ni>=0){const nx=B.team[ni];r.push(F(()=>{B.foe=nx;B.dF=nx.hp;B.foeGone=false;B.sinkF=0;B.st.foe=newSt();B.dot.foe=null;B.rech.foe=false;if(!S.seen.includes(nx.id))S.seen.push(nx.id)}),...T(`${B.trainer.tname}は\n${nm(nx)}を くりだした！`));return r}
   B.over=true;const tr=B.trainer,money=Math.round(tr.money*foe.lv*2.5/10)*10;
   r.push(F(()=>AU.jingle('win')),...T(`${tr.tname}との\nしょうぶに かった！`),F(()=>{B.fshow='trainer'}),...T(...tr.lose),F(()=>{S.money+=money}),...T(`しょうきんとして\n${money}えん てにいれた！`),
    F(()=>{S.flags[tr.id]=true;endBattle();if(tr.onWin)Q.push(...tr.onWin());if(tr.hx!==undefined&&(tr.x!==tr.hx||tr.y!==tr.hy))Q.push(walkHome(tr));if(tr.badge){const bn=typeof tr.badge==='string'?tr.badge:'ゴツゴツバッジ';if(!S.badges.includes(bn))S.badges.push(bn);
-    Q.push(F(()=>{tr.alert=0;AU.jingle('win')}),...T(...(tr.badgeTalk||[]),`${bn}を もらった！`),...(S.badges.length>=BADGES.length?T('— しさくばんは ここまで！ —\nあそんでくれて ありがとう！'):[]),F(save))}}));
+    Q.push(F(()=>{tr.alert=0;AU.jingle('win')}),...T(...(tr.badgeTalk||[]),`${bn}を もらった！`),F(save))}}));
   return r}
  if(m.hp<=0){const ni=S.party.findIndex(x=>x.hp>0);
   const r=[F(()=>{B.sinkM=1;AU.sfx('faint')}),Wt(()=>B.sinkM>=SINK),F(()=>{B.meIn=false;B.sinkM=0}),delay(6),...T(`${nm(m)}は たおれた！`)];
@@ -3432,6 +3595,7 @@ function drawStat(st){const x=164,y=8,w=152;box(x,y,w,138);
 
 function throwBall(k='ball'){
  if(B.god){say('ウッピーは ボールを\nはじきかえした！');return}
+ if(B.legend){say(`${nm(B.foe)}は ボールを\nはじきかえした！`);return}
  if(B.trainer){say('ひとの モンスターを\nとっちゃ だめだ！');return}
  if((S.items[k]||0)<=0){say(`${IT[k].n}を もっていない！`);return}
  S.items[k]--;B.menu='main';const foe=B.foe;B.ballK=k;
@@ -3449,7 +3613,7 @@ function usePotion(k='potion'){const m=me(),amt=k==='superpotion'?60:20;
  S.items[k]--;B.menu='main';
  Q.push(...T(`${IT[k].n}を つかった！`),F(()=>{m.hp=Math.min(m.mhp,m.hp+amt)}),Wt(settled),...T(`${nm(m)}の HPが かいふくした！`),...foeTurn())}
 function run(){const m=me(),foe=B.foe;
- if(B.god){say('ふしぎな ちからで\nにげられない！');return}
+ if(B.god||B.legend){say('ふしぎな ちからで\nにげられない！');return}
  if(B.trainer){say('トレーナーとの しょうぶから\nにげることは できない！');return}
  B.runs++;
  if(m.spd>=foe.spd||Math.random()<0.4+0.2*B.runs){B.over=true;Q.push(...T('うまく にげきれた！'),F(endBattle))}
@@ -3690,7 +3854,7 @@ function drawBox(){const P0=S.party,BX=S.box,u=boxui;box(8,8,304,272);txt('ク�
   if(top>0)txt('▲',x+136,58,2,9,'right');if(top+6<list.length)txt('▼',x+136,214,2,9,'right')};
  col(16,'てもち',P0,u.i,u.col===0,0);col(164,'クラウドBOX',BX,u.j,u.col===1,Math.max(0,Math.min(BX.length-6,u.j-2)));
  const L=u.col===0?P0:BX,m=L[u.col===0?u.i:u.j];R(16,226,288,2,'#dde4ee');
- if(m){const sp=SP[m.id];R(20,234,46,14,TCOL[sp.type]||'#888');txt(TN[sp.type],43,236,'#ffffff',9,'center');txt(`${nm(m)}　Lv${m.lv}　HP ${m.hp}/${m.mhp}`,74,234,3,12)}
+ if(m){const sp=SP[m.id];if(sp.type2){R(20,234,23,14,TCOL[sp.type]||'#888');R(43,234,23,14,TCOL[sp.type2]||'#888');txt(TN[sp.type].slice(0,2),31,236,'#ffffff',8,'center');txt(TN[sp.type2].slice(0,2),55,236,'#ffffff',8,'center')}else{R(20,234,46,14,TCOL[sp.type]||'#888');txt(TN[sp.type],43,236,'#ffffff',9,'center')}txt(`${nm(m)}　Lv${m.lv}　HP ${m.hp}/${m.mhp}`,74,234,3,12)}
  txt(u.col===0?'A：BOXに あずける　◀▶：きりかえ　B：おわる':'A：てもちに ひきだす　◀▶：きりかえ　B：おわる',160,258,2,10,'center')}
 function termT(g,v){floorT(g,v);pr(g,1,9,14,7,'#8a6a4a');pr(g,1,9,14,1,'#b08860');pr(g,2,15,12,1,'#5a3a20');pr(g,7,8,2,1,'#3a3a44');
  pr(g,3,1,10,8,'#2a2a36');pr(g,4,2,8,5,'#46c8d8');pr(g,4,2,8,1,'#8ae8f0');pr(g,6,4,4,2,'#ffffff');pp(g,7,3,'#ffffff');pp(g,8,3,'#ffffff');pr(g,4,11,8,2,'#c8c8d0');pr(g,4,11,8,1,'#e8e8f0')}
@@ -3792,7 +3956,7 @@ function drawPMenu(){HITS.length=0;box(168,150,144,104);['つよさを みる','
 function drawStatus(j,mvc,pick){const m=S.party[j],sp=SP[m.id];box(8,8,304,272);
  c.fillStyle='#eef4fb';c.fillRect(20,22,92,92);c.imageSmoothingEnabled=false;c.drawImage(ART[m.id].img,26,28,80,80);
  txt(nm(m),124,24);txt(`Lv${m.lv}`,296,24,3,16,'right');
- R(124,46,62,16,TCOL[sp.type]||'#5870b0');txt(TN[sp.type],155,48,'#ffffff',12,'center');stPill(m,192,47);
+ if(sp.type2){typePills(m.id,124,46,118,16,11);stPill(m,248,47)}else{R(124,46,62,16,TCOL[sp.type]||'#5870b0');txt(TN[sp.type],155,48,'#ffffff',12,'center');stPill(m,192,47)}
  const r=m.hp/m.mhp;txt('HP',124,70,3,12);R(148,71,148,9,3);R(150,73,144,5,'#e8f0f8');R(150,73,Math.round(144*r),5,hpc(r));txt(m.hp>0?`${m.hp}／${m.mhp}`:'ひんし',296,84,3,12,'right');
  const need=m.lv>=LVMAX?0:expAt(m,m.lv+1)-m.exp;txt('つぎの レベルまで',124,102,2,11);txt(m.lv>=LVMAX?'―':String(need),296,102,3,12,'right');
  [['こうげき',m.atk],['ぼうぎょ',m.def],['すばやさ',m.spd]].forEach(([l,v],i)=>{const x=22+i*96;R(x,124,88,34,'#eef2f8');txt(l,x+44,128,2,11,'center');txt(String(v),x+44,141,3,14,'center')});
