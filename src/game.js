@@ -1352,7 +1352,7 @@ SP.kazekirio={name:'カゼキリオー',type:'flying',b:{hp:72,atk:82,def:66,spd
 SP.piyotto.evo={lv:10,to:'tsubametto'};
 DEX.splice(DEX.indexOf('piyotto')+1,0,'tsubametto','kazekirio');
 MV.morinoibuki={n:'もりの いぶき',t:'grass',p:120,d:'もりの かみの いぶき'};
-SP.uppy={type2:'flying',name:'ウッピー',type:'grass',b:{hp:100,atk:110,def:100,spd:95},exp:0,cr:0,moves:['morinoibuki','hanafubuki','nekkokarame','hinatabokko'],learn:{},desc:'まよいの もりを まもる かみさま。 その すがたを みた ものは すくない。'};
+SP.uppy={type2:'flying',name:'ウッピー',type:'grass',b:{hp:108,atk:120,def:108,spd:104},exp:0,cr:0,moves:['morinoibuki','hanafubuki','nekkokarame','hinatabokko'],learn:{},desc:'まよいの もりを まもる かみさま。 その すがたを みた ものは すくない。'};
 Object.assign(MV,{
  happagiri:{n:'はっぱぎり',t:'grass',p:55,crit:true,d:'きゅうしょに あたりやすい'},
  kyuketsu:{n:'きゅうけつ',t:'flying',p:45,drain:true,d:'HPを すいとる'},
@@ -1607,8 +1607,9 @@ Object.assign(MV,{
  holoslash:{n:'ホロスラッシュ',t:'normal',p:80,crit:true,d:'きゅうしょに あたりやすい'},
  pixelnova:{n:'ピクセルノヴァ',t:'normal',p:130,acc:90,recharge:true,d:'つぎの ターンは うごけない'},
 });
-SP.shounon={name:'ショウノーン',type:'normal',b:{hp:100,atk:100,def:100,spd:100},exp:270,cr:.03,grow:1.1,moves:['butsukaru','niramitsukeru'],learn:{10:'kodamagaeshi',20:'subayai',30:'kirisaku',36:'datastream',40:'reboot',45:'holoslash',52:'daichi',60:'pixelnova'},
+SP.shounon={name:'ショウノーン',type:'normal',b:{hp:100,atk:100,def:100,spd:100},exp:270,cr:.03,grow:1.1,moves:['butsukaru','niramitsukeru'],learn:{10:'kodamagaeshi',20:'subayai',30:'kirisaku',36:'datastream',40:'reboot',41:'inferno',43:'daikaishou',45:'holoslash',47:'daichinomegumi',49:'ikazuchi',52:'daichi',54:'daichiware',56:'psychoburst',58:'shinennohane',60:'pixelnova',62:'tenryuuzan'},
  desc:'ひびきの どうくつの おくで ねむっていた なぞの モンスター。 からだの なかを ひかる データが ながれている。'};
+// ショウノーンは すべての タイプの つよい わざを おぼえる（Lv41〜62。せんよう わざは のぞく）
 DEX.push('shounon');WHERE.shounon='ひびきの どうくつの おく（？？？）';
 /* ---------- 6ばんどうろ・ひびきの どうくつの あたらしい モンスター（でんき・くさ・エスパー） ----------
    しんかLvは でる ばしょの さいこうLv＋3いじょう。つかまえてから しんかまでに わざを 1つ いじょう おぼえる */
