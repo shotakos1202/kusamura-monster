@@ -14744,7 +14744,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.02-1053';
+const BUILD='2026.11.02-1106';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -16190,30 +16190,30 @@ function termT(g,v){floorT(g,v);pr(g,1,9,14,7,'#8a6a4a');pr(g,1,9,14,1,'#b08860'
  pr(g,3,1,10,8,'#2a2a36');pr(g,4,2,8,5,'#46c8d8');pr(g,4,2,8,1,'#8ae8f0');pr(g,6,4,4,2,'#ffffff');pp(g,7,3,'#ffffff');pp(g,8,3,'#ffffff');pr(g,4,11,8,2,'#c8c8d0');pr(g,4,11,8,1,'#e8e8f0')}
 
 const REGION={route7:'route7',oami:'oami',oamiCenter:'oami',oamiShop:'oami',gym6:'oami',bt1:'oami',bt50:'oami',bt51:'oami',bt52:'oami',bt53:'oami',bt54:'oami',bt55:'oami',btRoof:'oami',cave4:'cave',route6:'route6',cave1:'cave',cave2:'cave',cave3:'cave',town5:'town5',gym5:'town5',center5:'town5',shop5:'town5',trial2:'forest',trial3:'forest',grove:'forest',route5:'route5',sea5:'sea5',town4:'town4',gym4:'town4',center4:'town4',shop4:'town4',hill:'hill',gym3:'town3',coast:'coast',route4:'route4',town3:'town3',center3:'town3',shop3:'town3',home:'village',nbr:'village',village:'village',route:'route',town:'town',center:'town',shop:'town',house:'town',gym:'town',forest:'forest',route3:'route3',town2:'town2',center2:'town2',shop2:'town2',house2:'town2',gym2:'town2'};
-const WMAP=[{id:'village',n:'とよっちょむら',d:'みどりが いっぱいの ちいさな むら',x:78,y:210,k:'town',roof:'#d8583c'},
- {id:'route',n:'1ばんどうろ',d:'くさむらの おおい はじまりの みち',x:78,y:182,k:'road'},
- {id:'town',n:'ハナサキタウン',d:'はなと いしの まち。 ジムは いわタイプ',x:82,y:154,k:'town',roof:'#8c8c98'},
- {id:'forest',n:'まよいの もり',d:'みちの いりくんだ ふかい もり',x:98,y:120,k:'forest'},
- {id:'route3',n:'3ばんどうろ',d:'かわぞいの みち。 みずの モンスターが すむ',x:130,y:96,k:'road'},
- {id:'town2',n:'ミナモシティ',d:'うんがと はしの まち。 ジムは みずタイプ',x:166,y:80,k:'town',roof:'#3cb8b0'},
- {id:'coast',n:'ミナモかいがん',d:'すなはまと いりえ。 つりゲームが できる',x:214,y:104,k:'beach'},
- {id:'route4',n:'4ばんどうろ',d:'まちへ つづく せいびされた みち',x:192,y:62,k:'road'},
- {id:'town3',n:'ミライポート',d:'ビルと みなとと こうえんの まち。 ジムは エスパータイプ',x:232,y:46,k:'city'},
- {id:'hill',n:'ミライの おか',d:'エスパーの モンスターが すむ おか',x:282,y:62,k:'hill'},
- {id:'route5',n:'5ばんどうろ',d:'ミライポートから ふなつきばへ つづく ながい みち',x:180,y:50,k:'road'},
- {id:'sea5',n:'5ばんどうろ（うみ）',d:'ふねで わたる ひろい うみ',x:100,y:48,k:'sea'},
- {id:'town4',n:'ユノハマシティ',d:'おんせんと うみの かんこうち。 ジムは ほのおタイプ',x:40,y:56,k:'town',roof:'#e05030'},
- {id:'route6',n:'6ばんどうろ',d:'ユノハマシティの きたの やまみち',x:56,y:76,k:'mount'},
- {id:'cave',n:'ひびきの どうくつ',d:'こえが よく ひびく ながい どうくつ',x:42,y:100,k:'cave'},
- {id:'town5',n:'タカネシティ',d:'かぜの ふく こうげんの まち。 ジムは ひこうタイプ',x:40,y:130,k:'town',roof:'#e8b830'},
- {id:'route7',n:'7ばんどうろ',d:'タカネシティと オオアミシティを むすぶ こうげんの みち',x:40,y:163,k:'road'},
- {id:'oami',n:'オオアミシティ',d:'ブラックタワーが そびえる おおきな まち。 ジムは でんき・ノーマルタイプ',x:38,y:198,k:'tower'}];
-const WFOG=[[262,150],[236,204],[154,198],[150,148],[290,118]];
+const WMAP=[{id:'village',n:'とよっちょむら',d:'みどりが いっぱいの ちいさな むら',x:180,y:208,k:'town',roof:'#d8583c'},
+ {id:'route',n:'1ばんどうろ',d:'くさむらの おおい はじまりの みち',x:180,y:186,k:'road'},
+ {id:'town',n:'ハナサキタウン',d:'はなと いしの まち。 ジムは いわタイプ',x:180,y:162,k:'town',roof:'#8c8c98'},
+ {id:'forest',n:'まよいの もり',d:'みちの いりくんだ ふかい もり',x:168,y:134,k:'forest'},
+ {id:'route3',n:'3ばんどうろ',d:'かわぞいの みち。 みずの モンスターが すむ',x:214,y:122,k:'road'},
+ {id:'town2',n:'ミナモシティ',d:'うんがと はしの まち。 ジムは みずタイプ',x:256,y:116,k:'town',roof:'#3cb8b0'},
+ {id:'coast',n:'ミナモかいがん',d:'すなはまと いりえ。 つりゲームが できる',x:266,y:156,k:'beach'},
+ {id:'route4',n:'4ばんどうろ',d:'まちへ つづく せいびされた みち',x:254,y:82,k:'road'},
+ {id:'town3',n:'ミライポート',d:'ビルと みなとと こうえんの まち。 ジムは エスパータイプ',x:264,y:50,k:'city'},
+ {id:'hill',n:'ミライの おか',d:'エスパーの モンスターが すむ おか',x:222,y:66,k:'hill'},
+ {id:'route5',n:'5ばんどうろ',d:'ミライポートから ふなつきばへ つづく ながい みち',x:188,y:46,k:'road'},
+ {id:'sea5',n:'5ばんどうろ（うみ）',d:'ふねで わたる ひろい うみ',x:118,y:44,k:'sea'},
+ {id:'town4',n:'ユノハマシティ',d:'おんせんと うみの かんこうち。 ジムは ほのおタイプ',x:46,y:54,k:'town',roof:'#e05030'},
+ {id:'route6',n:'6ばんどうろ',d:'ユノハマシティの きたの やまみち',x:66,y:84,k:'mount'},
+ {id:'cave',n:'ひびきの どうくつ',d:'こえが よく ひびく ながい どうくつ',x:48,y:112,k:'cave'},
+ {id:'town5',n:'タカネシティ',d:'かぜの ふく こうげんの まち。 ジムは ひこうタイプ',x:44,y:140,k:'town',roof:'#e8b830'},
+ {id:'route7',n:'7ばんどうろ',d:'タカネシティと オオアミシティを むすぶ こうげんの みち',x:48,y:166,k:'road'},
+ {id:'oami',n:'オオアミシティ',d:'ブラックタワーが そびえる おおきな まち。 ジムは でんき・ノーマルタイプ',x:66,y:198,k:'tower'}];
+const WFOG=[[110,210],[140,190],[128,158],[104,116],[296,196]];
 const WLINKS=[['village','route'],['route','town'],['town','forest'],['forest','route3'],['route3','town2'],['town2','coast'],['town2','route4'],['route4','town3'],['town3','hill'],['town3','route5'],['route5','sea5'],['sea5','town4'],['town4','route6'],['route6','cave'],['cave','town5'],['town5','route7'],['route7','oami']];
 function fog(x,y,s){c.globalAlpha=.85;for(let i=0;i<7;i++){const a=i/7*Math.PI*2+frame/240,r=12*s+Math.sin(frame/40+i)*2;ell(x+Math.cos(a)*r,y+Math.sin(a)*r*.6,11*s,8*s,i%2?'#e4e8ee':'#d0d6e0')}ell(x,y,14*s,10*s,'#dde2ea');c.globalAlpha=1}
-const WM_LAND=[[70,226],[44,180],[26,140],[24,104],[40,80],[46,66],[78,70],[120,42],[190,40],[256,44],[286,80],[284,140],[270,200],[238,226]];
+const WM_LAND=[[78,222],[54,204],[34,166],[28,124],[38,94],[56,72],[92,62],[136,56],[160,40],[230,38],[278,40],[282,64],[268,100],[266,134],[278,162],[264,196],[232,214],[180,224]];
 const WM_SEA=new Set(['route5|sea5','sea5|town4']);
-function wmLand(){c.beginPath();WM_LAND.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();c.moveTo(64,58);c.ellipse(40,58,24,15,0,0,Math.PI*2)}
+function wmLand(){c.beginPath();WM_LAND.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();c.moveTo(66,54);c.ellipse(44,54,22,14,0,0,Math.PI*2)}
 function wmIcon(n,x,y){
  if(n.k==='town'){c.globalAlpha=.25;ell(x,y+8,12,3,'#000');c.globalAlpha=1;R(x-9,y-5,18,12,'#f4ead0');R(x-9,y+6,18,2,'#8a6a46');c.fillStyle=n.roof;c.beginPath();c.moveTo(x-12,y-4);c.lineTo(x,y-13);c.lineTo(x+12,y-4);c.fill();R(x-2,y+1,4,6,'#7a4a26');R(x-7,y-1,3,3,'#8ccaf0');R(x+4,y-1,3,3,'#8ccaf0')}
  else if(n.k==='city'){c.globalAlpha=.25;ell(x,y+8,13,3,'#000');c.globalAlpha=1;for(const[dx,h,cl]of[[-10,15,'#6a88a8'],[-3,23,'#5a7898'],[5,18,'#7894b4']]){R(x+dx,y+8-h,7,h,cl);for(let yy=y+10-h;yy<y+6;yy+=4)R(x+dx+2,yy,3,2,'#ffe890')}}
