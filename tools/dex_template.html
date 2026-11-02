@@ -1,0 +1,161 @@
+<title>くさむらモンスター ずかん管理</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap">
+<style>
+/* Layout: ゲームの4色パレットを地に、左に一覧グリッド・右に詳細パネル（スマホは詳細が上に重なる） */
+:root{
+ --bg:#eef2ea; --panel:#f8f8f0; --line:#c8d8e8; --ink:#181828; --sub:#5a6078; --accent:#5870b0; --chip:#e2e8ee; --bar:#d8e0e8;
+ --warn:#c86a20;
+ --f-pixel:"DotGothic16","Hiragino Kaku Gothic ProN","Meiryo",monospace;
+ --f-body:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Meiryo",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12141f;--panel:#1b1e2c;--line:#2e3550;--ink:#eef0f6;--sub:#9aa2bc;--accent:#8ea4e8;--chip:#262b3e;--bar:#2a3046;--warn:#f0a050;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12141f;--panel:#1b1e2c;--line:#2e3550;--ink:#eef0f6;--sub:#9aa2bc;--accent:#8ea4e8;--chip:#262b3e;--bar:#2a3046;--warn:#f0a050;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.6;padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1180px;margin:0 auto;display:grid;gap:18px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+h1{font-family:var(--f-pixel);font-weight:400;font-size:26px;margin:0;letter-spacing:.04em;text-wrap:balance}
+.meta{color:var(--sub);font-size:12px}
+.types{display:flex;flex-wrap:wrap;gap:6px}
+.tchip{font-family:var(--f-pixel);font-size:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:3px;padding:3px 8px;cursor:pointer;display:flex;gap:6px;align-items:center}
+.tchip i{width:9px;height:9px;display:inline-block;border-radius:1px}
+.tchip b{font-weight:400;color:var(--sub);font-variant-numeric:tabular-nums}
+.tchip[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tools input,.tools select{font:inherit;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:3px;padding:6px 8px}
+.tools input{flex:1 1 180px;min-width:0}
+.tools label{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--sub)}
+button:focus-visible,input:focus-visible,select:focus-visible,.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:18px;align-items:start}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:8px;cursor:pointer;display:grid;gap:2px;text-align:left;color:inherit;font:inherit}
+.card[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.card .top{display:flex;justify-content:space-between;font-size:11px;color:var(--sub);font-variant-numeric:tabular-nums}
+.card img{width:64px;height:64px;image-rendering:pixelated;justify-self:center}
+.card .nm{font-family:var(--f-pixel);font-size:14px}
+.card .row{display:flex;flex-wrap:wrap;gap:2px 4px;justify-content:space-between;align-items:center;font-size:11px;color:var(--sub)}
+.tp{font-family:var(--f-pixel);font-size:11px;color:#fff;border-radius:2px;padding:0 5px;line-height:17px;white-space:nowrap}
+.flag{color:var(--warn);font-size:11px}
+.detail{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:16px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);max-height:calc(100vh - 40px);overflow:auto;display:grid;gap:14px}
+.dh{display:flex;gap:14px;align-items:center}
+.dh img{width:96px;height:96px;image-rendering:pixelated;background:var(--chip);border-radius:4px}
+.dh h2{font-family:var(--f-pixel);font-weight:400;font-size:22px;margin:0}
+.dh code{font-size:12px;color:var(--sub)}
+.desc{margin:0;color:var(--sub);font-size:13px}
+h3{font-family:var(--f-pixel);font-weight:400;font-size:13px;margin:0 0 6px;color:var(--accent);letter-spacing:.06em}
+.stats{display:grid;grid-template-columns:5.5em 2.4em 1fr;gap:4px 8px;align-items:center;font-size:12px;font-variant-numeric:tabular-nums}
+.stats .b{height:8px;background:var(--bar);border-radius:1px;overflow:hidden}.stats .b i{display:block;height:100%}
+.stats .v{text-align:right}
+.kv{display:grid;grid-template-columns:max-content 1fr;gap:2px 12px;font-size:12px;margin:0}
+.kv dt{color:var(--sub)}.kv dd{margin:0}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:4px}
+.chain button{background:none;border:1px solid transparent;border-radius:4px;padding:2px 4px;cursor:pointer;color:inherit;display:grid;justify-items:center;font-family:var(--f-pixel);font-size:11px}
+.chain button[aria-current="true"]{border-color:var(--accent)}
+.chain img{width:44px;height:44px;image-rendering:pixelated}
+.chain .ar{color:var(--sub);font-size:11px;font-variant-numeric:tabular-nums}
+table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
+td,th{padding:3px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--sub);font-weight:400}
+.tw{overflow-x:auto}
+.empty{color:var(--sub);font-size:12px}
+.notes{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px 16px}
+.notes ul{margin:0;padding-left:1.2em;display:grid;gap:4px;font-size:13px;max-width:80ch}
+.count{font-size:12px;color:var(--sub)}
+@media (max-width:860px){.main{grid-template-columns:minmax(0,1fr)}.detail{position:static;max-height:none;order:-1}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+ <header>
+  <div><h1>くさむらモンスター ずかん管理</h1>
+  <div class="meta" id="meta"></div></div>
+  <div class="types" id="types"></div>
+ </header>
+ <div class="tools">
+  <input id="q" type="search" placeholder="なまえ・ID・わざ・ばしょで さがす" aria-label="さがす">
+  <select id="sort" aria-label="ならびかえ">
+   <option value="no">ずかん No</option><option value="bst">合計 ↓</option><option value="hp">HP ↓</option><option value="atk">こうげき ↓</option><option value="def">ぼうぎょ ↓</option><option value="spd">すばやさ ↓</option><option value="first">はじめて出会う Lv</option>
+  </select>
+  <select id="view" aria-label="しぼりこみ">
+   <option value="all">ぜんぶ</option><option value="wild">野生で出る</option><option value="nowild">野生で出ない</option><option value="unseen">野生にもトレーナーにも出ない</option><option value="final">さいごの しんか</option><option value="single">しんか しない</option>
+  </select>
+  <span class="count" id="count"></span>
+ </div>
+ <div class="main">
+  <div class="grid" id="grid"></div>
+  <aside class="detail" id="detail" aria-live="polite"></aside>
+ </div>
+ <section class="notes">
+  <h3>きづいた こと（じどうで しらべた もの）</h3>
+  <ul>
+__NOTES__
+  </ul>
+ </section>
+</div>
+
+<script>
+const D=__DATA__;
+const R=D.rows,TC=D.tcol,TN=D.tn,BY={};R.forEach(r=>BY[r.id]=r);
+const TID={};for(const k in TN)TID[TN[k]]=k;
+const SN={hp:'HP',atk:'こうげき',def:'ぼうぎょ',spd:'すばやさ'};
+const MAXS=130;
+let sel=R[0].id,types=new Set();
+try{const s=localStorage.getItem('kmdex-sel');if(s&&BY[s])sel=s}catch(e){}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const firstLv=r=>r.wild.length?Math.min(...r.wild.map(w=>w.lo)):(r.tr.length?Math.min(...r.tr.map(t=>t.lv)):999);
+$('meta').textContent=`${R.length}ひき ・ src/game.js から じどうせいせい（tools/make_dex.py）`;
+// type chips
+const tc={};R.forEach(r=>{tc[r.type]=(tc[r.type]||0)+1;if(r.type2)tc[r.type2]=(tc[r.type2]||0)+1});
+$('types').innerHTML=Object.keys(tc).sort((a,b)=>tc[b]-tc[a]).map(t=>`<button class="tchip" data-t="${t}" aria-pressed="false"><i style="background:${TC[t]}"></i>${TN[t]}<b>${tc[t]}</b></button>`).join('');
+$('types').addEventListener('click',e=>{const b=e.target.closest('.tchip');if(!b)return;const t=b.dataset.t;types.has(t)?types.delete(t):types.add(t);b.setAttribute('aria-pressed',types.has(t));render()});
+const tp=t=>`<span class="tp" style="background:${TC[t]}">${TN[t]}</span>`;
+function list(){
+ const q=$('q').value.trim().toLowerCase(),v=$('view').value,s=$('sort').value;
+ let L=R.filter(r=>{
+  if(types.size&&!types.has(r.type)&&!types.has(r.type2))return false;
+  if(v==='wild'&&!r.wild.length)return false;
+  if(v==='nowild'&&r.wild.length)return false;
+  if(v==='unseen'&&(r.wild.length||r.tr.length))return false;
+  if(v==='final'&&r.evo)return false;
+  if(v==='single'&&r.stages>1)return false;
+  if(q){const hay=[r.name,r.id,r.where,r.desc,...r.moves,...r.learn.map(l=>l[1]),...r.wild.map(w=>w.area),...r.tr.map(t=>t.t)].join(' ').toLowerCase();if(!hay.includes(q))return false}
+  return true});
+ const key={no:r=>r.no,bst:r=>-r.bst,hp:r=>-r.b.hp,atk:r=>-r.b.atk,def:r=>-r.b.def,spd:r=>-r.b.spd,first:r=>firstLv(r)*100+r.no}[s];
+ return L.sort((a,b)=>key(a)-key(b));
+}
+function render(){
+ const L=list();
+ $('count').textContent=`${L.length} / ${R.length}ひき`;
+ $('grid').innerHTML=L.length?L.map(r=>`<button class="card" data-id="${r.id}" aria-current="${r.id===sel}">
+  <div class="top"><span>No.${String(r.no).padStart(3,'0')}</span><span>合計 ${r.bst}</span></div>
+  <img src="${r.img}" alt="">
+  <div class="nm">${esc(r.name)}</div>
+  <div class="row"><span style="display:flex;gap:3px">${tp(r.type)}${r.type2?tp(r.type2):''}</span><span>${!r.wild.length&&!r.tr.length?'<span class="flag">出番なし</span>':r.wild.length?'野生 Lv'+firstLv(r)+'〜':'トレーナーのみ'}</span></div>
+ </button>`).join(''):'<p class="empty">あてはまる モンスターが いません。しぼりこみを ゆるめてください。</p>';
+ detail();
+}
+function detail(){
+ const r=BY[sel];
+ const stat=k=>`<span>${SN[k]}</span><span class="v">${r.b[k]}</span><span class="b"><i style="width:${Math.min(100,r.b[k]/MAXS*100)}%;background:${TC[r.type]}"></i></span>`;
+ const chain=r.chain.map((id,i)=>{const m=BY[id];return (i?`<span class="ar">Lv${m.pre[1]} →</span>`:'')+`<button data-id="${id}" aria-current="${id===sel}"><img src="${m.img}" alt="">${esc(m.name)}</button>`}).join('');
+ const wild=r.wild.length?`<div class="tw"><table><tr><th>ばしょ</th><th>Lv</th><th>でやすさ</th></tr>${r.wild.map(w=>`<tr><td>${esc(w.area)}${w.water?'（なみのり）':''}</td><td>${w.lo}–${w.hi}</td><td>${w.rate}</td></tr>`).join('')}</table></div>`:'<p class="empty">野生では 出ない</p>';
+ const tr=r.tr.length?`<div class="tw"><table><tr><th>トレーナー</th><th>ばしょ</th><th>Lv</th></tr>${r.tr.map(t=>`<tr><td>${esc(t.t)}</td><td>${esc(t.area)}</td><td>${t.lv}</td></tr>`).join('')}</table></div>`:'<p class="empty">だれの 手持ちにも いない</p>';
+ const ln=r.learn.length?`<div class="tw"><table><tr><th>Lv</th><th>わざ</th><th>タイプ</th><th>いりょく</th></tr>${r.learn.map(l=>`<tr><td>${l[0]}</td><td>${esc(l[1])}</td><td>${tp(TID[l[2]]||'normal')}</td><td>${l[3]||'—'}</td></tr>`).join('')}</table></div>`:'<p class="empty">レベルで おぼえる わざは ない（こてい わざ）</p>';
+ $('detail').innerHTML=`<div class="dh"><img src="${r.img}" alt="${esc(r.name)}"><div><div class="meta">No.${String(r.no).padStart(3,'0')}</div><h2>${esc(r.name)}</h2><div style="display:flex;gap:8px;align-items:center">${tp(r.type)}${r.type2?tp(r.type2):''}<code>${r.id}</code></div></div></div>
+ <p class="desc">${esc(r.desc)}</p>
+ <div><h3>のうりょく（合計 ${r.bst}）</h3><div class="stats">${['hp','atk','def','spd'].map(stat).join('')}</div></div>
+ <dl class="kv"><dt>けいけんち</dt><dd>${r.exp}</dd><dt>つかまえやすさ</dt><dd>${r.cr}</dd>${r.grow!==1?`<dt>せいちょう</dt><dd>×${r.grow}</dd>`:''}<dt>入手（WHERE）</dt><dd>${esc(r.where)||'—'}</dd><dt>はじめの わざ</dt><dd>${r.moves.map(esc).join('、')}</dd></dl>
+ <div><h3>しんか</h3><div class="chain">${chain}</div>${r.stages===1?'<p class="empty">しんか しない</p>':''}</div>
+ <div><h3>野生の 出現</h3>${wild}</div>
+ <div><h3>トレーナーの 手持ち</h3>${tr}</div>
+ <div><h3>おぼえる わざ</h3>${ln}</div>`;
+}
+function pick(id){sel=id;try{localStorage.setItem('kmdex-sel',id)}catch(e){}document.querySelectorAll('.card').forEach(c=>c.setAttribute('aria-current',c.dataset.id===id));detail();if(matchMedia('(max-width:860px)').matches)$('detail').scrollIntoView({behavior:'smooth',block:'start'})}
+$('grid').addEventListener('click',e=>{const c=e.target.closest('.card');if(c)pick(c.dataset.id)});
+$('detail').addEventListener('click',e=>{const c=e.target.closest('.chain button');if(c)pick(c.dataset.id)});
+['q','sort','view'].forEach(id=>$(id).addEventListener('input',render));
+render();
+</script>

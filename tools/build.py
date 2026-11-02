@@ -42,6 +42,16 @@ def main():
     test = game[:-5] + EXPORT
     open(os.path.join(ROOT, 'dist', 'test.html'), 'w', encoding='utf-8').write(DOC_HEAD + shell + vendor + '<script>\n' + test + '\n</script>\n')
     print('built index.html, dist/artifact.html, dist/test.html')
+    # モンスターずかん（dev/dex.html・dev/monsters.md）も じどうで さいしんに する。
+    # Playwright が ない かんきょうでは とばす（KM_NODEX=1 でも とばせる）
+    if os.environ.get('KM_NODEX') != '1':
+        try:
+            import playwright  # noqa: F401
+        except ImportError:
+            print('（ずかんの じどう こうしんは スキップ：Playwright が ない）')
+        else:
+            import subprocess, sys
+            subprocess.run([sys.executable, os.path.join(ROOT, 'tools', 'make_dex.py')], check=False)
 
 if __name__ == '__main__':
     main()
