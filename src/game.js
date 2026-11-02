@@ -2149,12 +2149,12 @@ MAPS.nbr.npcs.push({id:'tatsuV',x:4,y:6,dir:'up',spr:'boy',pal:TATSU_PAL,showIf:
 MAPS.forest.npcs.push({id:'tatsuF',x:14,y:37,dir:'down',spr:'boy',pal:TATSU_PAL,showIf:'tfShow',hideFlag:'tatsu1',rival:true,tname:'ライバルの タツヤ',get team(){const b=rivalBase();return[['tsubametto',11],['koroishi',11],[b,12]]},money:50,say:[],lose:['タツヤ「……へえ。\nやるじゃん。」'],after:['……'],onWin:()=>tatsuForestWin()});
 MAPS.town4.npcs.push({id:'tatsu6',x:13,y:15,dir:'up',spr:'boy',pal:TATSU_PAL,showIf:'t6Show',hideFlag:'tatsu2',rival:true,tname:'ライバルの タツヤ',get team(){const b=rivalBase();return[['kazekirio',37],['gansekidon',37],['raidenga',38],[EVO3[b],40]]},money:90,say:[],lose:['タツヤ「うおっ……\nまじかよ！」'],after:['……'],onWin:()=>tatsuYunohamaWin()});
 // みずの うえ（かんいボート）の やせいの モンスター
-// かんいボートで のれる みずべ：その エリア そうとうの みずタイプ
-Object.assign(MAPS.village,{wildW:()=>[['rakkoro',3,5,45],['hasagani',3,5,45],['mizutama',3,4,2]]});
-Object.assign(MAPS.town2,{wildW:()=>[['rakkoro',16,19,40],['hasagani',16,19,40],['yoroigani',20,21,8],['namitama',16,18,2]]});
-Object.assign(MAPS.town3,{wildW:()=>[['rakkoole',22,24,30],['yoroigani',21,24,30],['rakkoro',19,21,20],['fuwakura',22,24,8],['namitama',20,22,2]]});
-Object.assign(MAPS.route3,{wildW:()=>[['rakkoro',18,21,30],['rakkoole',22,22,5],['hasagani',18,19,25],['yoroigani',20,22,8],['umidory',18,22,20],['tsubametto',18,21,10]]});
-Object.assign(MAPS.coast,{wildW:()=>[['rakkoole',22,26,30],['yoroigani',22,26,25],['umidory',22,26,25],['fuwakura',24,26,10]]});
+// かんいボートで のれる みずべ：ボートを かえる ユノハマ ふきん（Lv30）が さいてい、それいこうは エリアの レベル
+Object.assign(MAPS.village,{wildW:()=>[['rakkoole',30,32,40],['yoroigani',30,32,40],['fuwakura',30,32,18],['uzushion',30,32,2]]});
+Object.assign(MAPS.town2,{wildW:()=>[['rakkoole',30,33,40],['yoroigani',30,33,35],['fuwakura',30,32,23],['uzushion',30,32,2]]});
+Object.assign(MAPS.town3,{wildW:()=>[['rakkoole',30,33,30],['yoroigani',30,33,30],['tobiuon',30,32,20],['fuwakura',30,32,18],['uzushion',30,32,2]]});
+Object.assign(MAPS.route3,{wildW:()=>[['rakkoole',30,33,35],['yoroigani',30,33,35],['tobiuon',30,32,15],['namigame',30,32,13],['uzushion',30,32,2]]});
+Object.assign(MAPS.coast,{wildW:()=>[['rakkoole',31,33,30],['yoroigani',31,33,30],['fuwakura',31,33,20],['namigame',31,33,18],['uzushion',31,33,2]]});
 Object.assign(MAPS.town4,{wildW:()=>[['fuwakura',30,33,30],['tobiuon',30,33,30],['namigame',31,33,20],['rakkoole',32,34,10],['yoroigani',31,33,10]]});
 Object.assign(MAPS.route6,{wildW:()=>[['ishigaeru',31,33,50],['umidory',31,33,30],['rakkoole',31,33,20]]});
 Object.assign(MAPS.cave2,{wildW:()=>[['namigame',34,36,30],['ishigaeru',34,36,30],['fuwakura',34,36,15],['yoroigani',34,35,10],['daiogani',36,37,8]]});
