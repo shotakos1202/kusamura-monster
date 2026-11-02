@@ -14806,10 +14806,10 @@ Object.assign(MAPS,{
   items:[{id:'fj4',x:1,y:18,k:'revive',amt:2}],
   wild:(x,y)=>FUJI_WILD,
   npcs:[
-   {id:'teruiF',x:11,y:9,dir:'down',spr:'boy',pal:TERUI_PAL,hideFlag:'endingDone',boss:true,tname:'かめんの おとこ',get pal(){return S&&S.flags.teruiUnmask?TERUI_FACE:TERUI_PAL},team:[['maobasa',64],['makyou',64],['ganmogura',65],['suishouou',65],['zantetsuryu',67]],money:150,say:['かめんの おとこ「……こい。」'],lose:['かめんの おとこ「……ここまで\nだな。」'],after:['……'],onWin:()=>teruiFujiWin()},
-   {id:'kiyoF',x:11,y:7,dir:'down',spr:'boy',pal:KIYO_PAL,showIf:'fujiKiyo',hideFlag:'endingDone',boss:true,tname:'くろふくの ボス キヨシ',team:[['maobasa',66],['gansekidon',66],['makyou',67],['lunapowan',67],['bakumu',68],['minezou',70]],money:200,say:['キヨシ「……まだ\nやるか、 こぞう。」','キヨシ「なんど でも\nたたきつぶして やる！」'],lose:['キヨシ「……ばかな……！\nミネゾーウまで……！」'],after:['……'],onWin:()=>kiyoshiFujiWin()},
+   {id:'teruiF',x:11,y:9,dir:'down',spr:'boy',pal:TERUI_PAL,hideFlag:'endingDone',boss:true,tname:'かめんの おとこ',get pal(){return S&&S.flags.teruiUnmask?TERUI_FACE:TERUI_PAL},team:[['raidenga',64],['ganmogura',64],['makyou',65],['zantetsuryu',66],['uppy',67]],money:150,say:['かめんの おとこ「……こい。」'],lose:['かめんの おとこ「……ここまで\nだな。」'],after:['……'],onWin:()=>teruiFujiWin()},
+   {id:'kiyoF',x:11,y:7,dir:'down',spr:'boy',pal:KIYO_PAL,showIf:'fujiKiyo',hideFlag:'endingDone',boss:true,tname:'くろふくの ボス キヨシ',team:[['maobasa',66],['gansekidon',66],['kazandori',67],['lunapowan',67],['bakumu',68],['minezou',70]],money:200,say:['キヨシ「……まだ\nやるか、 こぞう。」','キヨシ「なんど でも\nたたきつぶして やる！」'],lose:['キヨシ「……ばかな……！\nミネゾーウまで……！」'],after:['……'],onWin:()=>kiyoshiFujiWin()},
    {id:'elderF',x:8,y:6,dir:'down',spr:'old',pal:ELDER_PAL,showIf:'fujiKiyo',hideFlag:'endingDone',text:['……']},
-   {id:'fatherF',x:11,y:5,dir:'down',spr:'boy',pal:FATHER_PAL,showIf:'fatherShow',hideFlag:'endingDone',boss:true,last:true,tname:'あのかた',team:[['ootsunoryuu',70],['daiogani',70],['suishouou',71],['maobasa',71],['makyou',72],['soutenryuu',74]],money:0,say:['とうさん「……こい。」'],lose:['あのかた「…………」'],after:['……'],onWin:()=>fatherWin()},
+   {id:'fatherF',x:11,y:5,dir:'down',spr:'boy',pal:FATHER_PAL,showIf:'fatherShow',hideFlag:'endingDone',boss:true,last:true,tname:'あのかた',team:[['daiogani',70],['suishouou',71],['hyouen',71],['kokenonushi',72],['mizuchi',72],['soutenryuu',74]],money:0,say:['とうさん「……こい。」'],lose:['あのかた「…………」'],after:['……'],onWin:()=>fatherWin()},
   ]},
 });
 // エンディング：いえに かぞくが そろう
@@ -15034,7 +15034,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.02-1230';
+const BUILD='2026.11.02-1243';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -15335,7 +15335,7 @@ function gateT(g,v,C,open,fr){floorT(g,v);if(open){pr(g,0,0,16,1,C[0]);pr(g,0,15
 function switchT(g,v,on){floorT(g,v);pr(g,3,2,10,13,'#3a3a46');pr(g,4,3,8,11,'#5a5a68');pr(g,5,4,6,4,on?'#3aa0f0':'#f0d020');pr(g,6,5,4,2,'#ffffff');pr(g,7,9,2,4,'#1a1a20');pr(g,on?8:6,9,2,2,'#e8e8f0')}
 
 /* ---------- ぼうそうむら → カモガワシティ → マウントフジ → エンディング ---------- */
-let FLY=null,GODS=null,ENDSCR=null;
+let FLY=null,GODS=null,ENDSCR=null,KAISOU=null;
 const hasSaza=()=>S.party.some(m=>m.id==='sazanami');
 // フェリー（ミライポート ⇄ カモガワシティ かいじょう）
 function ferryRide(to){Q.push(F(()=>{AU.sfx('door')}),delay(10),F(()=>{BLACKOUT=0}),mzStep(30,q=>{BLACKOUT=q}),
@@ -15391,6 +15391,16 @@ function fujiFly(){menu=null;
   ...T('マウントフジの ちゅうふくに\nおりたった……！','マグマが ながれ、 ねっとうが\nふきあがり かみなりが\nとどろいている……'),F(save))}
 function fujiReturn(){Q.push(...T('ここから さざなみで\nもどる ことが できそうだ。'));if(!hasSaza())return say('……でも さざなみが\nてもちに いない。');
  Q.push(...T('さざなみに のって\nオオアミシティへ もどった！'),F(()=>{fade={t:0,to:['oami',4,11,'down']};AU.sfx('fxflying')}),Wt(()=>!fade),F(save))}
+function drawKaisou(){const a=KAISOU.a;c.save();c.globalAlpha=a;
+ const gr=c.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#1e3a24');gr.addColorStop(1,'#4a6a34');c.fillStyle=gr;c.fillRect(0,0,W,H);
+ for(let i=0;i<7;i++){const x=i*52-10;c.fillStyle='#14281a';c.fillRect(x+18,40,14,H);ell(x+25,50+(i%2)*14,34,40,'#18321e')}
+ c.globalAlpha=a*.22;for(let i=0;i<4;i++){c.fillStyle='#fff4c0';c.beginPath();c.moveTo(150+i*30,0);c.lineTo(170+i*30,0);c.lineTo(220+i*14,H);c.lineTo(180+i*14,H);c.fill()}
+ c.globalAlpha=a;ell(160,184,130,18,'#5a7a3c');ell(205,178,40,7,'rgba(255,250,200,.5)');
+ const b=Math.sin(frame/18)*5;c.imageSmoothingEnabled=false;c.drawImage(ART.uppy.img,155,78+b,100,100);
+ const[rows,fl]=sprFor('boy','right',0);spr(rows,80,142,2,fl,TERUI_FACE);
+ c.globalAlpha=a*.28;R(0,0,W,H,'#8a6a30');c.globalAlpha=a;
+ const v=c.createRadialGradient(W/2,H/2,90,W/2,H/2,230);v.addColorStop(0,'rgba(0,0,0,0)');v.addColorStop(1,'rgba(0,0,0,.75)');c.fillStyle=v;c.fillRect(0,0,W,H);
+ txt('── かいそう ──',W/2,10,'#f0e4c0',11,'center');c.restore()}
 function drawFly(){const t=FLY.t,gr=c.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#5aa0e8');gr.addColorStop(1,'#d8f0ff');c.fillStyle=gr;c.fillRect(0,0,W,H);
  ell(260,50,22,22,'#fff8c0');
  const mx=W+60-t*1.1;c.fillStyle='#6a5a7a';c.beginPath();c.moveTo(mx-90,H);c.lineTo(mx-18,150);c.lineTo(mx+18,150);c.lineTo(mx+90,H);c.fill();c.fillStyle='#f0ecf8';c.beginPath();c.moveTo(mx-30,166);c.lineTo(mx-18,150);c.lineTo(mx+18,150);c.lineTo(mx+30,166);c.fill();
@@ -15409,7 +15419,11 @@ function summitEvent(){S.flags.fujiCall=1;const e=MAPS.fuji2.npcs.find(n=>n.id==
   F(()=>{B={trainer:e};mode='trans';trans=0}))}
 function teruiFujiWin(){const e=MAPS.fuji2.npcs.find(n=>n.id==='teruiF'),k=MAPS.fuji2.npcs.find(n=>n.id==='kiyoF'),NI='にいちゃん';
  return[delay(10),...T('かめんの おとこ「……つよく\nなったな。 ほんとうに。」','かめんの おとこは しずかに\nかめんを はずした……'),F(()=>{S.flags.teruiUnmask=1;AU.sfx('fxstatus')}),delay(30),
-  ...T('（……え……！？）','（にい…… ちゃん……！？）',`${NI}「……ひさしぶりだな。」`,`${NI}「ずっと\nだまってて ごめんな。」`,`${NI}「とうさんを さがす\nたびの とちゅうで くろふくの\nけいかくを しったんだ。」`,`${NI}「だから かめんを つけて\nやつらの なかに もぐりこんだ。」`,`${NI}「4ばんどうろで おまえを\nみた ときは ……ほんとうに\nあせったよ。」`,`${NI}「おまえだけは\nまきこみたく なかったんだ。」`,`${NI}「……でも\nもう とめない。」`,`${NI}「この さきに いる 'あのかた'の\nしょうたいは……」`,`${NI}「……おれの くちからは\nいえない。 おまえの めで たしかめて\nくれ。」`,`${NI}「いっしょに いこう。」`),
+  ...T('（……え……！？）','（にい…… ちゃん……！？）',`${NI}「……ひさしぶりだな。」`,`${NI}「ずっと\nだまってて ごめんな。」`,`${NI}「とうさんを さがす\nたびの とちゅうで くろふくの\nけいかくを しったんだ。」`,`${NI}「だから かめんを つけて\nやつらの なかに もぐりこんだ。」`,`${NI}「4ばんどうろで おまえを\nみた ときは ……ほんとうに\nあせったよ。」`,`${NI}「おまえだけは\nまきこみたく なかったんだ。」`,`${NI}「……でも\nもう とめない。」`,`${NI}「この さきに いる 'あのかた'の\nしょうたいは……」`,`${NI}「……おれの くちからは\nいえない。 おまえの めで たしかめて\nくれ。」`,`${NI}「いっしょに いこう。」`,'（……でも にいちゃん、\nどうして ウッピーを……？）',`${NI}「……ウッピーの ことか。」`,`${NI}「4ばんどうろで おまえを\nみた あと……」`,`${NI}「おれは ひとりで\nまよいの もりへ いったんだ。」`),
+  F(()=>{KAISOU={a:0};AU.sfx('fxstatus')}),mzStep(40,q=>{KAISOU.a=q}),
+  ...T('……まよいの もりの おく。','ウッピー「……ウピィ。」','もりの かみ ウッピーが\nテルイを じっと みている……','テルイ「……たのむ。 おれに\nちからを かして くれ。」','テルイ「おとうとを\nくろふくから まもりたい。」','テルイ「そして…… あの ひとを\nとめなきゃ ならないんだ。」','ウッピーは テルイの こころの\nおくを みつめた……','「……おとうとを おもう こころ。\nとめたいと ねがう こころ……」','「その こころ……\nみとめましょう。」','ウッピーは しずかに\nテルイの そばに おりたった……'),F(()=>{AU.jingle('catch')}),...T('ウッピーが テルイの\nなかまに なった……'),
+  mzStep(40,q=>{KAISOU.a=1-q}),F(()=>{KAISOU=null}),delay(10),
+  ...T(`${NI}「ウッピーは おまえの\nことも しって いたよ。」`,`${NI}「『ちいさき もの』……\nおまえの ことを そう よんでた。」`,`${NI}「……さあ、 いこう。」`),
   F(()=>{healAll();AU.jingle('heal')}),delay(40),...T('にいちゃんが モンスターを\nげんきに して くれた！'),
   F(()=>{e.x=e.fx=e.hx=13;e.y=e.fy=e.hy=10;e.dir='up'}),...heroTo(11,9),F(()=>{P.dir='up';S.flags.fujiKiyo=1;AU.sfx('fxdragon');shakeT=24}),delay(30),
   ...T('ギャオオオオ……ッ！！','キヨシ「……テルイ。 やはり\nうらぎって いたか。」','おじいちゃん「……！\nおまえたち……！」','キヨシ「まあ いい。 じじいの ふえの\nしらべ さえ あれば……」','キヨシ「さんしんは あのかたの\nもの！ もう だれにも とめられん！」','キヨシ「こぞう…… ここで\nおわりに して やる！」','キヨシ「いけ、 ミネゾーウ！\nあのかたの ために！！」'),
@@ -15420,7 +15434,7 @@ function kiyoshiFujiWin(){const k=MAPS.fuji2.npcs.find(n=>n.id==='kiyoF'),f=MAPS
   F(()=>{S.flags.fatherShow=1;f.alert=50;AU.sfx('alert')}),Wt(()=>f.alert<=0),
   ...T(`？？？「……もう よい、 キヨシ。\nさがって いろ。」`,'キヨシ「は…… はい……」',`？？？「…………」`,`？？？「……おおきく なったな。」`,'（え……？ この こえ……）','おじいちゃん「……やはり……\nおまえ だったのか……」','にいちゃん「……とうさん。」','（とう…… さん……！？）',
    `${TO}「……そうだ。 わたしが\nくろふくを つくった '${AN}'だ。」`,`${TO}「むかし わたしは\nじいさんから さんしんの ひみつを\nきいた。」`,`${TO}「ちからが ほしかった。\nさんしんを したがえる ちからが。」`,`${TO}「ふえを もって この やまで\nさんしんを よびだした。」`,`${TO}「だが さんしんは わたしを\nみとめなかった……！」`,`${TO}「いかりくるった さんしんは\nちりぢりに なった。」`,`${TO}「わたしに のこったのは……\nこの にくしみだけだ。」`,
-   `${TO}「わたしの こころでは\nふえに こたえて くれない。」`,`${TO}「だから じいさんに\nふかせる。 さんしんを わたしの\nものに する！」`,'おじいちゃん「……ちからでは\nこころは うごかせんのじゃ！」',`${TO}「だまれ！！」`,`${TO}「……じゃまを するなら\nむすこで あっても ようしゃは\nしない。」`,'（とうさん…… ぼくが\nとめる！）',`${TO}「……こい。 その ちから、\nみせて みろ！」`),
+   `${TO}「わたしの こころでは\nふえに こたえて くれない。」`,`${TO}「だから じいさんに\nふかせる。 さんしんを わたしの\nものに する！」`,'おじいちゃん「……ちからでは\nこころは うごかせんのじゃ！」',`${TO}「だまれ！！」`,`${TO}「……じゃまを するなら\nむすこで あっても ようしゃは\nしない。」`,'おじいちゃん「……まて。 これを\nつかうんじゃ。」'),F(()=>{healAll();AU.jingle('heal')}),delay(40),...T('おじいちゃんが モンスターを\nげんきに して くれた！','おじいちゃん「……たのんだぞ。\nあの こを とめて くれ。」','（とうさん…… ぼくが\nとめる！）',`${TO}「……こい。 その ちから、\nみせて みろ！」`),
   F(()=>{B={trainer:f};mode='trans';trans=0})]}
 function fatherWin(){const f=MAPS.fuji2.npcs.find(n=>n.id==='fatherF'),TO='とうさん';
  return[delay(20),...T(`${TO}「……なぜだ。」`,`${TO}「なぜ わたしでは\nだめなのだ……」`,'おじいちゃん「……こころじゃよ。」','おじいちゃん「ちからを もとめる\nこころでは さんしんは こたえん。」',`${TO}「…………」`,`${TO}「……おまえの め……」`,`${TO}「むかしの わたしと……\nいや、 わたしとは ちがうな……」`,`${TO}「……これを。」`),
@@ -16368,7 +16382,7 @@ function checkFaint(){const foe=B.foe,m=me();if(B.god){if(m.hp<=0)m.hp=1;if(foe.
   else r.push(F(()=>{B.forced=true;B.menu='party';B.pcur=ni}),Wt(()=>!B.forced),F(()=>{const i=B.pcur;B.menu='main';B.mi=i;B.dM=S.party[i].hp;B.dExp=S.party[i].exp;B.st.me=newSt();B.dot.me=null;B.rech.me=false}),delay(10),F(()=>{B.meIn=true;return T(`ゆけっ！ ${nm(me())}！`)}));
   return r}
  return[]}
-function gainExp(m,foe,mult){const diff=foe.lv-m.lv,bonus=diff>0?1+diff*.15:1,g=Math.max(1,Math.floor(SP[foe.id].exp*foe.lv/4.5*mult*bonus));
+function gainExp(m,foe,mult){const diff=foe.lv-m.lv,bonus=diff>0?1+diff*.15:1,g=Math.max(1,Math.floor((SP[foe.id].exp||300)*foe.lv/4.5*mult*bonus));
  return[...T(`${nm(m)}は ${g}けいけんちを\nもらった！`),F(()=>{m.exp+=g}),...expSteps(m),F(()=>shareExp(m,g))]}
 function shareExp(m,g){const others=S.party.filter(o=>o!==m&&o.hp>0&&o.lv<LVMAX);if(!others.length)return[];const sh=Math.max(1,Math.floor(g/3));const r=[...T(`なかまも ${sh}けいけんちを\nもらった！`)];
  for(const o of others){o.exp+=sh;while(o.lv<LVMAX&&o.exp>=expAt(o,o.lv+1)){const om=o.mhp;o.lv++;calc(o);o.hp+=o.mhp-om;r.push(...T(`${nm(o)}は\nレベル ${o.lv}に あがった！`));
@@ -16810,7 +16824,7 @@ function drawWorld(){
  if(CUR.forest){const vg=c.createRadialGradient(W/2,H/2,70,W/2,H/2,210);vg.addColorStop(0,'rgba(8,30,10,0)');vg.addColorStop(1,'rgba(8,30,10,.5)');c.fillStyle=vg;c.fillRect(0,0,W,H)}
  if(CUR.cave){const vg=c.createRadialGradient(W/2,H/2-8,60,W/2,H/2,200);vg.addColorStop(0,'rgba(14,8,4,0)');vg.addColorStop(1,'rgba(14,8,4,.62)');c.fillStyle=vg;c.fillRect(0,0,W,H)}
  drawSkyEv();
- areaFx(cx,cy);if(MZ)drawMZ(cx,cy);if(GODS)drawGods();if(FLY)drawFly();if(BLACKOUT>0){c.globalAlpha=BLACKOUT;R(0,0,W,H,'#000000');c.globalAlpha=1}if(ENDSCR)drawEnd();
+ areaFx(cx,cy);if(MZ)drawMZ(cx,cy);if(GODS)drawGods();if(FLY)drawFly();if(KAISOU)drawKaisou();if(BLACKOUT>0){c.globalAlpha=BLACKOUT;R(0,0,W,H,'#000000');c.globalAlpha=1}if(ENDSCR)drawEnd();
  if(nameT>0&&CUR.name&&!Q.length){const w=CUR.name.length*16+28;box(8,8,w,40);txt(CUR.name,22,20)}
  if(menu){if(menu.pg==='root')drawRoot();else if(menu.pg==='dev')drawList(menu.dev[menu.dev.length-1]);else if(menu.pg==='mail')drawMailUI(menu.mu,S.mail||[]);else if(menu.pg==='quit'){drawRoot();drawQuit()}else if(menu.pg==='party'||menu.pg==='pmenu'){drawParty(menu.j,menu.use?'だれに つかう？':'てもち',menu.use?'A：つかう　B：もどる':'A：えらぶ　B：もどる',i=>{menu.j=i});if(menu.pg==='pmenu')drawPMenu()}else if(menu.pg==='stat')drawStatus(menu.j,menu.mv,menu.pick);else if(menu.pg==='wmap')drawWorldMap(menu.w||0);else if(menu.pg==='items')drawItems(menu.k,visItems(),i=>{menu.k=i});else if(menu.pg==='dex')drawDex(menu.dx||0);else if(menu.pg==='dexd')drawDexDetail(menu.dx||0)}
  if(shop)drawShop();
