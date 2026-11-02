@@ -2545,6 +2545,13 @@ let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
 const isWebHost=()=>{try{return /^https?:$/.test(location.protocol)&&window.top===window&&!/claude/.test(location.hostname)}catch(e){return false}};
+// newer version on the server? reload on the title screen, otherwise tell the player
+let updNote=false;
+function checkUpdate(){if(!isWebHost()||!navigator.onLine)return;
+ fetch(location.pathname+'?v='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():'').then(h=>{const m=/const BUILD='([0-9.\-]+)'/.exec(h||'');if(!m)return;if(!(m[1]>BUILD)){try{sessionStorage.removeItem('kusa-upd')}catch(e){}return}
+  if(mode==='title'&&['main','new'].includes(TT.pg)){let n=0;try{n=+sessionStorage.getItem('kusa-upd')||0;sessionStorage.setItem('kusa-upd',n+1)}catch(e){}if(n<2)location.reload();return}
+  if(!updNote){updNote=true;toast={text:'あたらしい バージョンが あるよ！',t:300}}}).catch(()=>{})}
+setTimeout(checkUpdate,1500);document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkUpdate()});
 function contGame(){let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}
  if(d&&d.party){S=d;S.flags=S.flags||{};if(S.flags.ev5raid){delete S.flags.ev5raid;S.pos={map:'center3',x:4,y:4,dir:'up'}}delete S.flags.ev5call;delete S.flags.ev6call;delete S.flags.ev6hib;for(const k of TATSU_TEMP)delete S.flags[k];const nn=deliverNews(S);loadMap(S.pos.map,S.pos.x,S.pos.y,S.pos.dir);mode='world';say('つづきから はじめよう！');if(nn||unread(S))toast={text:nn?'メールが とどいた！':`みどくの メールが ${unread(S)}つ`,t:220};return}
  tmsg(['セーブデータが よみこめませんでした。'])}
@@ -3598,7 +3605,7 @@ function updMenu(){const m=menu;
  if(m.pg==='dev'){const L=m.dev[m.dev.length-1];updList(L,()=>{m.dev.pop();if(!m.dev.length)m.pg='root'});return}
  if(m.pg==='mail'){updMailUI(m.mu,S.mail||(S.mail=[]),()=>{m.pg='root'},null);return}
  if(m.pg==='quit'){if(btnp('up')||btnp('down'))m.q^=1;if(btnp('b')){m.pg='root';return}
-  if(btnp('a')){if(m.q===0){save();DEV=null;menu=null;shop=null;boxui=null;Q.length=0;mode='title';TT={pg:'main',i:0}}else m.pg='root'}return}
+  if(btnp('a')){if(m.q===0){save();DEV=null;menu=null;shop=null;boxui=null;Q.length=0;mode='title';TT={pg:'main',i:0};if(updNote)checkUpdate()}else m.pg='root'}return}
  if(m.pg==='dex'||m.pg==='dexd'){const n=DEX.length;m.dx=m.dx||0;{const u=btnr('up'),d=btnr('down');if(u===1)m.dx=(m.dx+n-1)%n;else if(u===2&&m.dx>0){m.dx--;AU.sfx('cur')}if(d===1)m.dx=(m.dx+1)%n;else if(d===2&&m.dx<n-1){m.dx++;AU.sfx('cur')}}if(m.pg==='dex'&&btnp('left'))m.dx=Math.max(0,m.dx-5);if(m.pg==='dex'&&btnp('right'))m.dx=Math.min(n-1,m.dx+5);
   if(btnp('b')){m.pg=m.pg==='dexd'?'dex':'root';return}
   if(m.pg==='dex'&&btnp('a')){if(S.seen.includes(DEX[m.dx]))m.pg='dexd';else AU.sfx('bump')}return}
