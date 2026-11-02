@@ -14392,7 +14392,7 @@ Object.assign(MAPS,{
    {id:'satori',x:5,y:1,dir:'down',spr:'girl',pal:['#f8d0a8','#e0509a','#4a2080','#1c1820'],tname:'ジムリーダーの サトリ',team:[['yumemi',24],['powan',25],['lunapowan',27]],money:80,
     say:['……きみが くることは\nずっと まえから みえていたわ。','わたしは ミライジムの リーダー\nサトリ。 こころの ちから、 みせて！'],lose:['……この みらいは\nよめなかったわ。'],after:['みらいは さだまって いない。\nだから おもしろいのよ。'],
     badge:'ミライバッジ',badgeTalk:['サトリ「あなたの みらいに\nミライバッジを。」']},
-   {id:'nana',x:8,y:11,dir:'left',spr:'girl',pal:['#f8d0a8','#f0a0e0','#5a3a8a','#1c1820'],sight:6,tname:'ジムトレーナーの ナナ',team:[['powan',21],['yumemi',21]],money:28,
+   {id:'g3nana',x:8,y:11,dir:'left',spr:'girl',pal:['#f8d0a8','#f0a0e0','#5a3a8a','#1c1820'],sight:6,tname:'ジムトレーナーの ナナ',team:[['powan',21],['yumemi',21]],money:28,
     say:['ワープパネルの さきへは\nかんたんに いかせないわ！'],lose:['よそくが はずれた……'],after:['ただしい パネルを えらばないと\nいりぐちに もどされるわよ。']},
    {id:'ren',x:5,y:5,dir:'down',spr:'boy',pal:['#f8d0a8','#8a6ac8','#2a2a48','#1c1820'],sight:2,tname:'ジムトレーナーの レン',team:[['yumemi',22],['puraguru',22]],money:30,
     say:['ぼくの ねんりきを\nうけてみろ！'],lose:['しゅうちゅうが きれた……'],after:['みぎの パネルが あたりさ。']},
@@ -15034,7 +15034,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.02-1154';
+const BUILD='2026.11.02-1230';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -15792,7 +15792,7 @@ const NEWS=[
  {id:'2026.11.01a',title:'あたらしい モンスター',body:['こんかいの こうしん：','・6ばんどうろと ひびきの どうくつに\n でんき・くさ・エスパーの\n あたらしい モンスターが ふえたよ','・たびの うしろの ほうの ばしょでは\n しんかした モンスターが\n でて くるように なったよ','ずかんを うめに いってみてね！']},
  {id:'2026.11.02a',title:'あたらしい エリアが ひらけた！',body:['こんかいの こうしん：','・タカネシティの きたの\n がけくずれが なおって\n 7ばんどうろへ いけるように！','・その さきには\n オオアミシティ が あるよ','・オオアミジムも まってるよ','・どこかで めずらしい\n ドラゴンタイプの モンスターが\n みつかる かも……？','ものがたりも おおきく うごくよ。\nたのしんでね！']},
  {id:'2026.11.02b',title:'ジェットパック はつばい！',body:['こんかいの こうしん：','・オオアミシティの ショップで\n ジェットパックが かえるように！\n （5まんえん）','・マップで いったことの ある\n まちを えらぶと とんで いけるよ','・とぶには ジェットねんりょうが いるよ。\n ジェットパックを かうと\n どの ショップでも かえるように なるよ','・タイトルに「ゲームを おわる」を\n ついか したよ']},
- {id:'2026.11.02b',title:'ものがたりの さいごまで！',body:['こんかいの こうしん：','・オオアミシティの さきに\n 8ばんどうろ と ぼうそうむら','・ドラゴンの すむ\n とがった いわの やま','・うみの そこの まち\n カモガワシティ（フェリーで いこう）','・あたらしい ジムが 2つ。\n バッジは ぜんぶで 8こ！','・あたらしい ドラゴンが 5しゅるい','・そして…… ものがたりの さいごまで\n あそべるように なったよ','・かいわの もじが ゆっくり\n でるように なったよ','さいごまで たのしんでね！']},
+ {id:'2026.11.02c',title:'ものがたりの さいごまで！',body:['こんかいの こうしん：','・オオアミシティの さきに\n 8ばんどうろ と ぼうそうむら','・ドラゴンの すむ\n とがった いわの やま','・うみの そこの まち\n カモガワシティ（フェリーで いこう）','・あたらしい ジムが 2つ。\n バッジは ぜんぶで 8こ！','・あたらしい ドラゴンが 5しゅるい','・そして…… ものがたりの さいごまで\n あそべるように なったよ','・かいわの もじが ゆっくり\n でるように なったよ','さいごまで たのしんでね！']},
 ];
 let toast=null;
 function deliverNews(st){st.mail=st.mail||[];const ids=NEWS.map(n=>n.id);let from=st.newsSeen?ids.indexOf(st.newsSeen)+1:Math.max(0,NEWS.length-1);let n=0;
@@ -15884,7 +15884,7 @@ const SCN=[
  ['カモガワジム（わかしお）',()=>{devBase(60,7,{uppy:1,ev5done:1,elderGone:1,ev6done:1,ishimoriGone:1,tatsu2:1,it_cmap:1,caveOpen:1,r4terui:1,r7done:1,terui7:1,kiyoTGone:1,towerDone:1,oamiWake:1,shiraLeft:1,matsunagaTold:1,tatsu3:1});loadMap('gym8',5,12,'up')}],
  ['しんかいの いせき イベント',()=>{devBase(62,8,{uppy:1,ev5done:1,elderGone:1,ev6done:1,ishimoriGone:1,tatsu2:1,it_cmap:1,caveOpen:1,r4terui:1,r7done:1,terui7:1,kiyoTGone:1,towerDone:1,oamiWake:1,shiraLeft:1,matsunagaTold:1,tatsu3:1});loadMap('kamoDome',12,11,'down')}],
  ['マウントフジ（さざなみ あり）',()=>{devBase(64,8,{uppy:1,ev5done:1,elderGone:1,ev6done:1,ishimoriGone:1,tatsu2:1,it_cmap:1,caveOpen:1,r4terui:1,r7done:1,terui7:1,kiyoTGone:1,towerDone:1,oamiWake:1,shiraLeft:1,matsunagaTold:1,tatsu3:1,oosugiR:1,sazanamiGot:1,ruinsDone:1,ruinsOpen:1,ruinsCall:1});S.party.push(mon('sazanami',64));S.visited.fuji=1;loadMap('kamogawa',7,4,'up')}],
- ['さんちょう（テルイ〜エンディング）',()=>{devBase(68,8,{uppy:1,ev5done:1,elderGone:1,ev6done:1,ishimoriGone:1,tatsu2:1,it_cmap:1,caveOpen:1,r4terui:1,r7done:1,terui7:1,kiyoTGone:1,towerDone:1,oamiWake:1,shiraLeft:1,matsunagaTold:1,tatsu3:1,oosugiR:1,sazanamiGot:1,ruinsDone:1,ruinsOpen:1,ruinsCall:1});S.party.push(mon('sazanami',66));loadMap('fuji2',11,14,'up')}],
+ ['さんちょう（テルイ〜エンディング）',()=>{devBase(68,8,{uppy:1,ev5done:1,elderGone:1,ev6done:1,ishimoriGone:1,tatsu2:1,it_cmap:1,caveOpen:1,r4terui:1,r7done:1,terui7:1,kiyoTGone:1,towerDone:1,oamiWake:1,shiraLeft:1,matsunagaTold:1,tatsu3:1,oosugiR:1,sazanamiGot:1,ruinsDone:1,ruinsOpen:1,ruinsCall:1});S.party.push(mon('sazanami',66));loadMap('fuji2',11,18,'up')}],
  ['タツヤ（まよいのもり）',()=>{devBase(14,1,{});loadMap('forest',14,38,'up')}],
  ['タツヤ（ユノハマ）',()=>{devBase(38,4,{uppy:1,ev5done:1,elderGone:1,ev6done:1});S.items.oldmap=1;loadMap('town4',13,14,'up')}],
  ['のりもの（じてんしゃ・ボート・ジェット）',()=>{devBase(40,5,{uppy:1,ev5done:1,elderGone:1,ev6done:1,tatsu2:1});Object.assign(S.items,{oldmap:1,bike:1,boat:1,jetpack:1,fuel:3});loadMap('town4',6,17,'down')}],

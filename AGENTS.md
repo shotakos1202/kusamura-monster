@@ -25,6 +25,7 @@
 - セーブの移行（QRコード／リンク／ファイル）も、かいはつしゃモードの入口（あいことばのあと）からだけ使える。一般のタイトルメニューには出さない。
 - 変更後は必ず `python3 tools/build.py && python3 tests/check_maps.py && python3 tests/check_monsters.py`。
 - マップ・バトル・メニューなど大きな変更では `python3 tests/fuzz.py` も実行する。
+- ストーリー・イベント・マップを変えたら `python3 tests/playthrough.py` で、さいしょから エンディングまで あそべるかを しらべる（ボットが 章ごとに じっさいに あるいて すすめる。1〜2ふん）。あたらしい 章を つくったら `CHAPTERS` に たす。
 - マップを追加したら、入口・人・看板・アイテムに歩いて行けるかを `tests/check_maps.py` で確認する。
 
 ## モンスター
