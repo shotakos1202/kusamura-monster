@@ -2231,7 +2231,10 @@ function stepQ(){let g=0;while(Q.length&&g++<300){const s=Q[0];
  if(s.tutor){const r=updTutor(s.tutor);if(r){Q.shift();Q.unshift(...r);continue}return}
  if(s.w){if(s.w()){Q.shift();continue}return}
  const len=s.m.join('').length;
- if(s.n<len){s.n+=held.a?5:2;if(btnp('a'))s.n=len;return}
+ // もじおくり：かいわは 1びょうに やく30もじ、バトルは やく60もじ（Aを おしっぱなしで すこし はやく）。
+ // さいごまで でてから 10フレームは つぎへ すすまない（れんだで よみとばさない ため）。
+ if(s.n<len){s.n+=held.a?(mode==='battle'?2:1):(mode==='battle'?1:.5);if(btnp('a'))s.n=len;if(s.n>=len){s.n=len;s.wait=10}return}
+ if(s.wait>0){s.wait--;return}
  if(btnp('a')||btnp('b')){Q.shift();continue}
  return}}
 
@@ -3482,7 +3485,7 @@ function updBattle(){
 function box(x,y,w,h){R(x,y,w,h,3);R(x+3,y+3,w-6,h-6,0);R(x+5,y+5,w-10,h-10,2);R(x+6,y+6,w-12,h-12,0)}
 function drawMsg(){const s=Q[0];if(s&&s.learn)return drawLearn(s.learn);if(s&&s.tutor)return drawTutor(s.tutor);if(!s||!s.m)return;box(0,200,320,88);let left=s.n;
  s.m.forEach((ln,i)=>{txt(ln.slice(0,Math.max(0,left)),18,218+i*32);left-=ln.length});
- if(s.n>=s.m.join('').length&&(frame>>4)%2)txt('▼',298,264,3,12);if(s.stat)drawStat(s.stat)}
+ if(s.n>=s.m.join('').length&&!(s.wait>0)&&(frame>>4)%2)txt('▼',298,264,3,12);if(s.stat)drawStat(s.stat)}
 /* ---------- tiles: 16x16 logical pixels, cached per variant/frame ---------- */
 const TC2={};
 function tcv(key,fn){let v=TC2[key];if(!v){v=document.createElement('canvas');v.width=v.height=32;const g=v.getContext('2d');fn(g);TC2[key]=v}return v}
@@ -3725,6 +3728,9 @@ function wmIcon(n,x,y){
  else if(n.k==='sea'){R(x-9,y+1,18,4,'#8a5a2e');R(x-7,y+5,14,2,'#6a3a1c');R(x,y-12,2,13,'#6a3a1c');c.fillStyle='#f4f4f4';c.beginPath();c.moveTo(x+2,y-12);c.lineTo(x+10,y-1);c.lineTo(x+2,y-1);c.fill()}
  else if(n.k==='hill'){ell(x,y+3,13,7,'#5aa040');ell(x-2,y+1,8,4,'#86c860');ell(x+4,y-1,2,2,'#f070c8')}
  else if(n.k==='beach'){ell(x,y+4,12,5,'#f2dea4');R(x-1,y-8,2,12,'#9a6a3e');ell(x-5,y-9,6,2,'#3f8e36');ell(x+5,y-9,6,2,'#3f8e36')}
+ else if(n.k==='crag'){for(const[dx,h,w]of[[-9,14,6],[0,20,7],[9,12,6]]){c.fillStyle='#6a5e70';c.beginPath();c.moveTo(x+dx-w,y+7);c.lineTo(x+dx-1,y+7-h);c.lineTo(x+dx+w,y+7);c.fill();c.fillStyle='#8e8098';c.beginPath();c.moveTo(x+dx-1,y+7-h);c.lineTo(x+dx+w,y+7);c.lineTo(x+dx+2,y+7);c.fill()}ell(x+5,y-3,2.4,2,'#3c56aa')}
+ else if(n.k==='deep'){c.globalAlpha=.35;ell(x,y+6,15,5,'#1a4a8a');c.globalAlpha=1;R(x-8,y+2,16,4,'#c8ccd8');R(x-2,y-12,4,15,'#8a8fa0');R(x-5,y-15,10,4,'#5a6070');c.globalAlpha=.5+.5*Math.sin(frame/8);R(x-1,y-18,2,3,'#ffe060');c.globalAlpha=1;ell(x,y+10,9,3,'#3aa0e0');ell(x,y+10,5,1.6,'#c8ecff')}
+ else if(n.k==='fuji'){c.globalAlpha=.25;ell(x,y+9,20,4,'#000');c.globalAlpha=1;c.fillStyle='#4a2a3a';c.beginPath();c.moveTo(x-20,y+9);c.lineTo(x-5,y-14);c.lineTo(x+5,y-14);c.lineTo(x+20,y+9);c.fill();c.fillStyle='#e8e4f0';c.beginPath();c.moveTo(x-9,y-7);c.lineTo(x-5,y-14);c.lineTo(x+5,y-14);c.lineTo(x+9,y-7);c.lineTo(x+4,y-9);c.lineTo(x,y-6);c.lineTo(x-4,y-9);c.fill();R(x-2,y-2,3,11,'#e05020');c.globalAlpha=.5+.4*Math.sin(frame/7);ell(x,y-16,6,3,'#ff6030');c.globalAlpha=1}
  else if(n.k==='mount'){c.fillStyle='#8a7a66';c.beginPath();c.moveTo(x-13,y+7);c.lineTo(x-2,y-10);c.lineTo(x+13,y+7);c.fill();c.fillStyle='#a8987e';c.beginPath();c.moveTo(x-2,y-10);c.lineTo(x+13,y+7);c.lineTo(x+4,y+7);c.fill();c.fillStyle='#f4f4f8';c.beginPath();c.moveTo(x-6,y-4);c.lineTo(x-2,y-10);c.lineTo(x+3,y-4);c.fill()}
  else if(n.k==='cave'){ell(x,y+2,13,8,'#8a7a66');ell(x-3,y-1,6,3,'#a8987e');ell(x,y+5,5,4.5,'#1a1410')}
  else{ell(x,y,6,6,'#9a7a48');ell(x,y,4,4,'#f0d8a0')}}
