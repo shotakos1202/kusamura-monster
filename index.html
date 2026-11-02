@@ -14170,14 +14170,26 @@ SP.minezou={name:'ミネゾーウ',type:'dragon',type2:'flying',b:{hp:118,atk:12
 DEX.push('mizuchi','hanetokage','soutenryuu','tsunoryuu','ootsunoryuu','minezou','sazanami');
 Object.assign(WHERE,{mizuchi:'とがった いわの やま（まれ）',hanetokage:'とがった いわの やま',soutenryuu:'ハネトカゲが Lv57で しんか',tsunoryuu:'とがった いわの やま',ootsunoryuu:'ツノリュウが Lv58で しんか',minezou:'そらの かみ（キヨシが したがえている）',sazanami:'カモガワシティ しんかいの いせき'});
 /* でんせつ・まぼろしは ずかんの さいご（この じゅんで ならぶ）。まぼろし → さんしん（もり・そら・うみ）の じゅん。そらの かみ・うみの かみは ウッピーの うしろに たす */
+/* ドラゴンわざ：どの タイプにも 1.1ばい＋きゅうしょに あたりやすい（resolve で けいさん。せつめいにも ひょうじ） */
+const DRAGON_BONUS=1.1;
+for(const k in MV){const v=MV[k];if(v.t==='dragon'&&v.p&&!v.crit)v.d=(v.d?v.d+'・':'')+'きゅうしょ↑'}
+if(MV.kokuenha)MV.kokuenha.d='ミネゾーウ せんよう・やけど・きゅうしょ↑';
 const LEGEND=['hisuiko','hisuiryu','hisuijin','shounon','uppy','minezou','sazanami'];
 for(const id of LEGEND){const k=DEX.indexOf(id);if(k>=0)DEX.splice(k,1)}DEX.push(...LEGEND.filter(id=>SP[id]));
 const STARTERS=['hinokon','mizutama','happaru'];
 const IT={ball:{n:'ボール',price:100,d:'やせいの モンスターを つかまえる'},potion:{n:'くすり',price:150,d:'モンスターの HPを 20 かいふくする'}};
-Object.assign(IT,{superpotion:{n:'いいくすり',price:400,d:'モンスターの HPを 60 かいふくする'},revive:{n:'げんきのつぶ',price:2000,d:'ひんしの モンスターを はんぶん かいふく'},rarecandy:{n:'ふしぎなキャンディ',price:9999,d:'モンスターの レベルが 1 あがる'}});
+Object.assign(IT,{superpotion:{n:'いいくすり',price:400,d:'モンスターの HPを 60 かいふくする'},revive:{n:'げんきのつぶ',price:2000,d:'ひんしの モンスターを はんぶん かいふく'},rarecandy:{n:'ふしぎなキャンディ',price:6000,d:'モンスターの レベルが 1 あがる'}});
 const ITEMS=['ball','potion','superpotion','revive','rarecandy'],BITEMS=['ball','potion','superpotion'];
 IT.ballplus={n:'ボールプラス',price:300,d:'ボールより 1.3ばい つかまえやすい'};
 ITEMS.splice(1,0,'ballplus');BITEMS.splice(1,0,'ballplus');
+// オオアミシティ いこうの ショップ：ボールウルトラ・すげーくすり・ふしぎなキャンディ／ユノハマシティ いこう：げんきの けっしょう
+IT.ballultra={n:'ボールウルトラ',price:800,d:'いちばん つかまえやすい ボール（ボールの 2ばい）'};
+IT.sugoikusuri={n:'すげーくすり',price:800,d:'HPを まんたんに して じょうたいも なおす'};
+IT.kesshou={n:'げんきのけっしょう',price:4000,d:'ひんしの モンスターを まんたんまで かいふく'};
+ITEMS.splice(ITEMS.indexOf('ballplus')+1,0,'ballultra');BITEMS.splice(BITEMS.indexOf('ballplus')+1,0,'ballultra');
+ITEMS.splice(ITEMS.indexOf('superpotion')+1,0,'sugoikusuri');BITEMS.push('sugoikusuri');
+ITEMS.splice(ITEMS.indexOf('revive')+1,0,'kesshou');
+const isBall=k=>k==='ball'||k==='ballplus'||k==='ballultra',BALLX={ballplus:1.3,ballultra:2};
 IT.oldmap={n:'なぞの ちず',price:0,d:'オオアミシティに アジトの しるしが ある ちず'};ITEMS.push('oldmap');
 IT.cavemap={n:'どうくつの ちず',price:0,d:'ひびきの どうくつの かくし つうろが かかれた ちず'};ITEMS.push('cavemap');
 IT.bike={n:'じてんしゃ',price:15000,once:true,d:'2ばい はやく うごける。 Aボタンを 2かい れんだで のる／おりる'};
@@ -14186,7 +14198,7 @@ IT.jetpack={n:'ジェットパック',price:50000,once:true,d:'マップで い�
 IT.fuel={n:'ジェットねんりょう',price:800,d:'ジェットパック 1かいぶんの ねんりょう'};
 ITEMS.push('bike','boat','jetpack','fuel');
 IT.flute={n:'ひでんの たてぶえ',price:0,d:'さんしんを よびだす ちょうろうの いえの たてぶえ'};ITEMS.push('flute');
-const KEYIT=['oldmap','cavemap','bike','boat','jetpack','fuel','flute'],visItems=()=>ITEMS.filter(k=>!KEYIT.includes(k)||(S&&S.items[k]));
+const KEYIT=['oldmap','cavemap','bike','boat','jetpack','fuel','flute'],visItems=()=>ITEMS.filter(k=>S&&(S.items[k]||0)>0),bItems=()=>BITEMS.filter(k=>S&&(S.items[k]||0)>0);
 
 /* ---------- people ---------- */
 const PL_DN=mk(["........","....3333","...32222","..322222","..333333","...30000","...30300","...30000","....3300","..332222",".3022222",".3022222","..333333","...31111","...3113.","...333.."]);
@@ -14462,7 +14474,7 @@ Object.assign(MAPS,{
    {x:6,y:5,dir:'left',spr:'boy',pal:['#f8d0a8','#f0d040','#4060a0','#1c1820'],text:['かんこうで きたのに\nモンスターが つかれちゃって……']}]},
  shop4:{rows:["kkkkkkkkkk","kbbbffbbbk","kffffffffk","kccfffffpk","kffffffffk","kfffttfffk","kffffffffk","kkkkmmkkkk"],
   warps:{'4,7':['town4',23,4,'down'],'5,7':['town4',23,4,'down']},
-  npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','potion','superpotion','revive','boat']},
+  npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','potion','superpotion','revive','kesshou','boat']},
    {x:6,y:4,dir:'down',spr:'girl',pal:['#f8d0a8','#f0a0c0','#3a3a8a','#2a1a14'],text:['げんきのつぶが うってるのは\nこの まちだけ なんだって。']}]},
 });
 // Mirai Port west road now opens onto Route 5 (construction finished)
@@ -14590,7 +14602,7 @@ Object.assign(MAPS,{
    {x:6,y:5,dir:'left',spr:'boy',pal:HIKER,text:['どうくつを ぬけて きたら\nもう へとへとだよ……']}]},
  shop5:{rows:["kkkkkkkkkk","kbbbffbbbk","kffffffffk","kccfffffpk","kffffffffk","kfffttfffk","kffffffffk","kkkkmmkkkk"],
   warps:{'4,7':['town5',24,4,'down'],'5,7':['town5',24,4,'down']},
-  npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','potion','superpotion','revive']},
+  npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','potion','superpotion','revive','kesshou']},
    {x:6,y:4,dir:'down',spr:'girl',pal:['#f8d0a8','#80d0f0','#3a3a8a','#2a1a14'],text:['ここは たかい ところだから\nにもつを はこぶのが たいへん。']}]},
 });
 // ひびきの どうくつの ひみつ: すいしょうの とびら → ひかりの パネル → ショウノーン
@@ -14652,7 +14664,7 @@ Object.assign(MAPS,{
    {x:7,y:5,dir:'left',spr:'girl',pal:['#f8d0a8','#80d0f0','#3a3a8a','#2a1a14'],text:['オオアミシティは おおきな まち。\nいろんな ひとが あつまるのよ。']}]},
  oamiShop:{rows:["kkkkkkkkkk","kbbbffbbbk","kffffffffk","kccfffffpk","kffffffffk","kfffttfffk","kffffffffk","kkkkmmkkkk"],
   warps:{'4,7':['oami',19,11,'down'],'5,7':['oami',19,11,'down']},
-  npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','potion','superpotion','revive','jetpack']},
+  npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','ballultra','potion','superpotion','sugoikusuri','revive','kesshou','rarecandy','jetpack']},
    {x:6,y:4,dir:'down',spr:'boy',pal:['#f8d0a8','#f0a020','#4a4a52','#1c1820'],text:['ブラックタワーに のぼるなら\nくすりを たくさん もっていきな！']}]},
  gym6:{gates:'+*',rows:["kkkkkkkkkkkk", "kpffffffffpk", "kffffffffffk", "kkkkk+kkkkkk", "kfff@ffffffk", "kffffffffffk", "kffffffffffk", "kkkkkkkk*kkk", "kffffffffffk", "kffffff@fffk", "kkk+kkkkkkkk", "kffffffff@fk", "kffffffffffk", "kkkkkmmkkkkk"],
   warps:{'5,13':['oami',4,16,'down'],'6,13':['oami',4,16,'down']},
@@ -14740,7 +14752,7 @@ Object.assign(MAPS,{
   ]},
  bousouCenter:{rows:["kkkkkkkkkk","kpfffhffpk","kcccccccck","kfffffffqk","kffffffffk","kttffffffk","kffffffffk","kkkkmmkkkk"],warps:{'4,7':['bousou',4,5,'down'],'5,7':['bousou',4,5,'down']},
   npcs:[{x:4,y:1,dir:'down',spr:'girl',pal:['#f8d0a8','#ffffff','#f080a0','#3a2030'],role:'nurse'},{x:6,y:5,dir:'left',spr:'boy',pal:HIKER,text:['とがった いわの やまの りゅうは\nかたくて つよいぞ。','いわや こおり…… いや、\nドラゴンには ドラゴンが きくんだ！']}]},
- bousouShop:{rows:["kkkkkkkkkk","kbbbffbbbk","kffffffffk","kccfffffpk","kffffffffk","kfffttfffk","kffffffffk","kkkkmmkkkk"],warps:{'4,7':['bousou',19,5,'down'],'5,7':['bousou',19,5,'down']},npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','potion','superpotion','revive']}]},
+ bousouShop:{rows:["kkkkkkkkkk","kbbbffbbbk","kffffffffk","kccfffffpk","kffffffffk","kfffttfffk","kffffffffk","kkkkmmkkkk"],warps:{'4,7':['bousou',19,5,'down'],'5,7':['bousou',19,5,'down']},npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','ballultra','potion','superpotion','sugoikusuri','revive','kesshou','rarecandy']}]},
  bhouse:{rows:room(),warps:{'4,7':['bousou',4,14,'down'],'5,7':['bousou',4,14,'down']},
   npcs:[{x:2,y:3,dir:'right',spr:'old',pal:['#f8d0a8','#a05a8a','#d8d8d8','#2a2a2a'],text:['むかしむかし…… マウントフジの\nそらが まっくらに なった ひが\nあったそうな。','その ひから さんしんの すがたを\nみた ものは いないと いう。','……おおきな こえでは いえんがの。']}]},
  crag:{name:'とがった いわの やま',out:true,crag:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTT", "T..TT.....WWWW.....TT..T", "T..T.GGG..WWWW..GGG.T..T", "T....GGG........GGG....T", "TT...GGG..TTTT..GGG...TT", "T.........TTTT.........T", "T..GGGG..........GGGG..T", "T..GGGG...A..A...GGGG..T", "TTT.GG............GG.TTT", "T.....TTT......TTT.....T", "T.GGG.TTT..GG..TTT.GGG.T", "T.GGG.....GGGG.....GGG.T", "T.GGG.....GGGG.....GGG.T", "T......TT......TT......T", "TTTT...TT..GG..TT...TTTT", "T.........GGGG.........T", "T..GGGG...GGGG...GGGG..T", "T..GGGG..........GGGG..T", "T.......TTTTTTTT.......T", "T..A....TTTTTTTT....A..T", "T......................T", "TTTTT..GGGG..GGGG..TTTTT", "T......GGGG..GGGG......T", "T..TT..........S...TT..T", "T..TT..................T", "T.......GG....GG.......T", "T.......GG....GG.......T", "TTTTTTTTTTT..TTTTTTTTTTT"],
@@ -14775,7 +14787,7 @@ Object.assign(MAPS,{
   ]},
  kamoCenter:{rows:["kkkkkkkkkk","kpfffhffpk","kcccccccck","kfffffffqk","kffffffffk","kttffffffk","kffffffffk","kkkkmmkkkk"],warps:{'4,7':['kamoDome',4,5,'down'],'5,7':['kamoDome',4,5,'down']},
   npcs:[{x:4,y:1,dir:'down',spr:'girl',pal:['#f8d0a8','#ffffff','#f080a0','#3a2030'],role:'nurse'},{x:6,y:5,dir:'left',spr:'girl',pal:['#f8d0a8','#3aa0d0','#3a3a8a','#2a1a14'],get text(){return S&&S.flags.sazanamiGot?['さざなみを ボックスに あずけると\nマウントフジへは とべないわ。','マップで マウントフジを えらぶ\nときは かならず てもちに いれてね！']:['カモガワシティの ジムは\nみずと ドラゴンの ジムよ。']}}]},
- kamoShop:{rows:["kkkkkkkkkk","kbbbffbbbk","kffffffffk","kccfffffpk","kffffffffk","kfffttfffk","kffffffffk","kkkkmmkkkk"],warps:{'4,7':['kamoDome',19,5,'down'],'5,7':['kamoDome',19,5,'down']},npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','potion','superpotion','revive']}]},
+ kamoShop:{rows:["kkkkkkkkkk","kbbbffbbbk","kffffffffk","kccfffffpk","kffffffffk","kfffttfffk","kffffffffk","kkkkmmkkkk"],warps:{'4,7':['kamoDome',19,5,'down'],'5,7':['kamoDome',19,5,'down']},npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','ballultra','potion','superpotion','sugoikusuri','revive','kesshou','rarecandy']}]},
  kamoHouse:{rows:room(),warps:{'4,7':['kamoDome',4,15,'down'],'5,7':['kamoDome',4,15,'down']},
   npcs:[{x:6,y:3,dir:'left',spr:'old',pal:['#f8d0a8','#7a8aa8','#d8d8d8','#2a2a2a'],text:['わしらの せんぞは うみの かみに\nまもられて この まちを つくった。','うみの かみは こころを みる。\nうそは つうじんよ。']}]},
  gym8:{rows:["kkkkkkkkkkkk", "kpffffffffpk", "kffffffffffk", "kWWWWnnWWWWk", "kffffffffffk", "kfWWWWWWWWfk", "kfWWWWWWWWfk", "kffffffffffk", "kWWWnnWWWWWk", "kffffffffffk", "kffffffffffk", "kfWWffffWWfk", "kffffffffffk", "kkkkkmmkkkkk"],warps:{'5,13':['kamoDome',12,11,'down'],'6,13':['kamoDome',12,11,'down']},
@@ -14861,7 +14873,11 @@ c.canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;const r=c.can
  for(let i=HITS.length-1;i>=0;i--){const h=HITS[i];if(x>=h.x&&x<h.x+h.w&&y>=h.y&&y<h.y+h.h){if(Q.length&&!h.q)return;e.preventDefault();h.fn();if(!h.noA&&!gestureA())pressed.a=true;return}}});
 const btnp=k=>{if(pressed[k]){pressed[k]=false;return true}return false};
 /* ながおし リピート：おした しゅんかん 1、ながおしで 2（18フレーム ごから 4フレームごと、1びょう いじょうで 2フレームごと） */
-const holdT={};const btnr=k=>{if(btnp(k)){holdT[k]=0;return 1}if(!held[k]){holdT[k]=0;return 0}const t=++holdT[k];if(t<18)return 0;return (t-18)%(t>60?2:4)===0?2:0};
+/* メニューで うえ・したを ながおし → くりかえし おす（0.3びょう ご 4フレームごと、1びょう いじょうで 2フレームごと）。あるいている ときは なにも しない */
+const REP={up:0,down:0},REPF={up:false,down:false};
+function keyRepeat(){const ui=mode!=='world'||menu||shop||boxui||Q.length;for(const k of['up','down']){REPF[k]=false;if(!held[k]||!ui){REP[k]=0;continue}const t=++REP[k];if(t>=18&&(t-18)%(t>60?2:4)===0&&!pressed[k]){pressed[k]=true;REPF[k]=true}}}
+// 1: ふつうに おした、2: ながおしの くりかえし（ずかんでは はしで とまる）
+const btnr=k=>btnp(k)?(REPF[k]?2:1):0;
 /* ---------- sound: tiny chiptune sequencer (square lead + triangle bass) ---------- */
 const NOTE={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
 const n2f=n=>{const m=/^([A-G])([#b]?)(\d)$/.exec(n);const s=NOTE[m[1]]+(m[2]==='#'?1:m[2]==='b'?-1:0);return 440*Math.pow(2,((+m[3]+1)*12+s-69)/12)};
@@ -15034,7 +15050,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.02-1523';
+const BUILD='2026.11.02-1640';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -15814,6 +15830,7 @@ const NEWS=[
  {id:'2026.11.02a',title:'あたらしい エリアが ひらけた！',body:['こんかいの こうしん：','・タカネシティの きたの\n がけくずれが なおって\n 7ばんどうろへ いけるように！','・その さきには\n オオアミシティ が あるよ','・オオアミジムも まってるよ','・どこかで めずらしい\n ドラゴンタイプの モンスターが\n みつかる かも……？','ものがたりも おおきく うごくよ。\nたのしんでね！']},
  {id:'2026.11.02b',title:'ジェットパック はつばい！',body:['こんかいの こうしん：','・オオアミシティの ショップで\n ジェットパックが かえるように！\n （5まんえん）','・マップで いったことの ある\n まちを えらぶと とんで いけるよ','・とぶには ジェットねんりょうが いるよ。\n ジェットパックを かうと\n どの ショップでも かえるように なるよ','・タイトルに「ゲームを おわる」を\n ついか したよ']},
  {id:'2026.11.02c',title:'ものがたりの さいごまで！',body:['こんかいの こうしん：','・オオアミシティの さきに\n 8ばんどうろ と ぼうそうむら','・ドラゴンの すむ\n とがった いわの やま','・うみの そこの まち\n カモガワシティ（フェリーで いこう）','・あたらしい ジムが 2つ。\n バッジは ぜんぶで 8こ！','・あたらしい ドラゴンが 5しゅるい','・そして…… ものがたりの さいごまで\n あそべるように なったよ','・かいわの もじが ゆっくり\n でるように なったよ','さいごまで たのしんでね！']},
+ {id:'2026.11.02d',title:'あたらしい どうぐと ドラゴン',body:['こんかいの こうしん：','・ショップに あたらしい どうぐ！\n ユノハマシティ から：\n げんきのけっしょう','・オオアミシティ から：\n ボールウルトラ・すげーくすり・\n ふしぎなキャンディ','・ドラゴンの わざが パワーアップ！\n どの タイプにも すこし つよく\n きゅうしょにも あたりやすい','・どうぐは もっている ものだけ\n でるように なったよ','・メニューで うえ・したを ながおし\n すると はやく うごくよ']},
 ];
 let toast=null;
 function deliverNews(st){st.mail=st.mail||[];const ids=NEWS.map(n=>n.id);let from=st.newsSeen?ids.indexOf(st.newsSeen)+1:Math.max(0,NEWS.length-1);let n=0;
@@ -16103,9 +16120,9 @@ function updMenu(){const m=menu;
  if(m.pg==='dex'||m.pg==='dexd'){const n=DEX.length;m.dx=m.dx||0;{const u=btnr('up'),d=btnr('down');if(u===1)m.dx=(m.dx+n-1)%n;else if(u===2&&m.dx>0){m.dx--;AU.sfx('cur')}if(d===1)m.dx=(m.dx+1)%n;else if(d===2&&m.dx<n-1){m.dx++;AU.sfx('cur')}}if(m.pg==='dex'&&btnp('left'))m.dx=Math.max(0,m.dx-5);if(m.pg==='dex'&&btnp('right'))m.dx=Math.min(n-1,m.dx+5);
   if(btnp('b')){m.pg=m.pg==='dexd'?'dex':'root';return}
   if(m.pg==='dex'&&btnp('a')){if(S.seen.includes(DEX[m.dx]))m.pg='dexd';else AU.sfx('bump')}return}
- if(m.pg==='items'){const n=visItems().length;if(btnp('up'))m.k=(m.k+n-1)%n;if(btnp('down'))m.k=(m.k+1)%n;
+ if(m.pg==='items'){const n=visItems().length;if(!n){m.pg='root';say('どうぐを なにも もっていない。');return}m.k=Math.min(m.k||0,n-1);if(btnp('up'))m.k=(m.k+n-1)%n;if(btnp('down'))m.k=(m.k+1)%n;
   if(btnp('b')){m.pg='root';return}
-  if(btnp('a')){const k=visItems()[m.k];if((S.items[k]||0)<=0)say(`${IT[k].n}を もっていない。`);else if(k==='oldmap')say('なぞの ちずを ひらいた。','「アジト：オオアミシティ」\nと しるしが ついている……');else if(k==='cavemap')say('どうくつの ちずを ひらいた。','ひびきの どうくつの みちが\nこまかく かかれている。');else if(useTool(k,m)){}else if(k==='ball'||k==='ballplus')say('いまは つかえない！');else if(!S.party.length)say('つかう あいてが いない。');else{m.pg='party';m.use=k;m.j=0}}
+  if(btnp('a')){const k=visItems()[m.k];if((S.items[k]||0)<=0)say(`${IT[k].n}を もっていない。`);else if(k==='oldmap')say('なぞの ちずを ひらいた。','「アジト：オオアミシティ」\nと しるしが ついている……');else if(k==='cavemap')say('どうくつの ちずを ひらいた。','ひびきの どうくつの みちが\nこまかく かかれている。');else if(useTool(k,m)){}else if(isBall(k))say('いまは つかえない！');else if(!S.party.length)say('つかう あいてが いない。');else{m.pg='party';m.use=k;m.j=0}}
   return}
  if(m.pg==='wmap'){const n=WMAP.length;if(btnp('up')||btnp('right'))m.w=(m.w+1)%n;if(btnp('down')||btnp('left'))m.w=(m.w+n-1)%n;if(btnp('b')){m.pg=m.jet?'items':'root';m.jet=false;return}
   if(btnp('a')){const w=WMAP[m.w];if(w.id==='fuji'&&(S.visited||{}).fuji){fujiFly();return}if(S.items.jetpack&&(S.visited||{})[w.id]&&(w.k==='town'||w.k==='city'||w.k==='tower'||w.k==='deep'))jetTo(w);else{m.pg=m.jet?'items':'root';m.jet=false}}return}
@@ -16127,7 +16144,8 @@ function updMenu(){const m=menu;
   if(btnp('a')){const t=S.party[m.j];
    if(m.use){const k=m.use;let ok=false;
     if(k==='potion'||k==='superpotion'){const amt=k==='potion'?20:60;if(t.hp<=0||t.hp>=t.mhp)say('つかっても こうかが ないよ。');else{const h=Math.min(amt,t.mhp-t.hp);t.hp+=h;S.items[k]--;say(`${nm(t)}の HPが ${h} かいふくした！`);ok=true}}
-    else if(k==='revive'){if(t.hp>0)say('つかっても こうかが ないよ。');else{t.hp=Math.max(1,Math.floor(t.mhp/2));t.status=null;S.items[k]--;AU.jingle('heal');say(`${nm(t)}は げんきを とりもどした！`);ok=true}}
+    else if(k==='sugoikusuri'){if(t.hp<=0||(t.hp>=t.mhp&&!t.status))say('つかっても こうかが ないよ。');else{t.hp=t.mhp;t.status=null;S.items[k]--;AU.jingle('heal');say(`${nm(t)}は すっかり げんきに なった！`);ok=true}}
+    else if(k==='revive'||k==='kesshou'){if(t.hp>0)say('つかっても こうかが ないよ。');else{t.hp=k==='kesshou'?t.mhp:Math.max(1,Math.floor(t.mhp/2));t.status=null;S.items[k]--;AU.jingle('heal');say(`${nm(t)}は げんきを とりもどした！`);ok=true}}
     else if(k==='rarecandy'){if(t.lv>=LVMAX)say('これいじょう レベルは あがらない。');else{S.items[k]--;Q.push(...candyUp(t));ok=true}}
     if(ok){m.pg='items';m.use=null;save()}}
    else{m.pg='pmenu';m.sub=0}}}}
@@ -16166,9 +16184,9 @@ function inflict(def,kind,who,fromHit){return[F(()=>{const ty=typesOf(def.id);
  return T(kind==='brn'?`${who}は やけどを おった！`:kind==='par'?`${who}は まひして\nわざが でにくくなった！`:`${who}は\nねむってしまった！`)})]}
 function resolve(att,def,mv,isP,who){const sd=side(isP),od=side(!isP),dwho=lab(def,!isP),r=[];
  if(mv.p){const hits=mv.hits?mv.hits[0]+(Math.random()*(mv.hits[1]-mv.hits[0]+1)|0):1,e=effOn(mv.t,def.id),stab=stabOf(mv.t,att.id)?1.5:1;let total=0,n=0,crit1=false,hp=def.hp;const dm=[];
-  for(let h=0;h<hits&&hp>0;h++){const crit=Math.random()<(mv.crit?1/4:1/16)?1.5:1;if(crit>1)crit1=true;
+  for(let h=0;h<hits&&hp>0;h++){const crit=Math.random()<(mv.crit||mv.t==='dragon'?1/4:1/16)?1.5:1;if(crit>1)crit1=true;
    const A=att.atk*smul(B.st[sd].atk)*(att.status==='brn'?.5:1),Df=def.def*smul(B.st[od].def);
-   let d=Math.max(1,Math.floor((((2*att.lv/5+2)*mv.p*A/Df)/50+2)*stab*e*crit*(0.85+Math.random()*0.15)));if(DEV&&DEV.ohko&&isP)d=Math.max(d,hp);hp=Math.max(B.god?1:0,hp-d);dm.push(d);total+=d;n++}
+   let d=Math.max(1,Math.floor((((2*att.lv/5+2)*mv.p*A/Df)/50+2)*stab*e*(mv.t==='dragon'?DRAGON_BONUS:1)*crit*(0.85+Math.random()*0.15)));if(DEV&&DEV.ohko&&isP)d=Math.max(d,hp);hp=Math.max(B.god?1:0,hp-d);dm.push(d);total+=d;n++}
   const alive=hp>0;
   // each hit of a multi-hit move gets its own lunge + effect + damage animation
   dm.forEach((d,k)=>{if(k>0)r.push(F(()=>{B.lunge={who:sd,t:0,d:10};AU.sfx('swing')}),Wt(()=>B.lunge.t>=10),F(()=>{B.lunge=null;B.fx={type:mv.t,id:mv.id,t:0,to:od,d:Math.min(22,fxDur(mv.id))};AU.sfx('fx'+mv.t)}),Wt(()=>B.fx.t>=B.fx.d),F(()=>{B.fx=null}));
@@ -16419,18 +16437,18 @@ function throwBall(k='ball'){
  if((S.items[k]||0)<=0){say(`${IT[k].n}を もっていない！`);return}
  S.items[k]--;B.menu='main';const foe=B.foe;B.ballK=k;
  Q.push(...T(`${IT[k].n}を なげた！`),F(()=>{B.ball=true;B.ballT=0;AU.sfx('throw');
-  const lvF=Math.max(.8,Math.min(1.45,1.5-.04*foe.lv)),gap=me().lv-foe.lv,gapF=gap>=0?Math.min(2.2,1+.12*gap):Math.max(.6,1+.08*gap),rate=Math.min(.95,(SP[foe.id].cr*(1-0.75*foe.hp/foe.mhp)+0.1)*(foe.status==='slp'?2:foe.status==='par'?1.5:1)*lvF*gapF*(k==='ballplus'?1.3:1)),ok=Math.random()<rate;B.shakes=ok?3:(Math.random()*3|0);
+  const lvF=Math.max(.8,Math.min(1.45,1.5-.04*foe.lv)),gap=me().lv-foe.lv,gapF=gap>=0?Math.min(2.2,1+.12*gap):Math.max(.6,1+.08*gap),rate=Math.min(.95,(SP[foe.id].cr*(1-0.75*foe.hp/foe.mhp)+0.1)*(foe.status==='slp'?2:foe.status==='par'?1.5:1)*lvF*gapF*(BALLX[k]||1)),ok=Math.random()<rate;B.shakes=ok?3:(Math.random()*3|0);
   const after=ok?[F(()=>AU.jingle('catch')),...T(`やったー！\n${nm(foe)}を つかまえた！`),F(()=>{const r=[];foe.exp=expAt(foe,foe.lv);const isNew=!S.caught.includes(foe.id);if(isNew)S.caught.push(foe.id);
      if(isNew)r.push(...T(`${nm(foe)}の データが\nずかんに とうろく された！`));
      if(S.party.length<6)S.party.push(foe);else{foe.hp=foe.mhp;foe.status=null;S.box.push(foe);r.push(...T(`てもちが いっぱいなので ${nm(foe)}は\nクラウドBOXへ てんそうされた！`))}
      if(isNew&&S.caught.length===DEX.length)r.push(...T('ずかんが ぜんぶ うまった！\nおめでとう！'));return r}),F(endBattle)]
    :[F(()=>{B.ball=false;AU.sfx('pop')}),...T(B.shakes>=2?'ああっ！ おしい！\nもうすこしで つかまえられたのに！':'ダメだ！ ボールから\nでてしまった！'),...foeTurn()];
   return[Wt(()=>++B.ballT>34+B.shakes*30),...after]}))}
-function usePotion(k='potion'){const m=me(),amt=k==='superpotion'?60:20;
+function usePotion(k='potion'){const m=me(),full=k==='sugoikusuri',amt=full?m.mhp:k==='superpotion'?60:20;
  if((S.items[k]||0)<=0){say(`${IT[k].n}を もっていない！`);return}
- if(m.hp>=m.mhp){say(`${nm(m)}の HPは まんたんだ！`);return}
+ if(m.hp>=m.mhp&&!(full&&m.status)){say(`${nm(m)}の HPは まんたんだ！`);return}
  S.items[k]--;B.menu='main';
- Q.push(...T(`${IT[k].n}を つかった！`),F(()=>{m.hp=Math.min(m.mhp,m.hp+amt)}),Wt(settled),...T(`${nm(m)}の HPが かいふくした！`),...foeTurn())}
+ Q.push(...T(`${IT[k].n}を つかった！`),F(()=>{m.hp=Math.min(m.mhp,m.hp+amt);if(full)m.status=null}),Wt(settled),...T(`${nm(m)}の HPが かいふくした！`),...foeTurn())}
 function run(){const m=me(),foe=B.foe;
  if(B.god||B.legend){say('ふしぎな ちからで\nにげられない！');return}
  if(B.trainer){say('トレーナーとの しょうぶから\nにげることは できない！');return}
@@ -16458,8 +16476,8 @@ function updBattle(){
  if(B.menu==='main'){B.cur=grid(B.cur,4);
   if(btnp('a')){if(B.cur===0){B.menu='moves';B.mcur=Math.min(B.mcur,m.moves.length-1)}else if(B.cur===1){B.menu='items'}else if(B.cur===2){B.menu='party';B.pcur=B.mi}else run()}}
  else if(B.menu==='moves'){B.mcur=grid(B.mcur,m.moves.length);if(btnp('b'))B.menu='main';else if(btnp('a'))turnMove(m.moves[B.mcur])}
- else if(B.menu==='items'){const n=BITEMS.length;if(btnp('up'))B.icur=(B.icur+n-1)%n;if(btnp('down'))B.icur=(B.icur+1)%n;
-  if(btnp('b'))B.menu='main';else if(btnp('a')){if(BITEMS[B.icur]==='ball'||BITEMS[B.icur]==='ballplus')throwBall(BITEMS[B.icur]);else usePotion(BITEMS[B.icur])}}
+ else if(B.menu==='items'){const n=bItems().length;if(!n){B.menu='main';say('つかえる どうぐを もっていない。');return}B.icur=Math.min(B.icur,n-1);if(btnp('up'))B.icur=(B.icur+n-1)%n;if(btnp('down'))B.icur=(B.icur+1)%n;
+  if(btnp('b'))B.menu='main';else if(btnp('a')){{const k=bItems()[B.icur];if(!k)B.menu='main';else if(isBall(k))throwBall(k);else usePotion(k)}}}
  else if(B.menu==='party'){const n=S.party.length;if(btnp('up'))B.pcur=(B.pcur+n-1)%n;if(btnp('down'))B.pcur=(B.pcur+1)%n;
   if(btnp('b'))B.menu='main';
   else if(btnp('a')){const t=S.party[B.pcur];if(B.pcur===B.mi)say(`${nm(t)}は もう でているよ！`);else if(t.hp<=0)say(`${nm(t)}は たたかえる げんきが ない！`);else doSwitch(B.pcur)}}}
@@ -16806,8 +16824,10 @@ function drawRoot(){box(8,8,164,78);txt(`おかね ${S.money}えん`,22,22,3,14)
  const RT=DEV?['かいはつしゃ',...ROOT]:ROOT;box(184,8,128,12+RT.length*24);RT.forEach((s,i)=>{hit(184,13+i*24,128,24,()=>{menu.i=i});txt(s,214,19+i*24);if(i===menu.i)txt('▶',196,19+i*24);if(s==='メール'&&unread(S))ell(272,27+i*24,4,4,'#e84848')})}
 function drawQuit(){HITS.length=0;box(0,200,320,88);txt(DEV?'かいはつしゃモードを おわって':'セーブして タイトルに',18,218);txt('もどりますか？',18,250);box(212,124,108,72);['はい','いいえ'].forEach((t,i)=>{hit(212,134+i*26,108,26,()=>{menu.q=i});txt(t,248,140+i*26);if(i===menu.q)txt('▶',230,140+i*26)})}
 function drawShop(){box(8,8,92,58);txt('おかね',20,19,3,12);txt(`${S.money}えん`,90,38,3,S.money>=10000?12:14,'right');
- // list fits above the message box (y<200): one row per item, price on the same line
- const ST=shop.stock,rows=ST.length+1,rh=Math.min(30,Math.floor(170/rows));box(104,8,208,22+rows*rh);[...ST.map(k=>IT[k].n),'やめる'].forEach((s,i)=>{const y=20+i*rh,fs=s.length>=8?12:14;hit(104,y-6,208,rh,()=>{shop.i=i});txt(s,130,y+(14-fs)/2,3,fs);if(i<ST.length){const it=IT[ST[i]];txt(it.once&&S.items[ST[i]]?'かった':`${it.price}えん`,300,y+2,it.once&&S.items[ST[i]]?'#a0aab8':2,12,'right')}if(i===shop.i)txt('▶',114,y,3,14)});
+ // 8ぎょう より おおい ときは スクロール（カーソルが みえる いちに）
+ const ST=shop.stock,LS=[...ST.map(k=>IT[k].n),'やめる'],VIS=Math.min(8,LS.length),rh=Math.min(30,Math.floor(170/VIS)),top=Math.max(0,Math.min(LS.length-VIS,shop.i-3));box(104,8,208,22+VIS*rh);
+ for(let r=0;r<VIS;r++){const i=top+r,s=LS[i],y=20+r*rh,fs=s.length>=9?11:s.length>=8?12:14;hit(104,y-6,208,rh,()=>{shop.i=i});txt(s,130,y+(14-fs)/2,3,fs);if(i<ST.length){const it=IT[ST[i]];txt(it.once&&S.items[ST[i]]?'かった':`${it.price}えん`,300,y+2,it.once&&S.items[ST[i]]?'#a0aab8':2,12,'right')}if(i===shop.i)txt('▶',114,y,3,14)}
+ if(top>0)txt('▲',306,12,2,9,'right');if(top+VIS<LS.length)txt('▼',306,18+VIS*rh,2,9,'right');
  if(!Q.length){box(0,200,320,88);if(shop.i<ST.length){const k=ST[shop.i];wrapTxt(IT[k].d,18,212,284,13,17,3);txt(IT[k].once?(S.items[k]?'もっている':'1かいだけ かえる'):`もっている かず ×${S.items[k]||0}`,18,252,2,13)}else txt('かいものを おわる',18,218,3,14)}}
 function epos(e){const k=e.mv/STEP;return[(e.x+(e.fx-e.x)*k)*TS,(e.y+(e.fy-e.y)*k)*TS]}
 function drawWorld(){
@@ -17069,7 +17089,7 @@ function drawBattle(){
  else{box(0,200,156,88);txt(`${nm(m)}は`,18,218);txt('どうする？',18,250);box(140,200,180,88);
   ['たたかう','どうぐ','てもち','にげる'].forEach((s,i)=>{const x=i%2?250:170,y=i<2?218:250;hit(x-20,y-10,80,32,()=>{B.cur=i});txt(s,x,y);if(i===B.cur)txt('▶',x-16+((frame>>4)%2),y)});
   if(B.menu==='party')drawParty(B.pcur,'いれかえ','A：いれかえる　B：もどる',i=>{B.pcur=i});
-  if(B.menu==='items')drawItems(B.icur,BITEMS,i=>{B.icur=i})}}
+  if(B.menu==='items')drawItems(B.icur,bItems(),i=>{B.icur=i})}}
 function drawBye(){R(0,0,W,H,'#101828');const a=Math.min(1,TT.t/30);c.globalAlpha=a;
  logo('くさむら',W/2,60,32,'#6cc848','#173a18');logo('モンスター',W/2,98,24,'#ffa040','#4a1a0a');
  txt('あそんで くれて ありがとう！',W/2,160,'#ffffff',14,'center');txt('この がめんを とじて だいじょうぶだよ。',W/2,186,'#c8d4e8',11,'center');
@@ -17103,7 +17123,7 @@ function drawTrans(){drawWorld();
 /* ---------- loop ---------- */
 function bgmFor(){if(mode==='evolve')return null;if(mode==='mini')return'minamo';if(mode==='trans'||mode==='battle')return B&&B.over?null:(B&&B.trainer&&B.trainer.last?'last':B&&B.trainer&&B.trainer.rival?'rival':B&&(B.legend||(B.trainer&&B.trainer.boss))?'boss':'battle');if(mode==='title'&&TT.pg==='bye')return null;if(mode==='title'||mode==='starter')return'field';
  if(ENDSCR||GODS||(S&&S.flags&&S.flags.endScene))return'ending';if(FLY)return'fuji';if(MZ)return'danger';if(S&&S.map==='kamoRuins')return'shinpi';if(S&&/^fuji/.test(S.map||''))return S.flags.fujiCalm?'ending':'fuji';if(S&&S.flags.ev6call)return SKY?'danger':'shinpi';if(S&&/^bt/.test(S.map||''))return'tower';if(S&&S.map==='cave4')return'shinpi';if(S&&['trial2','trial3','grove'].includes(S.map))return'shinpi';const rg=S&&(REGION[S.map]||S.map);if(rg==='village'&&S.flags.ev5raid)return'danger';const MUS={village:'village',town:'town',town2:'minamo',town3:'mirai',town4:'yunohama',sea5:'umi',cave:'doukutsu',town5:'takane',oami:'oami',bousou:'town',crag:'takane',kamogawa:'kaitei',route8:'umi'};if(mode==='world'&&P.surf)return'umi';if(mode==='world'&&onBike)return'bike';return MUS[rg]||'field'}
-function update(){frame++;
+function update(){frame++;keyRepeat();
  const ui=Q.length||menu||shop||mode!=='world';
  if(pressed.a&&ui)AU.sfx('sel');else if(pressed.b&&(menu||shop||(mode==='battle'&&!Q.length&&B&&B.menu!=='main')))AU.sfx('back');
  if(DIRS.some(k=>pressed[k])&&!Q.length&&(menu||shop||mode==='title'||mode==='starter'||mode==='battle'))AU.sfx('cur');
