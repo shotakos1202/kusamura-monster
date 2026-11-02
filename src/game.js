@@ -40,7 +40,7 @@ const TN={fire:'ほのお',water:'みず',grass:'くさ',rock:'いわ',elec:'で
 const TC={fire:{grass:2,water:.5,rock:.5},water:{fire:2,rock:2,grass:.5},grass:{water:2,rock:2,fire:.5,flying:.5},rock:{fire:2,elec:2,flying:2},elec:{water:2,grass:.5,rock:.5,flying:2},normal:{rock:.5},flying:{grass:2,elec:.5,rock:.5,psychic:2},psychic:{rock:2,psychic:.5}};TC.elec.psychic=2;TC.dragon={dragon:2};for(const t of['fire','water','grass','elec'])TC[t].dragon=.5;
 const eff=(a,d)=>(TC[a]&&TC[a][d])||1;
 // ダブルタイプ（さんしんだけ）：SP.type2 が あれば あいしょうは 2つの かけざん、タイプいっちも どちらかで OK
-const typesOf=id=>{const s=SP[id];return s&&s.type2?[s.type,s.type2]:[s&&s.type]},effOn=(t,id)=>typesOf(id).reduce((m,x)=>m*eff(t,x),1),stabOf=(t,id)=>typesOf(id).includes(t);
+const typesOf=id=>{const s=SP[id];return s&&s.type2?[s.type,s.type2]:[s&&s.type]},effOn=(t,id)=>typesOf(id).reduce((m,x)=>m*eff(t,x),1),stabOf=(t,id)=>typesOf(id).includes(t),STAB=1.08;
 const MV={
  butsukaru:{n:'ぶつかる',t:'normal',p:35},hinoiki:{n:'ひのいき',t:'fire',p:40},mizushibuki:{n:'みずしぶき',t:'water',p:40},
  happa:{n:'はっぱとばし',t:'grass',p:42},kuchibashi:{n:'くちばし',t:'normal',p:38},tsumuji:{n:'つむじかぜ',t:'normal',p:50},
@@ -1917,7 +1917,7 @@ Object.assign(MAPS,{
  hill:{name:'ミライの おか',out:true,rows:["TTTTTTTTTTTTTTTTTTTTTT", "T....GGGG.....GGGGG..T", "T.F..GGGG..F..GGGGG..T", "T....GGGG.....GGGGG..T", "T....................T", "TGGGG...GGGGGG...GGG.T", "TGGGG...GGGGGG...GGG.T", "........GGGGGG.......T", "........GGGGGG...S...T", "TGGG...............F.T", "TGGG..GGGGG...GGGGG..T", "TGGG..GGGGG...GGGGG..T", "T.....GGGGG...GGGGG..T", "T..F.........F.......T", "T....................T", "TTTTTTTTTTTTTTTTTTTTTT"],
   warps:{'0,7':['town3',24,14,'left'],'0,8':['town3',24,15,'left']},
   signs:{'17,8':['ミライの おか\nふしぎな モンスターが すむ おか']},
-  items:[{id:'hl1',x:20,y:1,k:'ballplus',amt:3},{id:'hl2',x:1,y:14,k:'superpotion',amt:1}],
+  items:[{id:'hl1',x:20,y:1,k:'ballplus',amt:3},{id:'hl2',x:1,y:14,k:'money',amt:1000}],
   wild:(x,y)=>[['powan',19,22,18],['yumemi',19,22,18],['tsubametto',19,21,8],['puraguru',19,21,6],['umidory',19,21,6]],
   npcs:[
    {id:'miko',x:15,y:8,dir:'left',spr:'girl',pal:['#f8d0a8','#c060c0','#3a2058','#1c1820'],sight:4,tname:'エスパーの ミコ',team:[['powan',20],['yumemi',21]],money:30,
@@ -1953,7 +1953,7 @@ Object.assign(MAPS,{
  route5:{name:'5ばんどうろ',out:true,noSurf:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T.....GGGGG......GGGGGG......F...T", "T..F..GGGGG......GGGGGG...........", "T.....GGGGG......GGGGGG...........", "T.........................S......T", "T..GGGG......GGGGGG.......GGGG...T", "TTT..TTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T...........GGGGG................T", "T..GGGGG....GGGGG.....GGGGG......T", "T..GGGGG..............GGsssssssssT", "T.........F.............sssssssssT", "TWWWWWWWWWWWWWWWWWWWWWWWWWnWWWWWWT", "TWWWWWWWWWWWWWWWWWWWWWWWWWnWWWWWWT", "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"],
   warps:{'33,2':['town3',1,14,'right'],'33,3':['town3',1,15,'right'],'26,12':['sea5',37,7,'left']},
   signs:{'26,4':['5ばんどうろ\nにし：ふなつきば → ユノハマシティ']},
-  items:[{id:'r5a',x:1,y:1,k:'superpotion',amt:2},{id:'r5b',x:1,y:10,k:'ballplus',amt:3}],
+  items:[{id:'r5a',x:1,y:1,k:'superpotion',amt:3},{id:'r5b',x:1,y:10,k:'money',amt:1200}],
   wild:(x,y)=>[['hidane',27,30,16],['koromagu',27,30,16],['kazandori',28,30,4],['hononyan',27,30,8],['puraguru',27,30,8],['umidory',27,30,8],['yumemi',27,27,3],['bakumu',28,30,5],['lunapowan',27,30,5],['kazekirio',27,30,6],['raidenga',27,30,6],['goroiwa',27,30,6],['kamasamurai',27,30,5],['homurakon',27,29,2],['namitama',27,29,2],['tsubomiru',27,29,2]],
   npcs:[
    {id:'messenger',x:31,y:2,dir:'right',spr:'boy',pal:['#f8d0a8','#58a858','#706858','#1c1820'],showIf:'ev5call',text:['むらの ひと「ちょうろうさまを\nどうか たのむ！」']},
@@ -2059,7 +2059,7 @@ Object.assign(MAPS,{
  route6:{name:'6ばんどうろ',out:true,rows:["TTTT666666666666TTTT", "TTT66666666666666TTT", "TT6666666556666666TT", "T6..........S.....6T", "T6..GGGG......GGG.6T", "T...GGGG..A...GGG..T", "T.A.......A........T", "TTTTTTT....TTTTTGGGT", "TGGGGTT....T....GGGT", "TGGGG......T.WW....T", "TGGGG..A...TWWWW...T", "T........F..WWW..A.T", "T..TTTTT.......GGG.T", "T..TGGG..A.....GGG.T", "T...GGG.......TTTTTT", "T...GGG.F.....TTTTTT", "TTT.......AA..TTTTTT", "TTTTT...........TTTT", "TTTTTTTT....TTTTTTTT", "TTTTTTTTT..TTTTTTTTT"],
   warps:{'9,19':['town4',25,1,'down'],'10,19':['town4',26,1,'down'],'9,2':['cave1',14,20,'up'],'10,2':['cave1',15,20,'up']},
   signs:{'12,3':['ひびきの どうくつ\nぬけた さきは タカネシティ']},
-  items:[{id:'r6a',x:18,y:10,k:'superpotion',amt:2},{id:'r6b',x:5,y:17,k:'revive',amt:1}],
+  items:[{id:'r6a',x:18,y:10,k:'money',amt:1500},{id:'r6b',x:5,y:17,k:'revive',amt:1}],
   wild:(x,y)=>[['hotaden',31,33,14],['kokedama',30,33,14],['miminaga',31,33,14],['mofutanu',31,33,12],['ishigaeru',31,33,10],['kazekirio',31,33,8],['umidory',31,33,6],['goroiwa',30,31,5],['gansekidon',32,33,4],['kamasamurai',31,33,5],['raidenga',31,33,5],['hononyan',30,31,6],['hyouen',32,33,3],['kazandori',32,33,3]],
   npcs:[
    {x:6,y:3,dir:'down',spr:'old',pal:HIKER,text:['この さきの どうくつは\nこえが よく ひびくんじゃ。','なかは ひろくて まよいやすい。\nきを つけて いくんじゃぞ。']},
@@ -2069,7 +2069,7 @@ Object.assign(MAPS,{
   ]},
  cave1:{name:'ひびきの どうくつ',out:true,cave:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T....TTTTTTT2...A....TTTT4..2T", "T....TTTTTTT.........TTTT....T", "TT.A...TTTTT..TTTTT..TTTT.A..T", "TTT....TTTTT..TTTTT.......TTTT", "TTTTT..TTT2...TTTTT.......TTTT", "T......TTT....TTTTTTTTT...TTTT", "T.A....TTT.A..TTTTTTTTT...A..T", "T....TTTTT....TTTT..........2T", "TT...TTTTTTT..TTTT..TTTTTTTTTT", "TT...TTTTTTT......A.TTTTTTTTTT", "T2...TTTTTTT........TTTT.....T", "T....TTTTTTTTT.TTT..TTTT..A..T", "T................T..TTTT.....T", "TTTT...TTTTTTTT..T.......TT..T", "TTTT...TTTTTTTT..TTTTTT..TT..T", "T2.....TTTTTTTT..TTTTTT.....2T", "T...A..TTTTTTTT..TTTTTTTTTTTTT", "TTTTTTTTTTTTT.....TTTTTTTTTTTT", "TTTTTTTTTTTTT..A..TTTTTTTTTTTT", "TTTTTTTTTTTTTT....TTTTTTTTTTTT", "TTTTTTTTTTTTTT77TTTTTTTTTTTTTT"],
   warps:{'14,21':['route6',9,3,'down'],'15,21':['route6',10,3,'down'],'25,1':['cave2',2,2,'down']},
-  items:[{id:'c1a',x:1,y:1,k:'superpotion',amt:2},{id:'c1b',x:28,y:11,k:'revive',amt:1},{id:'c1c',x:2,y:16,k:'ballplus',amt:3},{id:'c1d',x:20,y:1,k:'money',amt:1500}],
+  items:[{id:'c1a',x:1,y:1,k:'sugoikusuri',amt:1},{id:'c1b',x:28,y:11,k:'revive',amt:1},{id:'c1c',x:2,y:16,k:'ballplus',amt:5},{id:'c1d',x:20,y:1,k:'money',amt:1800}],
   wild:(x,y)=>[['iwamogu',32,35,20],['tsuraran',32,35,20],['kirakoro',32,35,14],['miminaga',32,34,12],['mofutanu',32,34,8],['yamibasa',32,35,8],['gansekidon',32,35,6],['ishigaeru',32,34,6],['hotaden',32,34,6],['kokedama',32,34,6]],
   npcs:[
    {id:'c1t1',x:5,y:14,dir:'up',spr:'boy',pal:HIKER,sight:2,tname:'やまおとこの ダイチ',team:[['goroiwa',31],['iwamogu',34]],money:30,say:['こんな おくまで\nよく きたな！'],lose:['まいった！'],after:['イワモグは どうくつの\nみちを ほる モンスターだ。']},
@@ -2078,7 +2078,7 @@ Object.assign(MAPS,{
   ]},
  cave2:{name:'ひびきの どうくつ おおひろま',out:true,cave:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T...TTTTTTTTTTT2.TTTT.2TTTTTTTTTTTT...TT", "TT4.TT.....TTTT..TTT.....TTT..TTTTT...TT", "TTT..............TTT......TT...2TT....TT", "T.TTT2...........TT..........2.......TTT", "T.......A........TT..................TTT", "TT.......................A...........TTT", "TTTT..........A......................TTT", "TTTT................A............A..TTTT", "TTTT.....2.....................2....TTTT", "TTTTTTTTT.......................TTTTTTTT", "TTTTTTTTT.....WWWWWWWWWWWWW.....TTTTTTTT", "TTTTTTTTT..nWWWWWWWWWWWWWWWWWn..TTTTTTTT", "TTTTTTTTTWWnWWWWWWWWWWWWWWWWWnWWTTTTTTTT", "TTTTTTTTWWWnWWWWWWW2..WWWWWWWnWWWTTTTTTT", "TTTTTTTTWWWnnnnnnnn...nnnnnnnnWWWTTTTTTT", "TTTTTTTTWWWnWWWWWWW..2WWWWWWWnWWWTTTTTTT", "TTTTTTTTTWWnWWWWWWWWWWWWWWWWWnWWTTTTTTTT", "TTTTTTTTT..nWWWWWWWWWWWWWWWWWn..TTTTTTTT", "TTTTTTTTT.....WWWWWWWWWWWWW.....TTTTTTTT", "TTTTTTTTT.......................TTTTTTTT", "TT.......2.....................2.......T", "TT2.........A...............TT...A....TT", "TTTTT.A......................T.......TTT", "T2..T........TT............A.........TTT", "T........A...T.......................2TT", "TTTT.......T....2T.....A......TTT..4..TT", "TTTTTT....TT...TTTTT....T.....TTTT...TTT", "TTTTTTTTTTTTT.TTTTTTTTTTTT....TTTTTTTTTT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"],
   warps:{'2,2':['cave1',25,1,'down'],'35,26':['cave3',2,3,'down']},
-  items:[{id:'c2a',x:20,y:14,k:'rarecandy',amt:1},{id:'c2b',x:1,y:4,k:'superpotion',amt:2},{id:'c2c',x:38,y:21,k:'revive',amt:1},{id:'c2d',x:1,y:25,k:'ballplus',amt:3},{id:'c2e',x:36,y:1,k:'money',amt:2000}],
+  items:[{id:'c2a',x:20,y:14,k:'rarecandy',amt:1},{id:'c2b',x:1,y:4,k:'sugoikusuri',amt:2},{id:'c2c',x:38,y:21,k:'revive',amt:1},{id:'c2d',x:1,y:25,k:'ballultra',amt:2},{id:'c2e',x:36,y:1,k:'money',amt:2500}],
   wild:(x,y)=>[['iwamogu',34,37,14],['tsuraran',34,35,14],['kirakoro',34,37,14],['ishigaeru',34,36,12],['kagamiko',34,37,12],['miminaga',34,35,8],['mofutanu',34,34,8],['yamibasa',34,35,8],['gansekidon',34,37,6],['kiraseki',38,39,2],['tsuraragi',36,37,2],['glencon',35,37,1],['uzushion',35,37,1],['hanamiru',35,37,1]],
   npcs:[
    {x:3,y:5,dir:'down',spr:'boy',pal:['#f8d0a8','#d8a040','#5a4a2a','#1c1820'],text:['ここは ひびきの どうくつの\nおおひろま。','こえを だすと どこまでも\nひびいて いくんだ。','はしを わたって みぎしたへ\nいけば おくへ すすめるよ。']},
@@ -2089,7 +2089,7 @@ Object.assign(MAPS,{
   ]},
  cave3:{name:'ひびきの どうくつ おく',out:true,cave:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "TTTTTTTTTTTTTTTTTTTTTT77TTTTTT", "T....TTTTTTTTTTTTTTTT....TTTTT", "T.4..A..TTTTTTTTTTTTT.A..TTTTT", "T.........TTTTTTTTTTTT..TTTTTT", "TT..A...T....TTTTTTTTT..TTTTTT", "TTT.....T.......A..TTTT.TTTTTT", "T2..............A...TTT.TTTTTT", "T....TTTTTTTTT......TTT.TTTTTT", "TT.A..TTTTTTTTTTT..TTTT.TTTTTT", "TT....TTTTTTTTTTT..TT......TTT", "T.....A..TTTTTTT...........TTT", "T2...TTT..TTTTTTTTTTT......TTT", "TT...TT...A...TTTTTT.2....2TTT", "TT...TT...TTT..TTTTTTTTTTTTTTT", "T.....A........TTTTTTTTTTTTTTT", "T2..........2..TTTTTTTTTTTTTTT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"],
   warps:{'2,3':['cave2',35,26,'up'],'22,1':['town5',13,15,'up'],'23,1':['town5',13,15,'up']},
-  items:[{id:'c3a',x:2,y:16,k:'superpotion',amt:2},{id:'c3b',x:8,y:12,k:'ballplus',amt:3},{id:'c3c',x:26,y:10,k:'revive',amt:1},{id:'cmap',x:20,y:11,k:'cavemap',amt:1,showIf:'ishimoriGone'}],
+  items:[{id:'c3a',x:2,y:16,k:'sugoikusuri',amt:2},{id:'c3b',x:8,y:12,k:'ballultra',amt:2},{id:'c3c',x:26,y:10,k:'revive',amt:2},{id:'cmap',x:20,y:11,k:'cavemap',amt:1,showIf:'ishimoriGone'}],
   wild:(x,y)=>[['tsuraran',35,35,14],['iwamogu',35,37,14],['kirakoro',35,37,12],['ishigaeru',35,36,12],['kagamiko',35,37,10],['mofutanu',34,34,8],['miminaga',35,35,8],['gansekidon',35,37,4],['maobasa',36,38,3],['kokenonushi',37,38,3],['ganmogura',38,39,3],['gamaiwa',37,38,3],['hibikimimi',36,38,3],['tanuoyabun',35,37,3]],
   npcs:[
    {id:'c3g1',x:12,y:6,dir:'down',spr:'boy',pal:GRUNT_PAL,sight:1,tname:'したっぱの コダマ',team:[['yamibasa',35],['tsuraran',35]],money:40,get say(){let g=false;try{g=!!(S&&S.flags&&S.flags.ygruntGone)}catch(e){}return g?['げっ！ また おまえかよ！','ユノハマの うらみ、\nここで はらして やる！']:['ここから さきは\nとおさねえ！','……って いうか だれ？\nまあ いいや、 しょうぶだ！']},lose:['コダマ「まって？\nおれ わるい？」'],after:['コダマ「おれは わるくねえ！\nおまえが つよすぎるんだ！」','コダマ「この おくには かんぶの\nイシモリさまが いるんだからな！」']},
@@ -2149,6 +2149,10 @@ MAPS.nbr.npcs.push({id:'tatsuV',x:4,y:6,dir:'up',spr:'boy',pal:TATSU_PAL,showIf:
 MAPS.forest.npcs.push({id:'tatsuF',x:14,y:37,dir:'down',spr:'boy',pal:TATSU_PAL,showIf:'tfShow',hideFlag:'tatsu1',rival:true,tname:'ライバルの タツヤ',get team(){const b=rivalBase();return[['tsubametto',11],['koroishi',11],[b,12]]},money:50,say:[],lose:['タツヤ「……へえ。\nやるじゃん。」'],after:['……'],onWin:()=>tatsuForestWin()});
 MAPS.town4.npcs.push({id:'tatsu6',x:13,y:15,dir:'up',spr:'boy',pal:TATSU_PAL,showIf:'t6Show',hideFlag:'tatsu2',rival:true,tname:'ライバルの タツヤ',get team(){const b=rivalBase();return[['kazekirio',37],['gansekidon',37],['raidenga',38],[EVO3[b],40]]},money:90,say:[],lose:['タツヤ「うおっ……\nまじかよ！」'],after:['……'],onWin:()=>tatsuYunohamaWin()});
 // みずの うえ（かんいボート）の やせいの モンスター
+// かんいボートで のれる みずべ：その エリア そうとうの みずタイプ
+Object.assign(MAPS.village,{wildW:()=>[['rakkoro',3,5,45],['hasagani',3,5,45],['mizutama',3,4,2]]});
+Object.assign(MAPS.town2,{wildW:()=>[['rakkoro',16,19,40],['hasagani',16,19,40],['yoroigani',20,21,8],['namitama',16,18,2]]});
+Object.assign(MAPS.town3,{wildW:()=>[['rakkoole',22,24,30],['yoroigani',21,24,30],['rakkoro',19,21,20],['fuwakura',22,24,8],['namitama',20,22,2]]});
 Object.assign(MAPS.route3,{wildW:()=>[['rakkoro',18,21,30],['rakkoole',22,22,5],['hasagani',18,19,25],['yoroigani',20,22,8],['umidory',18,22,20],['tsubametto',18,21,10]]});
 Object.assign(MAPS.coast,{wildW:()=>[['rakkoole',22,26,30],['yoroigani',22,26,25],['umidory',22,26,25],['fuwakura',24,26,10]]});
 Object.assign(MAPS.town4,{wildW:()=>[['fuwakura',30,33,30],['tobiuon',30,33,30],['namigame',31,33,20],['rakkoole',32,34,10],['yoroigani',31,33,10]]});
@@ -2164,7 +2168,7 @@ Object.assign(MAPS,{
  route7:{name:'7ばんどうろ',out:true,rows:["TTTTTTTTT..TTTTTTTTT", "T.....T..........F.T", "T.GGG.T......T.GGG.T", "T.GGG........T.GGG.T", "T.GGG..A.....A..G..T", "T.......GGGGG......T", "TTTT....GGGGG...TTTT", "T.......GGGGG......T", "T..F..........F....T", "TWWWWWWWWnnWWWWWWWWT", "TWWWWWWWWnnWWWWWWWWT", "T...G.........G....T", "T..GGG..TT...GGG...T", "T..GGG..TT...GGG...T", "T.......TT.........T", "TTTTT.........TTTTTT", "T.....GGGGGG.......T", "T.A...GGGGGG...A...T", "T.....GGGGGG.......T", "T..................T", "T..TTTT....TTTT..F.T", "T..TTTT....TTTT....T", "T.GG...........GG..T", "T.GG....S......GG..T", "T..................T", "T.F..............F.T", "T..................T", "TTTTTTTTT..TTTTTTTTT"],
   warps:{'9,27':['town5',12,1,'down'],'10,27':['town5',13,1,'down'],'9,0':['oami',11,18,'up'],'10,0':['oami',12,18,'up']},
   signs:{'8,23':['7ばんどうろ\nきた：オオアミシティ']},
-  items:[{id:'r7a',x:18,y:1,k:'superpotion',amt:2},{id:'r7b',x:1,y:26,k:'revive',amt:1},{id:'r7c',x:17,y:13,k:'ballplus',amt:3}],
+  items:[{id:'r7a',x:18,y:1,k:'sugoikusuri',amt:2},{id:'r7b',x:1,y:26,k:'revive',amt:2},{id:'r7c',x:17,y:13,k:'money',amt:3000}],
   wild:(x,y)=>[['hibikimimi',40,42,14],['tanuoyabun',40,42,14],['inabikari',40,42,12],['kazandori',40,42,12],['gansekidon',41,43,10],['kokenonushi',40,42,12],['makyou',41,42,10],['kazekirio',41,43,8],['tsurugidora',40,42,3]],
   npcs:[
    {id:'r7t1',x:12,y:3,dir:'left',spr:'boy',pal:['#f8d0a8','#3c56aa','#1e2440','#1c1820'],sight:4,tname:'ドラゴンつかいの リュウジ',team:[['tsurugidora',42],['kazekirio',43]],money:44,say:['りゅうの ちからを\nみせて やる！'],lose:['りゅうが…… まけた……'],after:['ツルギドラは この みちで\nまれに みつかるんだ。','つよい りゅうに そだつぞ！']},
@@ -2214,14 +2218,14 @@ Object.assign(MAPS,{
   npcs:[{id:'b50g',x:2,y:3,dir:'right',spr:'girl',pal:GRUNT_PAL,sight:5,tname:'くろふくの おんな',team:[['tsuraragi',44],['hyouen',44]],money:40,say:['エレベーターから\nでてきたのは だれ？'],lose:['うそでしょ……'],after:['この さきは かいだんよ。\nキヨシさまは いちばん うえ。']}]},
  bt51:{name:'ブラックタワー 51F',tower:true,rows:["TTTTTTTTTTTT", "T$...T....3T", "T....T.....T", "T....T.....T", "T....T.....T", "T....TTT.TTT", "T..........T", "T..........T", "T.TTTT.TTT.T", "T..........T", "T..........T", "TTTTTTTTTTTT"],
   warps:{'1,1':['bt50',7,1,'down'],'10,1':['bt52',10,1,'down']},
-  items:[{id:'b51a',x:3,y:3,k:'superpotion',amt:2}],
+  items:[{id:'b51a',x:3,y:3,k:'ballultra',amt:3}],
   npcs:[
    {id:'kodamaT',x:8,y:5,dir:'down',spr:'boy',pal:GRUNT_PAL,sight:2,hideFlag:'kodamaTGone',tname:'したっぱの コダマ',team:[['maobasa',45],['tsuraragi',45],['magumajiro',46]],money:50,
     say:['あーっ！ また おまえか！','ここは おれさまが\nまかされた フロアだ！','きょうこそ ぜったいに\nとおさねえからな！'],lose:['コダマ「まって？\nおれ わるい？」'],after:['……'],onWin:()=>kodamaTWin()},
    {id:'b51g',x:1,y:9,dir:'right',spr:'girl',pal:GRUNT_PAL,sight:6,tname:'くろふくの おんな',team:[['bakumu',44],['maobasa',45]],money:40,say:['コダマなんかに\nまかせて られないわ！'],lose:['……やるじゃない。'],after:['コダマは へっぽこだけど\nなぜか しんらい されてるのよね。']}]},
  bt52:{name:'ブラックタワー 52F',tower:true,rows:["TTTTTTTTTTTT", "T3..T....T$T", "T...T.TT.T.T", "T...T..T.T.T", "T.TTTT.T...T", "T......T.TTT", "TTTT.TTT...T", "T........T.T", "T.TTTTTT.T.T", "T........T.T", "T..........T", "TTTTTTTTTTTT"],
   warps:{'10,1':['bt51',10,1,'down'],'1,1':['bt53',10,10,'up']},
-  items:[{id:'b52a',x:10,y:10,k:'revive',amt:1},{id:'b52b',x:1,y:10,k:'superpotion',amt:2}],
+  items:[{id:'b52a',x:10,y:10,k:'kesshou',amt:1},{id:'b52b',x:1,y:10,k:'sugoikusuri',amt:2}],
   npcs:[
    {id:'b52g1',x:3,y:2,dir:'left',spr:'boy',pal:GRUNT_PAL,sight:2,tname:'くろふくの おとこ',team:[['gamaiwa',45],['kazandori',45]],money:40,say:['かいだんは この さきだ。\nとおれる ものなら な！'],lose:['ぐっ……'],after:['53Fには オオスギさまが いる。\nあの ひとは ばけものだぞ。']},
    {id:'b52g2',x:8,y:5,dir:'up',spr:'girl',pal:GRUNT_PAL,sight:1,tname:'くろふくの おんな',team:[['lunapowan',45],['ganmogura',45]],money:40,say:['まちなさい！'],lose:['きゃあっ！'],after:['……あのかたの ことは\nわたしたちも しらないの。']},
@@ -2234,7 +2238,7 @@ Object.assign(MAPS,{
    {id:'b53g',x:5,y:8,dir:'up',spr:'girl',pal:GRUNT_PAL,sight:3,tname:'くろふくの おんな',team:[['makyou',46],['hyouen',46]],money:42,say:['オオスギさまの じゃまは\nさせないわ！'],lose:['オオスギさまに しかられる……'],after:['オオスギさまは ちからじまん。\nあたまは…… ちょっと ね。']}]},
  bt54:{name:'ブラックタワー 54F',tower:true,rows:["TTTTTTTTTTTT", "T........T3T", "T........T.T", "T.TTT.TTTT.T", "T....T.....T", "T.TT.T.TTT.T", "T..T...T...T", "TT.T.T.T.TTT", "T....T.T...T", "T.TTTT.TTT.T", "T$.........T", "TTTTTTTTTTTT"],
   warps:{'1,10':['bt53',1,1,'down'],'10,1':['bt55',5,10,'up']},
-  items:[{id:'b54a',x:1,y:1,k:'revive',amt:1}],
+  items:[{id:'b54a',x:1,y:1,k:'money',amt:3500}],
   npcs:[
    {id:'ishimoriT',x:10,y:3,dir:'down',spr:'boy',pal:ISHI_PAL,boss:true,hideFlag:'ishimoriTGone',tname:'かんぶの イシモリ',team:[['tsuraragi',48],['kiraseki',49],['gamaiwa',49],['ganmogura',50]],money:110,
     say:['……また あったな、 こぞう。','どうくつでの くつじょく……\nわすれては いない。','この うえに いるのは キヨシさま。\nそして おまえの じじいだ。','だが ここから さきへは\nいっぽも いかせん！','いしの ように くだけちれ！'],lose:['イシモリ「……ばかな。\nまた しても……」'],after:['……'],onWin:()=>ishimoriTWin()},
@@ -2262,7 +2266,7 @@ Object.assign(MAPS,{
  route8:{name:'8ばんどうろ',out:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T..GGGG.....TTT....GGGGG......FT", "T..GGGG..F..TTT....GGGGG.......T", "T.......................GG.....T", "T...GGG...........GGG..........T", "T...GGG.....N.....GGG....GGG...T", "................................", "T......GGGG.......S......GGG...T", "T......GGGG..............GGG...T", "ssssssssssssssssssssssssssssssss", "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"],
   warps:{'0,6':['oami',22,12,'left'],'31,6':['bousou',1,15,'right']},
   signs:{'18,7':['8ばんどうろ\nひがし：ぼうそうむら']},
-  items:[{id:'r8a',x:29,y:2,k:'superpotion',amt:2},{id:'r8b',x:2,y:8,k:'revive',amt:1}],
+  items:[{id:'r8a',x:29,y:2,k:'sugoikusuri',amt:3},{id:'r8b',x:2,y:8,k:'money',amt:4000}],
   wild:(x,y)=>[['hibikimimi',49,52,15],['tanuoyabun',49,52,15],['kazandori',49,52,12],['maobasa',49,52,12],['inabikari',49,52,12],['umidory',49,52,12],['kokenonushi',49,52,10],['magumajiro',49,52,8],['hanetokage',49,50,3]],
   wildW:()=>[['tobiuon',49,52,30],['namigame',49,52,30],['rakkoole',49,52,25],['daiogani',50,52,15]],
   npcs:[
@@ -2286,7 +2290,7 @@ Object.assign(MAPS,{
  crag:{name:'とがった いわの やま',out:true,crag:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTT", "T..TT.....WWWW.....TT..T", "T..T.GGG..WWWW..GGG.T..T", "T....GGG........GGG....T", "TT...GGG..TTTT..GGG...TT", "T.........TTTT.........T", "T..GGGG..........GGGG..T", "T..GGGG...A..A...GGGG..T", "TTT.GG............GG.TTT", "T.....TTT......TTT.....T", "T.GGG.TTT..GG..TTT.GGG.T", "T.GGG.....GGGG.....GGG.T", "T.GGG.....GGGG.....GGG.T", "T......TT......TT......T", "TTTT...TT..GG..TT...TTTT", "T.........GGGG.........T", "T..GGGG...GGGG...GGGG..T", "T..GGGG..........GGGG..T", "T.......TTTTTTTT.......T", "T..A....TTTTTTTT....A..T", "T......................T", "TTTTT..GGGG..GGGG..TTTTT", "T......GGGG..GGGG......T", "T..TT..........S...TT..T", "T..TT..................T", "T.......GG....GG.......T", "T.......GG....GG.......T", "TTTTTTTTTTT..TTTTTTTTTTT"],
   warps:{'11,27':['bousou',11,1,'down'],'12,27':['bousou',12,1,'down']},
   signs:{'15,23':['とがった いわの やま りゅうの\nすむ やま。 いわに ちゅうい！']},
-  items:[{id:'cg1',x:1,y:1,k:'rarecandy',amt:1},{id:'cg2',x:22,y:1,k:'revive',amt:1},{id:'cg3',x:12,y:24,k:'superpotion',amt:3}],
+  items:[{id:'cg1',x:1,y:1,k:'rarecandy',amt:1},{id:'cg2',x:22,y:1,k:'kesshou',amt:1},{id:'cg3',x:12,y:24,k:'ballultra',amt:5}],
   wild:(x,y)=>[['hanetokage',51,54,25],['tsunoryuu',51,54,25],['mizuchi',52,54,8],['gansekidon',52,54,10],['tsuraragi',52,54,10],['kazekirio',52,54,10],['maobasa',52,54,8]],
   npcs:[
    {id:'cgt1',x:5,y:20,dir:'right',spr:'girl',pal:['#f8d0a8','#2a8c86','#4a4a52','#2a1a14'],sight:4,tname:'ドラゴンつかいの カエデ',team:[['hanetokage',53],['tsunoryuu',54]],money:52,say:['りゅうの こころが\nわかるかしら？'],lose:['いい めを してるわね。'],after:['ハネトカゲは Lv57で\nソウテンリュウに なるのよ。']},
@@ -2339,11 +2343,11 @@ Object.assign(MAPS,{
   ]},
  fuji1:{name:'マウントフジ ちゅうふく',out:true,volcano:true,fujiReturn:true,rows:["TTTTTTTTTTT..TTTTTTTTTTT", "TJJJ...GGGG..GGGG...JJJT", "TJJ....GGGG..GGGG....JJT", "T...g..............g...T", "T.GGGG..TTTTTTTT..GGGG.T", "T.GGGG..TJJJJJJT..GGGG.T", "T.GGGG..TTTTTTTT..GGGG.T", "T......................T", "TTTT...GGGGGGGGGG...TTTT", "TJJT...GGGGGGGGGG...TJJT", "TJJT................TJJT", "T......g.......g.......T", "T.GGGGG..TTTTTT..GGGGG.T", "T.GGGGG..TJJJJT..GGGGG.T", "T.GGGGG..TTTTTT..GGGGG.T", "T......................T", "TTTTT..GGGG..GGGG..TTTTT", "TJJJT..GGGG..GGGG..TJJJT", "T......................T", "T..g......JJJJ......g..T", "T.GGGG....JJJJ....GGGG.T", "T.GGGG............GGGG.T", "T......TT......TT......T", "TTTT...TT..GG..TT...TTTT", "T..........GG..........T", "T......................T", "T....Q.........S.......T", "T......................T", "T......................T", "TTTTTTTTTTTTTTTTTTTTTTTT"],
   warps:{'11,0':['fuji2',11,24,'up'],'12,0':['fuji2',12,24,'up']},
-  items:[{id:'fj1',x:1,y:3,k:'revive',amt:2},{id:'fj2',x:22,y:15,k:'rarecandy',amt:1},{id:'fj3',x:2,y:25,k:'superpotion',amt:3}],
+  items:[{id:'fj1',x:1,y:3,k:'kesshou',amt:2},{id:'fj2',x:22,y:15,k:'rarecandy',amt:1},{id:'fj3',x:2,y:25,k:'money',amt:5000}],
   wild:(x,y)=>FUJI_WILD,npcs:[]},
  fuji2:{name:'マウントフジ さんちょう',out:true,volcano:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTT", "TTTTTTJJ&&&&&&&&JJTTTTTT", "TTTTJJ&&&&&&&&&&&&JJTTTT", "TTTJJ&&&&&&&&&&&&&&JJTTT", "TTTJ..................JT", "TT....................TT", "TT....................TT", "TTT..g............g..TTT", "TTTT................TTTT", "TTTTTT....GGGG....TTTTTT", "TJJTTT....GGGG....TTTJJT", "TJJT......GGGG......TJJT", "T....GGG........GGG....T", "T....GGG..TTTT..GGG....T", "T.g..GGG..TJJT..GGG..g.T", "T.........TTTT.........T", "TTTT..GGGG....GGGG..TTTT", "TJJT..GGGG....GGGG..TJJT", "T......................T", "T...GGGG........GGGG...T", "T...GGGG..TTTT..GGGG...T", "TT........TJJT........TT", "TTT.......TTTT.......TTT", "TTTT......GGGG......TTTT", "TTTTT.....GGGG.....TTTTT", "TTTTTTTTTTT..TTTTTTTTTTT"],
   warps:{'11,25':['fuji1',11,1,'down'],'12,25':['fuji1',12,1,'down']},
-  items:[{id:'fj4',x:1,y:18,k:'revive',amt:2}],
+  items:[{id:'fj4',x:1,y:18,k:'kesshou',amt:2}],
   wild:(x,y)=>FUJI_WILD,
   npcs:[
    {id:'teruiF',x:11,y:9,dir:'down',spr:'boy',pal:TERUI_PAL,hideFlag:'endingDone',boss:true,tname:'かめんの おとこ',get pal(){return S&&S.flags.teruiUnmask?TERUI_FACE:TERUI_PAL},team:[['raidenga',64],['ganmogura',64],['makyou',65],['zantetsuryu',66],['uppy',67]],money:150,say:['かめんの おとこ「……こい。」'],lose:['かめんの おとこ「……ここまで\nだな。」'],after:['……'],onWin:()=>teruiFujiWin()},
@@ -2356,6 +2360,8 @@ Object.assign(MAPS,{
 MAPS.home.npcs.push({id:'fatherH',x:7,y:3,dir:'down',spr:'boy',pal:FATHER_PAL,showIf:'endingDone',text:['とうさん「……ありがとう。\nおまえの おかげだ。」','とうさん「これからは かぞく\nみんなで この むらを まもって\nいくよ。」']},
  {id:'brotherH',x:7,y:5,dir:'left',spr:'boy',pal:TERUI_FACE,showIf:'endingDone',text:['にいちゃん「おまえ、 ほんとに\nつよく なったな。」','にいちゃん「こんど おれとも\nしょうぶ しような！」']},
  {id:'grandpaH',x:6,y:3,dir:'down',spr:'old',pal:ELDER_PAL,showIf:'endScene',text:['おじいちゃん「……よく\nやったのう。」']});
+Object.assign(MAPS.route7,{wildW:()=>[['namigame',40,42,30],['tobiuon',40,42,30],['rakkoole',40,42,20],['daiogani',41,43,15],['uzushion',41,43,2]]});
+Object.assign(MAPS.crag,{wildW:()=>[['daiogani',52,54,30],['namigame',51,54,25],['tobiuon',51,54,25],['fuwakura',51,54,15],['uzushion',52,54,2]]});
 for(const id in MAPS){const m=MAPS[id];m.npcs=m.npcs||[];m.npcs.forEach(e=>{e.hx=e.x;e.hy=e.y;e.hdir=e.dir;e.fx=e.x;e.fy=e.y;e.mv=0;e.alert=0;e.trainer=!!e.team});m.h=m.rows.length;m.w=m.rows[0].length}
 let CUR=MAPS.village;
 const at=(x,y)=>(x<0||y<0||x>=CUR.w||y>=CUR.h)?(CUR.out?'T':' '):CUR.rows[y][x];
@@ -3374,6 +3380,7 @@ const NEWS=[
  {id:'2026.11.02b',title:'ジェットパック はつばい！',body:['こんかいの こうしん：','・オオアミシティの ショップで\n ジェットパックが かえるように！\n （5まんえん）','・マップで いったことの ある\n まちを えらぶと とんで いけるよ','・とぶには ジェットねんりょうが いるよ。\n ジェットパックを かうと\n どの ショップでも かえるように なるよ','・タイトルに「ゲームを おわる」を\n ついか したよ']},
  {id:'2026.11.02c',title:'ものがたりの さいごまで！',body:['こんかいの こうしん：','・オオアミシティの さきに\n 8ばんどうろ と ぼうそうむら','・ドラゴンの すむ\n とがった いわの やま','・うみの そこの まち\n カモガワシティ（フェリーで いこう）','・あたらしい ジムが 2つ。\n バッジは ぜんぶで 8こ！','・あたらしい ドラゴンが 5しゅるい','・そして…… ものがたりの さいごまで\n あそべるように なったよ','・かいわの もじが ゆっくり\n でるように なったよ','さいごまで たのしんでね！']},
  {id:'2026.11.02d',title:'あたらしい どうぐと ドラゴン',body:['こんかいの こうしん：','・ショップに あたらしい どうぐ！\n ユノハマシティ から：\n げんきのけっしょう','・オオアミシティ から：\n ボールウルトラ・すげーくすり・\n ふしぎなキャンディ','・ドラゴンの わざが パワーアップ！\n どの タイプにも すこし つよく\n きゅうしょにも あたりやすい','・どうぐは もっている ものだけ\n でるように なったよ','・メニューで うえ・したを ながおし\n すると はやく うごくよ']},
+ {id:'2026.11.02e',title:'かいもの が べんりに',body:['こんかいの こうしん：','・ショップで いちどに\n たくさん かえるように！\n （▲▼で 1こ、 ◀▶で 10こ）','・くすりなどを おなじ モンスターに\n つづけて つかえるように','・ボールウルトラが きんいろに！','・みちに おちている どうぐが\n さきへ すすむほど ごうかに','・かんいボートで のれる みずべに\n みずタイプの モンスターが でるよ','・じぶんと おなじ タイプの わざの\n いりょくを ちょうせい したよ']},
 ];
 let toast=null;
 function deliverNews(st){st.mail=st.mail||[];const ids=NEWS.map(n=>n.id);let from=st.newsSeen?ids.indexOf(st.newsSeen)+1:Math.max(0,NEWS.length-1);let n=0;
@@ -3646,10 +3653,14 @@ function talk(e){if(e.obj)return objTalk(e);e.dir=OPP[P.dir];
  if(e.role==='tutor')return tutorTalk();
  if(e.role==='gift'){if(!S.flags.gift){S.flags.gift=true;S.items.potion+=3;say('たびの とちゅうかい？\nこれを もっていきなさい。','くすりを 3こ もらった！','くすりは メニューの どうぐから\nつかえるぞ。');save()}else say('ジムに いどむなら\nくすりを わすれずにな。');return}
  say(...e.text)}
+function shopMax(k){return Math.max(1,Math.min(99,Math.floor(S.money/IT[k].price)))}
+function buyQty(){const q=shop.qty,it=IT[q.k],tot=it.price*q.n;shop.qty=null;if(S.money<tot)return say('おかねが たりない ようです…');S.money-=tot;S.items[q.k]=(S.items[q.k]||0)+q.n;AU.sfx('buy');say(`${it.n}を ${q.n}こ かった！`);save()}
 function updShop(){const ST=shop.stock,n=ST.length+1,a=btnp('a'),b=btnp('b');
+ if(shop.qty){const q=shop.qty,mx=shopMax(q.k);if(btnp('up'))q.n=q.n>=mx?1:q.n+1;if(btnp('down'))q.n=q.n<=1?mx:q.n-1;if(btnp('right'))q.n=Math.min(mx,q.n+10);if(btnp('left'))q.n=Math.max(1,q.n-10);
+  if(b){shop.qty=null;return}if(a)buyQty();return}
  if(btnp('up'))shop.i=(shop.i+n-1)%n;if(btnp('down'))shop.i=(shop.i+1)%n;
  if(b||(a&&shop.i===n-1)){shop=null;say('ありがとう ございました！');return}
- if(a){const k=ST[shop.i],it=IT[k];if(it.once&&S.items[k]){say(`${it.n}は もう もっている！`);return}if(S.money<it.price)say('おかねが たりない ようです…');else{S.money-=it.price;S.items[k]=(S.items[k]||0)+1;AU.sfx('buy');say(`${it.n}を かった！`,...(k==='bike'?['Aボタンを 2かい れんだ すると\nのったり おりたり できるよ！']:k==='boat'?['みずの ほうを むいて\nAボタンで のれるよ！']:k==='jetpack'?['マップで まちを えらぶと\nとんで いけるよ！','ねんりょうは ショップで\nかってね。']:[]));save()}}}
+ if(a){const k=ST[shop.i],it=IT[k];if(it.once&&S.items[k]){say(`${it.n}は もう もっている！`);return}if(S.money<it.price)say('おかねが たりない ようです…');else if(!it.once){shop.qty={k,n:1}}else{S.money-=it.price;S.items[k]=(S.items[k]||0)+1;AU.sfx('buy');say(`${it.n}を かった！`,...(k==='bike'?['Aボタンを 2かい れんだ すると\nのったり おりたり できるよ！']:k==='boat'?['みずの ほうを むいて\nAボタンで のれるよ！']:k==='jetpack'?['マップで まちを えらぶと\nとんで いけるよ！','ねんりょうは ショップで\nかってね。']:[]));save()}}}
 const ROOT=['てもち','どうぐ','ずかん','マップ','メール','レポート','タイトルへ','とじる'];
 function updMenu(){const m=menu;
  if(m.pg==='root'){const RT=DEV?['かいはつしゃ',...ROOT]:ROOT,n=RT.length;if(btnp('up'))m.i=(m.i+n-1)%n;if(btnp('down'))m.i=(m.i+1)%n;
@@ -3690,7 +3701,7 @@ function updMenu(){const m=menu;
     else if(k==='sugoikusuri'){if(t.hp<=0||(t.hp>=t.mhp&&!t.status))say('つかっても こうかが ないよ。');else{t.hp=t.mhp;t.status=null;S.items[k]--;AU.jingle('heal');say(`${nm(t)}は すっかり げんきに なった！`);ok=true}}
     else if(k==='revive'||k==='kesshou'){if(t.hp>0)say('つかっても こうかが ないよ。');else{t.hp=k==='kesshou'?t.mhp:Math.max(1,Math.floor(t.mhp/2));t.status=null;S.items[k]--;AU.jingle('heal');say(`${nm(t)}は げんきを とりもどした！`);ok=true}}
     else if(k==='rarecandy'){if(t.lv>=LVMAX)say('これいじょう レベルは あがらない。');else{S.items[k]--;Q.push(...candyUp(t));ok=true}}
-    if(ok){m.pg='items';m.use=null;save()}}
+    if(ok){save();if((S.items[k]||0)<=0){m.pg='items';m.use=null;m.k=Math.max(0,Math.min(m.k,visItems().length-1))}}}
    else{m.pg='pmenu';m.sub=0}}}}
 
 /* ---------- battle ---------- */
@@ -3726,7 +3737,7 @@ function inflict(def,kind,who,fromHit){return[F(()=>{const ty=typesOf(def.id);
  def.status=kind;if(kind==='slp')def.slp=2+(Math.random()*3|0);
  return T(kind==='brn'?`${who}は やけどを おった！`:kind==='par'?`${who}は まひして\nわざが でにくくなった！`:`${who}は\nねむってしまった！`)})]}
 function resolve(att,def,mv,isP,who){const sd=side(isP),od=side(!isP),dwho=lab(def,!isP),r=[];
- if(mv.p){const hits=mv.hits?mv.hits[0]+(Math.random()*(mv.hits[1]-mv.hits[0]+1)|0):1,e=effOn(mv.t,def.id),stab=stabOf(mv.t,att.id)?1.5:1;let total=0,n=0,crit1=false,hp=def.hp;const dm=[];
+ if(mv.p){const hits=mv.hits?mv.hits[0]+(Math.random()*(mv.hits[1]-mv.hits[0]+1)|0):1,e=effOn(mv.t,def.id),stab=stabOf(mv.t,att.id)?STAB:1;let total=0,n=0,crit1=false,hp=def.hp;const dm=[];
   for(let h=0;h<hits&&hp>0;h++){const crit=Math.random()<(mv.crit||mv.t==='dragon'?1/4:1/16)?1.5:1;if(crit>1)crit1=true;
    const A=att.atk*smul(B.st[sd].atk)*(att.status==='brn'?.5:1),Df=def.def*smul(B.st[od].def);
    let d=Math.max(1,Math.floor((((2*att.lv/5+2)*mv.p*A/Df)/50+2)*stab*e*(mv.t==='dragon'?DRAGON_BONUS:1)*crit*(0.85+Math.random()*0.15)));if(DEV&&DEV.ohko&&isP)d=Math.max(d,hp);hp=Math.max(B.god?1:0,hp-d);dm.push(d);total+=d;n++}
@@ -3770,7 +3781,7 @@ function foeMove(){const f=B.foe,tg=me();
  const ok=f.moves.filter(id=>{const v=MV[id];if(v.heal)return f.hp<f.mhp*.5;if(!v.p&&v.status)return!tg.status;if(v.seed)return!B.dot.me;if(!v.p&&v.stat)return Math.abs(B.st[v.self?'foe':'me'][v.stat])<3;return true});
  const pool=ok.length?ok:f.moves;
  if(!B.trainer||Math.random()<.3)return rnd(pool);
- let best=pool[0],bv=-1;for(const id of pool){const v=MV[id];const val=v.p?v.p*effOn(v.t,tg.id)*(stabOf(v.t,f.id)?1.5:1)*(v.hits?(v.hits[0]+v.hits[1])/2:1):(v.heal?60:30);if(val>bv){bv=val;best=id}}return best}
+ let best=pool[0],bv=-1;for(const id of pool){const v=MV[id];const val=v.p?v.p*effOn(v.t,tg.id)*(stabOf(v.t,f.id)?STAB:1)*(v.hits?(v.hits[0]+v.hits[1])/2:1):(v.heal?60:30);if(val>bv){bv=val;best=id}}return best}
 const foeAtk=()=>atk(B.foe,false,foeMove());
 function endTurn(){return[F(()=>{if(!B||B.over)return[];B.flinch={me:false,foe:false};const r=[];
  for(const sd of ['me','foe']){const m=sd==='me'?me():B.foe,who=lab(m,sd==='me'),od=sd==='me'?'foe':'me';
@@ -4369,8 +4380,11 @@ function drawQuit(){HITS.length=0;box(0,200,320,88);txt(DEV?'かいはつしゃ�
 function drawShop(){box(8,8,92,58);txt('おかね',20,19,3,12);txt(`${S.money}えん`,90,38,3,S.money>=10000?12:14,'right');
  // 8ぎょう より おおい ときは スクロール（カーソルが みえる いちに）
  const ST=shop.stock,LS=[...ST.map(k=>IT[k].n),'やめる'],VIS=Math.min(8,LS.length),rh=Math.min(30,Math.floor(170/VIS)),top=Math.max(0,Math.min(LS.length-VIS,shop.i-3));box(104,8,208,22+VIS*rh);
- for(let r=0;r<VIS;r++){const i=top+r,s=LS[i],y=20+r*rh,fs=s.length>=9?11:s.length>=8?12:14;hit(104,y-6,208,rh,()=>{shop.i=i});txt(s,130,y+(14-fs)/2,3,fs);if(i<ST.length){const it=IT[ST[i]];txt(it.once&&S.items[ST[i]]?'かった':`${it.price}えん`,300,y+2,it.once&&S.items[ST[i]]?'#a0aab8':2,12,'right')}if(i===shop.i)txt('▶',114,y,3,14)}
+ for(let r=0;r<VIS;r++){const i=top+r,s=LS[i],y=20+r*rh,fs=s.length>=9?11:s.length>=8?12:14;if(!shop.qty)hit(104,y-6,208,rh,()=>{shop.i=i});txt(s,130,y+(14-fs)/2,3,fs);if(i<ST.length){const it=IT[ST[i]];txt(it.once&&S.items[ST[i]]?'かった':`${it.price}えん`,300,y+2,it.once&&S.items[ST[i]]?'#a0aab8':2,12,'right')}if(i===shop.i)txt('▶',114,y,3,14)}
  if(top>0)txt('▲',306,12,2,9,'right');if(top+VIS<LS.length)txt('▼',306,18+VIS*rh,2,9,'right');
+ if(!Q.length&&shop.qty){const q=shop.qty,it=IT[q.k],mx=shopMax(q.k),bt=(x,l,fn)=>{box(x,226,40,32);txt(l,x+20,234,3,16,'center');hit(x,226,40,32,fn,false,true)};box(0,200,320,88);
+  txt(it.n.length>=7?`${it.n}を かう`:`${it.n}を いくつ かう？`,18,210,3,13);bt(18,'−',()=>{q.n=q.n<=1?mx:q.n-1});txt(`×${q.n}`,104,233,3,16,'center');bt(150,'＋',()=>{q.n=q.n>=mx?1:q.n+1});
+  txt(`${it.price*q.n}えん`,302,210,3,13,'right');box(206,226,96,32);txt('かう',254,234,3,16,'center');hit(206,226,96,32,()=>{});txt('▲▼：1こ　◀▶：10こ　B：やめる',18,266,2,10);return}
  if(!Q.length){box(0,200,320,88);if(shop.i<ST.length){const k=ST[shop.i];wrapTxt(IT[k].d,18,212,284,13,17,3);txt(IT[k].once?(S.items[k]?'もっている':'1かいだけ かえる'):`もっている かず ×${S.items[k]||0}`,18,252,2,13)}else txt('かいものを おわる',18,218,3,14)}}
 function epos(e){const k=e.mv/STEP;return[(e.x+(e.fx-e.x)*k)*TS,(e.y+(e.fy-e.y)*k)*TS]}
 function drawWorld(){
@@ -4398,13 +4412,13 @@ function drawWorld(){
  drawSkyEv();
  areaFx(cx,cy);if(MZ)drawMZ(cx,cy);if(MZF)drawMZF(cx,cy);if(GODS)drawGods();if(FLY)drawFly();if(KAISOU)drawKaisou();if(BLACKOUT>0){c.globalAlpha=BLACKOUT;R(0,0,W,H,'#000000');c.globalAlpha=1}if(ENDSCR)drawEnd();
  if(nameT>0&&CUR.name&&!Q.length){const w=CUR.name.length*16+28;box(8,8,w,40);txt(CUR.name,22,20)}
- if(menu){if(menu.pg==='root')drawRoot();else if(menu.pg==='dev')drawList(menu.dev[menu.dev.length-1]);else if(menu.pg==='mail')drawMailUI(menu.mu,S.mail||[]);else if(menu.pg==='quit'){drawRoot();drawQuit()}else if(menu.pg==='party'||menu.pg==='pmenu'){drawParty(menu.j,menu.use?'だれに つかう？':'てもち',menu.use?'A：つかう　B：もどる':'A：えらぶ　B：もどる',i=>{menu.j=i});if(menu.pg==='pmenu')drawPMenu()}else if(menu.pg==='stat')drawStatus(menu.j,menu.mv,menu.pick);else if(menu.pg==='wmap')drawWorldMap(menu.w||0);else if(menu.pg==='items')drawItems(menu.k,visItems(),i=>{menu.k=i});else if(menu.pg==='dex')drawDex(menu.dx||0);else if(menu.pg==='dexd')drawDexDetail(menu.dx||0)}
+ if(menu){if(menu.pg==='root')drawRoot();else if(menu.pg==='dev')drawList(menu.dev[menu.dev.length-1]);else if(menu.pg==='mail')drawMailUI(menu.mu,S.mail||[]);else if(menu.pg==='quit'){drawRoot();drawQuit()}else if(menu.pg==='party'||menu.pg==='pmenu'){drawParty(menu.j,menu.use?`だれに つかう？ のこり${S.items[menu.use]||0}`:'てもち',menu.use?'A：つかう　B：もどる':'A：えらぶ　B：もどる',i=>{menu.j=i});if(menu.pg==='pmenu')drawPMenu()}else if(menu.pg==='stat')drawStatus(menu.j,menu.mv,menu.pick);else if(menu.pg==='wmap')drawWorldMap(menu.w||0);else if(menu.pg==='items')drawItems(menu.k,visItems(),i=>{menu.k=i});else if(menu.pg==='dex')drawDex(menu.dx||0);else if(menu.pg==='dexd')drawDexDetail(menu.dx||0)}
  if(shop)drawShop();
  if(boxui)drawBox();
  drawToast();
  drawMsg();
  if(fade){c.globalAlpha=fade.t<12?fade.t/12:(24-fade.t)/12;R(0,0,W,H,'#000');c.globalAlpha=1}}
-function drawBall(x,y){c.fillStyle='#181818';c.beginPath();c.arc(x,y,10,0,7);c.fill();c.fillStyle=B&&B.ballK==='ballplus'?'#3a78e0':'#e83838';c.beginPath();c.arc(x,y,8,Math.PI,0);c.fill();
+function drawBall(x,y){c.fillStyle='#181818';c.beginPath();c.arc(x,y,10,0,7);c.fill();c.fillStyle=B&&B.ballK==='ballplus'?'#3a78e0':B&&B.ballK==='ballultra'?'#e8b820':'#e83838';c.beginPath();c.arc(x,y,8,Math.PI,0);c.fill();
  c.fillStyle='#f8f8f8';c.beginPath();c.arc(x,y,8,0,Math.PI);c.fill();R(x-10,y-1,20,2,'#181818');c.fillStyle='#181818';c.beginPath();c.arc(x,y,4,0,7);c.fill();c.fillStyle='#f8f8f8';c.beginPath();c.arc(x,y,2,0,7);c.fill()}
 function infoBox(x,y,m,dh,isMe){const w=148,r=dh/m.mhp;if(CUR.cave){c.globalAlpha=.88;R(x-4,y-3,w+6,isMe?72:50,'#f2ead8');c.globalAlpha=1}
  txt(nm(m),x+6,y+(nm(m).length>=6?2:0),3,nm(m).length>=6?13:16);txt(`Lv${m.lv}`,x+w-4,y,isMe&&B.lvfx?'#e03030':3,16,'right');
