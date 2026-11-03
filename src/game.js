@@ -2360,7 +2360,7 @@ Object.assign(MAPS,{
 // いえに かえった あとの ふくそう（くろふくでは ない）
 const FATHER_HOME=['#e0c0a0','#4a4a52','#8a6a4a','#2a2a30'],BRO_HOME=['#f8d0a8','#2a3a5a','#3a8a5a','#3a3040'];
 MAPS.home.npcs.push({id:'fatherH',x:7,y:3,dir:'down',spr:'boy',pal:FATHER_HOME,showIf:'endingDone',text:['とうさん「……ありがとう。\nおまえの おかげだ。」','とうさん「これからは かぞくで\nこの むらを まもって いくよ。」']},
- {id:'brotherH',x:7,y:5,dir:'left',spr:'boy',pal:BRO_HOME,showIf:'endingDone',boss:true,tname:'にいちゃん',team:[['raidenga',74],['ganmogura',74],['makyou',75],['zantetsuryu',76],['uppy',78]],money:200,say:['にいちゃん「おまえ、 ほんとに\nつよく なったな。」','にいちゃん「……なあ。 こんどは\nかめん なしで しょうぶ しようぜ！」','にいちゃん「にいちゃんの ほんきを\nみせて やる！」'],lose:['にいちゃん「……まいった！\nもう かなわないな。」'],after:['にいちゃん「おまえと ウッピーが\nいれば この むらは あんしんだ。」','にいちゃん「また いつでも\nあいてに なるぜ！」']},
+ {id:'brotherH',x:7,y:5,dir:'left',spr:'boy',pal:BRO_HOME,showIf:'endingDone',boss:true,tname:'にいちゃん',team:[['raidenga',66],['ganmogura',66],['makyou',67],['zantetsuryu',68],['uppy',70]],money:200,say:['にいちゃん「おまえ、 ほんとに\nつよく なったな。」','にいちゃん「……なあ。 こんどは\nかめん なしで しょうぶ しようぜ！」','にいちゃん「にいちゃんの ほんきを\nみせて やる！」'],lose:['にいちゃん「……まいった！\nもう かなわないな。」'],after:['にいちゃん「おまえと ウッピーが\nいれば この むらは あんしんだ。」','にいちゃん「また いつでも\nあいてに なるぜ！」']},
  {id:'grandpaH',x:6,y:3,dir:'down',spr:'old',pal:ELDER_PAL,showIf:'endScene',text:['おじいちゃん「……よく\nやったのう。」']});
 Object.assign(MAPS.route7,{wildW:()=>[['namigame',40,42,30],['tobiuon',40,42,30],['rakkoole',40,42,20],['daiogani',41,43,15],['uzushion',41,43,2]]});
 Object.assign(MAPS.crag,{wildW:()=>[['daiogani',52,54,30],['namigame',51,54,25],['tobiuon',51,54,25],['fuwakura',51,54,15],['uzushion',52,54,2]]});
