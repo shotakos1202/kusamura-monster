@@ -2314,6 +2314,7 @@ Object.assign(MAPS,{
  kamoDome:{name:'カモガワシティ',dome:true,rows:["TTTTTTTTTTT99TTTTTTTTTTT", "T.F........KK........F.T", "T.CCCCC...KKKK...MMMMM.T", "T.CCCCC...KKKK...MMMMM.T", "T.wwDww...KKKK...wwDww.T", "T.........KKKK.........T", "TKKKKKKKKKKKKKKKKKKKKKKT", "T..A....eeeeeeee....A..T", "T.......eeeeeeee.......T", "T.F.....eeeeeeee.....F.T", "T.......wwwwDwww.......T", "T...........K..........T", "T.RRRRR.....K....U.....T", "T.RRRRR.....K..........T", "T.wwDww.....K....A..F..T", "T...........K..........T", "T..F....N...K...N....F.T", "T...........K..........T", "T.....A.....$.....A....T", "TTTTTTTTTTTTTTTTTTTTTTTT"],
   warps:{'11,0':['kamogawa',7,3,'down'],'12,0':['kamogawa',8,3,'down'],'4,4':['kamoCenter',4,6,'up'],'19,4':['kamoShop',4,6,'up'],'12,10':['gym8',5,12,'up'],'4,14':['kamoHouse',4,6,'up'],'12,18':['kamoRuins',7,13,'up']},
   npcs:[
+   {id:'wakaD',x:12,y:16,dir:'up',spr:'girl',pal:WAKA_PAL,showIf:'wakaDome',text:['わかしお「いそいで！」']},
    {x:13,y:17,dir:'left',spr:'boy',pal:['#f8d0a8','#3aa0d0','#2a4a80','#1c1820'],hideFlag:'ruinsOpen',text:['この さきは しんかいの いせき。','かってに はいっては\nいけない きまりなんだ。']},
    {x:7,y:6,dir:'down',spr:'girl',pal:['#f8d0a8','#80d0f0','#f4f4f4','#2a1a14'],text:['この まちは くうきの ドームで\nまもられて いるの。','ドームの そとを ひかる さかなが\nおよいで いくのよ。 きれいでしょ？']},
    {x:18,y:12,dir:'left',spr:'old',pal:['#f8d0a8','#3a6a8a','#d0d0d0','#2a2a2a'],get text(){return S&&S.flags.sazanamiGot?['うみの かみが めざめたと\nきいたぞ……！','マウントフジへ いくなら\nさざなみを てもちに いれるんじゃ。']:['いせきの おくには うみの かみが\nねむって いると いわれておる。','ジムリーダーの わかしおは いせきの\nもりびとの いえの こ じゃ。']}},
@@ -2943,10 +2944,10 @@ function tatsu3Win(){const e=MAPS.town3.npcs.find(n=>n.id==='tatsu3');
  return[delay(10),...T(TN_+'「……へへっ。 まいった。」',TN_+'「おまえ ほんとに\nつよく なったよな。」',TN_+'「ちいさい ころは おれの\nうしろを ついて きてたのに。」',TN_+'「……なあ。 おまえの\nとうちゃんと にいちゃんの こと。」',TN_+'「おれ、 まだ あきらめて\nないからな。」',TN_+'「おれは この まちで\nくろふくを みはって おく。」',TN_+'「だから おまえは まえだけ\nみて すすめ！」',TN_+'「じいちゃん…… ぜったい\nたすけろよ！ さいきょー！」'),
   F(()=>{e.dir='down'}),npcRun(e,['down','down','down','down'],2),F(()=>{delete S.flags.t3Show;delete S.flags.t3Call;save()}),...T('タツヤは まちの ほうへ\nかけて いった……')]}
 // しんかいの いせき：わかしお → オオスギ → さざなみ
-function ruinsEvent(){S.flags.ruinsCall=1;const W='わかしお';
- Q.push(...T('？？？「まって！」'),F(()=>{AU.sfx('alert')}),
+function ruinsEvent(){S.flags.ruinsCall=1;const W='わかしお',e=MAPS.kamoDome.npcs.find(n=>n.id==='wakaD');
+ Q.push(F(()=>{P.dir='down'}),...T('？？？「まって！」'),F(()=>{e.x=e.fx=12;e.y=e.fy=16;e.dir='up';S.flags.wakaDome=1;AU.sfx('alert')}),npcRun(e,['up','up','up','up'],2),F(()=>{e.alert=30}),Wt(()=>e.alert<=0),
   ...T(`${W}「……やっぱり。 いせきの\nほうから いやな けはいが する。」`,`${W}「わたしの いえは だいだい\nしんかいの いせきの もりびと。」`,`${W}「いせきの おくには うみの\nかみ さざなみが ねむって いる。」`,`${W}「もし だれかが さざなみを\nむりやり おこそうと したら……」`,`${W}「おねがい。\nいっしょに きて！」`),
-  F(()=>{BLACKOUT=0}),mzStep(30,q=>{BLACKOUT=q}),F(()=>{S.flags.ruinsOpen=1;S.flags.ruinsEv=1;loadMap('kamoRuins',7,12,'up')}),mzStep(30,q=>{BLACKOUT=1-q}),F(()=>{BLACKOUT=0}),
+  F(()=>{BLACKOUT=0}),mzStep(30,q=>{BLACKOUT=q}),F(()=>{delete S.flags.wakaDome;S.flags.ruinsOpen=1;S.flags.ruinsEv=1;loadMap('kamoRuins',7,12,'up')}),mzStep(30,q=>{BLACKOUT=1-q}),F(()=>{BLACKOUT=0}),
   ...T('……しんかいの いせき。','ひかる みずくさと さかなが\nくらやみを てらしている……','いせきの おくに だれか いる……！'),
   ...T('くろふくの おとこ「オオスギさま！\nきかいの じゅんび できました！」','オオスギ「がっはっは！ これで\nうみの かみも たたきおこせるわ！」','オオスギ「……ん？ なんだ、\nまた おまえか！」',`${W}「……あなたたち！\nさざなみに なにを する つもり！？」`,'オオスギ「キヨシさまの めいれいだ。\nさんしんを そろえろってな！」',`${W}「させない！\n……でも その まえに。」`,`${W}「モンスターを\nげんきに して あげる！」`),
   F(()=>{healAll();AU.jingle('heal')}),delay(40),...T('モンスターたちは\nげんきに なった！',`${W}「おねがい、\nあいつを とめて！」`,'オオスギ「がっはっは！ タワーの\nかりを かえして やるぜ！」'),
@@ -3292,7 +3293,7 @@ function techTile(ch,v,gx,gy){if(!CUR.tech)return null;const wall=t=>t==='T'||t=
  return null}
 /* ---------- ライバル: タツヤ ---------- */
 function rivalBase(){try{return (S&&S.flags&&(S.flags.rivalStarter||RIVAL_OF[S.flags.starter]))||'mizutama'}catch(e){return 'mizutama'}}
-const TATSU_TEMP=['tfCall','tfShow','t6Call','t6Show','tvShow','r7Call','r7tShow','r7kShow','roofCall','roofShow','t3Call','t3Show','fujiCall'];
+const TATSU_TEMP=['wakaDome','tfCall','tfShow','t6Call','t6Show','tvShow','r7Call','r7tShow','r7kShow','roofCall','roofShow','t3Call','t3Show','fujiCall'];
 function tatsuNear(e){for(const[dx,dy,d]of[[0,-1,'down'],[1,0,'left'],[-1,0,'right'],[0,1,'up']]){const x=P.x+dx,y=P.y+dy;if(canWalk(at(x,y))&&!entityAt(x,y)){e.x=e.fx=x;e.y=e.fy=y;e.dir=d;P.dir=OPP[d];return}}e.x=e.fx=P.x;e.y=e.fy=P.y-1;e.dir='down';P.dir='up'}
 function tatsuVillage(){const e=MAPS.nbr.npcs.find(n=>n.id==='tatsuV'),rs=rivalBase(),rn=SP[rs].name,mn=SP[S.flags.starter].name;
  return[delay(20),F(()=>{e.x=e.fx=4;e.y=e.fy=6;e.dir='up';S.flags.tvShow=1;AU.sfx('door')}),...T('？？？「おーい！ じいちゃーん！」'),npcRun(e,['up','up'],1),F(()=>{e.dir='right';P.dir='left';e.alert=30;AU.sfx('alert')}),Wt(()=>e.alert<=0),
