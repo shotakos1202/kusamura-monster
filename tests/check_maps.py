@@ -9,15 +9,15 @@ async def main():
         print(await pg.evaluate("""()=>{const{MAPS,WALK}=__t;const out=[];
  for(const id in MAPS){const m=MAPS[id];const at=(x,y)=>(x<0||y<0||x>=m.w||y>=m.h)?'#':m.rows[y][x];
   const block=new Set(m.npcs.filter(e=>!e.hideFlag&&!e.hideFn&&!e.aside).map(e=>e.x+','+e.y)); // hideFn：じょうけんで きえる NPC（ガードマン など）、aside：かつと よける NPC（リーグせんし）
-  const ok=(x,y)=>(m.boat?'Wn'.includes(at(x,y)):(WALK.has(at(x,y))||(m.gates||'').includes(at(x,y))))&&!block.has(x+','+y); // gates: スイッチで ひらく ゲート
+  const ok=(x,y)=>(m.boat?'Wn'.includes(at(x,y)):(WALK.has(at(x,y))||(m.isle&&at(x,y)==='W')||(m.gates||'').includes(at(x,y))))&&!block.has(x+','+y); // gates: スイッチで ひらく ゲート
   const arr=[];for(const o in MAPS)for(const k in (MAPS[o].warps||{})){const w=MAPS[o].warps[k];if(w[0]===id)arr.push([w[1],w[2]])}
   if(m.start)arr.push(m.start);if(!arr.length){out.push(id+' no arrivals');continue}
   const s0=arr[0];const seen=new Set([s0+'']);const st=[s0];
   while(st.length){const[x,y]=st.pop();{const w=(m.warps||{})[x+','+y];if(w&&w[0]===id&&!seen.has(w[1]+','+w[2])){seen.add(w[1]+','+w[2]);st.push([w[1],w[2]])}}for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(ok(nx,ny)&&!seen.has(nx+','+ny)){seen.add(nx+','+ny);st.push([nx,ny])}}}
   const adj=(x,y)=>[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>seen.has((x+dx)+','+(y+dy)));
   const p=[];
-  for(const a of arr)if(!seen.has(a+''))p.push('arrival '+a);
-  for(const k in m.warps||{}){const[x,y]=k.split(',').map(Number);if(!seen.has(k)&&!adj(x,y))p.push('warp '+k)}
+  for(const a of arr)if(!seen.has(a+'')&&at(a[0],a[1])!=='W')p.push('arrival '+a); // みずの うえへの とうちゃく（かんいボート）は のぞく
+  for(const k in m.warps||{}){const[x,y]=k.split(',').map(Number);if(!seen.has(k)&&!adj(x,y)&&at(x,y)!=='W')p.push('warp '+k)}
   for(const e of m.npcs)if(!e.hideFlag&&!adj(e.x,e.y)&&!adj(e.x,e.y+1))p.push('npc '+e.x+','+e.y);
   for(const k in m.signs||{}){const[x,y]=k.split(',').map(Number);if(m.rows[y][x]!=='S')p.push('signtile '+k);if(!adj(x,y))p.push('sign '+k)}
   for(const it of m.items||[])if(!seen.has(it.x+','+it.y)&&!adj(it.x,it.y))p.push('item '+it.id);
