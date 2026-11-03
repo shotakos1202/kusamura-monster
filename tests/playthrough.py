@@ -26,6 +26,8 @@ CHAPTERS=[
  ['カモガワジム（わかしお）',['wakashio','oosugiR','sazanamiGot','ruinsDone'],60000,''],
  ['マウントフジ（さざなみ あり）',['teruiF','kiyoF','fatherF','gameClear'],80000,
   "run(30);t.Q.length=0;run(5);t.menu={pg:'wmap',w:t.WMAP.findIndex(w=>w.id==='fuji'),i:0,j:0,k:0};t.pressed.a=true;run(1);"],
+ # クリアご（FEAT.postgame・かいはつしゃモードで テスト）：うけつけ → 4にん → けっしょう タツヤ
+ ['チャンピオンスタジアム（リーグ）',['champion'],150000,"X.S().party=['hisuijin','minezou','sazanami','uppy','mizuchi','ootsunoryuu'].map(id=>{const m=X.mon(id,100);m.moves=['hisuiounohoukou','kokuenha','tenryuuzan','ryuujinha'];return m});t.loadMap('stadiumIn',8,4,'up');"],
 ]
 GYM6=r"""()=>{const t=__t,X=__x;X.SCN.find(s=>s[0]==='オオアミジム')[1]();t.mode='world';const S=X.S();S.party=[X.mon('glencon',100),X.mon('uzushion',100)];
  const run=n=>{for(let i=0;i<n;i++){t.update();for(const k in t.pressed)t.pressed[k]=false}};
