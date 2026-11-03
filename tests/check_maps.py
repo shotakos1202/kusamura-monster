@@ -8,7 +8,7 @@ async def main():
         await pg.goto(URL);await pg.wait_for_function('window.__t',timeout=20000)
         print(await pg.evaluate("""()=>{const{MAPS,WALK}=__t;const out=[];
  for(const id in MAPS){const m=MAPS[id];const at=(x,y)=>(x<0||y<0||x>=m.w||y>=m.h)?'#':m.rows[y][x];
-  const block=new Set(m.npcs.filter(e=>!e.hideFlag&&!e.hideFn).map(e=>e.x+','+e.y)); // hideFn：じょうけんで きえる NPC（ガードマン など）
+  const block=new Set(m.npcs.filter(e=>!e.hideFlag&&!e.hideFn&&!e.aside).map(e=>e.x+','+e.y)); // hideFn：じょうけんで きえる NPC（ガードマン など）、aside：かつと よける NPC（リーグせんし）
   const ok=(x,y)=>(m.boat?'Wn'.includes(at(x,y)):(WALK.has(at(x,y))||(m.gates||'').includes(at(x,y))))&&!block.has(x+','+y); // gates: スイッチで ひらく ゲート
   const arr=[];for(const o in MAPS)for(const k in (MAPS[o].warps||{})){const w=MAPS[o].warps[k];if(w[0]===id)arr.push([w[1],w[2]])}
   if(m.start)arr.push(m.start);if(!arr.length){out.push(id+' no arrivals');continue}
