@@ -14847,6 +14847,7 @@ Object.assign(MAPS,{
   npcs:[
    {id:'teruiF',x:11,y:9,dir:'down',spr:'boy',pal:TERUI_PAL,hideFlag:'endingDone',boss:true,tname:'かめんの おとこ',get pal(){return S&&S.flags.teruiUnmask?TERUI_FACE:TERUI_PAL},team:[['raidenga',64],['ganmogura',64],['makyou',65],['zantetsuryu',66],['uppy',67]],money:150,say:['かめんの おとこ「……こい。」'],lose:['かめんの おとこ「……ここまで\nだな。」'],after:['……'],onWin:()=>teruiFujiWin()},
    {id:'kiyoF',x:11,y:7,dir:'down',spr:'boy',pal:KIYO_PAL,showIf:'fujiKiyo',hideFlag:'endingDone',boss:true,tname:'くろふくの ボス キヨシ',team:[['maobasa',66],['gansekidon',66],['kazandori',67],['lunapowan',67],['bakumu',68],['minezou',70]],money:200,say:['キヨシ「……まだ\nやるか、 こぞう。」','キヨシ「なんど でも\nたたきつぶして やる！」'],lose:['キヨシ「……ばかな……！\nミネゾーウまで……！」'],after:['……'],onWin:()=>kiyoshiFujiWin()},
+   {id:'minezouF',x:11,y:5,dir:'down',spr:'boy',mon:'minezou',glow:'#d8f0ff',role:'mzgod',showIf:'gameClear',hideFlag:'minezouGot'},
    {id:'elderF',x:8,y:6,dir:'down',spr:'old',pal:ELDER_PAL,showIf:'fujiKiyo',hideFlag:'endingDone',text:['……']},
    {id:'fatherF',x:11,y:5,dir:'down',spr:'boy',pal:FATHER_PAL,showIf:'fatherShow',hideFlag:'endingDone',boss:true,last:true,tname:'あのかた',team:[['daiogani',70],['suishouou',71],['hyouen',71],['kokenonushi',72],['mizuchi',72],['soutenryuu',74]],money:0,say:['とうさん「……こい。」'],lose:['あのかた「…………」'],after:['……'],onWin:()=>fatherWin()},
   ]},
@@ -15101,7 +15102,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.03-1659';
+const BUILD='2026.11.03-1711';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -15444,6 +15445,13 @@ function oosugiRuinsWin(){const o=MAPS.kamoRuins.npcs.find(n=>n.id==='oosugiR');
   ...T('わかしお「おくへ いきましょう。」'),...heroTo(7,5),F(()=>{P.dir='up'}),F(()=>{shakeT=40;AU.sfx('fxrock')}),delay(30),...T('ゴゴゴゴ……！','いせきが ゆれて いる……！'),F(()=>{AU.sfx('fxwater');AU.sfx('fxdragon')}),delay(20),
   ...T('うみの かみ さざなみが\nめを さました……！','わかしお「さざなみが…… あなたを\nじっと みている。」','わかしお「うみの かみは\nこころを みるの。」','わかしお「……ためされて いるのよ。」','わかしお「ぜんりょくで\nこたえて あげて！」'),
   F(()=>sazanamiBattle())]}
+// クリア後：マウントフジの さんちょうで ミネゾーウ（うつくしい すがた）と たたかい、かつと なかまに
+function minezouBattle(){B={foe:mon('minezou',70),legend:{intro:'そらの かみ ミネゾーウが\nたちはだかった！',hpx:2.2,onWin:minezouJoin}};mode='trans';trans=0}
+function minezouJoin(){const m=mon('minezou',70);
+ return[delay(20),...T('ミネゾーウは しずかに\nつばさを たたんだ……','ミネゾーウの こころが\nつたわって くる……','「……ありがとう。\nわたしを とき はなって くれて。」'),
+  F(()=>{S.flags.minezouGot=1;if(!S.seen.includes('minezou'))S.seen.push('minezou');if(!S.caught.includes('minezou'))S.caught.push('minezou');
+   if(S.party.length<6)S.party.push(m);else S.box.push(m);AU.jingle('catch')}),
+  ...T('ミネゾーウが なかまに なった！'),...(S.party.length>=6?T('ミネゾーウは クラウドBOXへ\nてんそう された！'):[]),F(save)]}
 function sazanamiBattle(){B={foe:mon('sazanami',64),legend:{intro:'うみの かみ さざなみが\nたちはだかった！',hpx:2.2,onWin:sazanamiJoin}};mode='trans';trans=0}
 function sazanamiJoin(){const m=mon('sazanami',64);
  return[delay(20),...T('さざなみは しずかに\nうなずいた……','さざなみの こころが\nつたわって くる……'),
@@ -15898,7 +15906,7 @@ const NEWS=[
  {id:'2026.11.02c',title:'ものがたりの さいごまで！',body:['こんかいの こうしん：','・オオアミシティの さきに\n 8ばんどうろ と ぼうそうむら','・ドラゴンの すむ\n とがった いわの やま','・うみの そこの まち\n カモガワシティ（フェリーで いこう）','・あたらしい ジムが 2つ。\n バッジは ぜんぶで 8こ！','・あたらしい ドラゴンが 5しゅるい','・そして…… ものがたりの さいごまで\n あそべるように なったよ','・かいわの もじが ゆっくり\n でるように なったよ','さいごまで たのしんでね！']},
  {id:'2026.11.02d',title:'あたらしい どうぐと ドラゴン',body:['こんかいの こうしん：','・ショップに あたらしい どうぐ！\n ユノハマシティ から：\n げんきのけっしょう','・オオアミシティ から：\n ボールウルトラ・すげーくすり・\n ふしぎなキャンディ','・ドラゴンの わざが パワーアップ！\n どの タイプにも すこし つよく\n きゅうしょにも あたりやすい','・どうぐは もっている ものだけ\n でるように なったよ','・メニューで うえ・したを ながおし\n すると はやく うごくよ']},
  {id:'2026.11.02e',title:'かいもの が べんりに',body:['こんかいの こうしん：','・ショップで いちどに\n たくさん かえるように！\n （▲▼で 1こ、 ◀▶で 10こ）','・くすりなどを おなじ モンスターに\n つづけて つかえるように','・ボールウルトラが きんいろに！','・みちに おちている どうぐが\n さきへ すすむほど ごうかに','・かんいボートで のれる みずべに\n みずタイプの モンスターが でるよ','・じぶんと おなじ タイプの わざの\n いりょくを ちょうせい したよ']},
- {id:'2026.11.03a',title:'クリアごの おたのしみ',body:['こんかいの こうしん：','・ものがたりを クリアした あと\n ジムリーダーと さいせん\n できるように！（Lv60〜70）','・ひづけが かわると\n また たたかえるよ','・はじめて かつと\n チャンピオンリーグの\n すいせんじょうが もらえる','・8まい あつめると……？','・いえの にいちゃんとも\n まいにち しょうぶ できるよ']},
+ {id:'2026.11.03a',title:'クリアごの おたのしみ',body:['こんかいの こうしん：','・ものがたりを クリアした あと\n ジムリーダーと さいせん\n できるように！（Lv60〜70）','・ひづけが かわると\n また たたかえるよ','・はじめて かつと\n チャンピオンリーグの\n すいせんじょうが もらえる','・8まい あつめると……？','・いえの にいちゃんとも\n まいにち しょうぶ できるよ','・マウントフジの さんちょうに\n なにかが まいおりて いる……？']},
  {id:'2026.11.02f',title:'ものがたりの しあげ',body:['こんかいの こうしん：','・オオアミシティから さいごまでの\n かいわを みなおしたよ','・つぎに どこへ いけば いいか\n わかりやすく なったよ','・エンディングに\n その あとの おはなしを ついか','・クリアした あとにも\n だれかが しょうぶを まってる……？']},
 ];
 let toast=null;
@@ -16162,6 +16170,7 @@ function talk(e){if(e.obj)return objTalk(e);e.dir=OPP[P.dir];
  if(e.trainer){if(!S.flags[e.id])return spot(e,false);if(e.re&&S.flags.gameClear)return rematch(e);return say(...e.after)}
  if(e.role==='ferry')return ferryTalk(e);if(e.role==='ferryBack')return ferryBackTalk();if(e.role==='sazanami')return sazanamiTalk();
  if(e.role==='fishgame'){Q.push(...T('つりびと「つりゲームに\nちょうせん してみるかい？」','つりびと「Aボタンで ウキを とめる。\nきいろに とめたら パーフェクト！」','つりびと「3かい しょうぶ。\nさあ いくぞ！」'),F(startFish));return}
+ if(e.role==='mzgod'){Q.push(...T('……そらから ひかりが\nふりそそぐ……','そらの かみ ミネゾーウが\nまいおりて きた！','ミネゾーウは こちらを\nじっと みている……','ミネゾーウ「キュオオオ……ン！」','……ちからを ためそうと\nしている みたいだ！'),F(()=>minezouBattle()));return}
  if(e.role==='god'){Q.push(...T('……しずかな もりの おくに\nふしぎな けはいが する……','ウッピー「ウピィ……？」','もりの かみ ウッピーが\nこちらを みつめている！','ウッピーは じっと\nこころの おくを みている……'),F(()=>{B={foe:mon('uppy',50),god:true};mode='trans';trans=0}));return}
  if(e.role==='elder'){
   if(!hasStarter()){Q.push(...T('おじいちゃん「おお、 きたか。\nまっておったぞ。」','おじいちゃん「おまえの とうさんが\nいなくなって もう なんねんか……」','おじいちゃん「にいさんも\nとうさんを さがしに でたきり……」','おじいちゃん「……それでも おまえは\nふたりを さがしに いくのか。」','（とうさんと にいちゃんを\nかならず みつけだすんだ！）','おじいちゃん「……よし。 その めは\nほんきの めじゃ。」','おじいちゃん「……わが いえには\nふるい いいつたえが あってのう。」','おじいちゃん「……いや、 いまは よい。」','おじいちゃん「ひとりたびは\nあぶないから のう。」','おじいちゃん「モンスターを\nつれて いきなさい。」','おじいちゃん「ここに 3びきの\nモンスターが おる。」','おじいちゃん「すきな こを ひとり\nえらぶが よい。」'),F(()=>{mode='starter';ssel=0;sconf=null}));return}
@@ -16923,7 +16932,7 @@ function drawWorld(){
   else if(it.hero){const hs=P.sp||STEP,fr=P.mv>hs/2?1+(P.par|0):0,bob=P.mv>hs/2?-1:0,[rows,fl]=sprFor('boy',P.dir,fr);if(at(P.x,P.y)!=='G'||P.mv>0)shadow();if(onBike)drawBike(sx,sy,P.dir);spr(rows,sx,sy-3+bob-(onBike?4:0),2,fl,HERO);
    if(at(P.x,P.y)==='G'&&!onBike&&P.mv<(P.sp||STEP)/2)c.drawImage(tcv('G',tallGrass),0,20,32,12,sx,sy+20,32,12)}
   else if(it.e.obj)drawObj(it.e,sx,sy);
-  else if(it.e.mon){const e=it.e,fl2=Math.sin(frame/20)*3;c.globalAlpha=.3+.15*Math.sin(frame/15);ell(sx+16,sy+12,24,20,'#e8ffb0');c.globalAlpha=.25;ell(sx+16,sy+29,12,3,'#000');c.globalAlpha=1;c.imageSmoothingEnabled=false;c.drawImage(ART[e.mon].img,sx-4,sy-14+fl2,40,40);
+  else if(it.e.mon){const e=it.e,fl2=Math.sin(frame/20)*3;c.globalAlpha=.3+.15*Math.sin(frame/15);ell(sx+16,sy+12,24,20,e.glow||'#e8ffb0');c.globalAlpha=.25;ell(sx+16,sy+29,12,3,'#000');c.globalAlpha=1;c.imageSmoothingEnabled=false;c.drawImage(ART[e.mon].img,sx-4,sy-14+fl2,40,40);
    for(let i=0;i<5;i++){const a=frame/30+i*1.26;R(sx+16+Math.cos(a)*22,sy+10+Math.sin(a)*8-((frame+i*17)%40)/3,2,2,'#fff8c0')}}
   else{const e=it.e,fr=e.mv>STEP/2?1+(e.par|0):0,bob=e.mv>STEP/2?-1:0,[rows,fl]=sprFor(e.spr,e.dir,fr);shadow();spr(rows,sx,sy-3+bob,2,fl,e.pal);
    if(e.alert>0){R(sx+7,sy-28,18,22,3);R(sx+9,sy-26,14,18,'#ffffff');txt('！',sx+16,sy-25,'#e03838',16,'center')}}}
