@@ -14847,7 +14847,7 @@ Object.assign(MAPS,{
   npcs:[
    {id:'teruiF',x:11,y:9,dir:'down',spr:'boy',pal:TERUI_PAL,hideFlag:'endingDone',boss:true,tname:'かめんの おとこ',get pal(){return S&&S.flags.teruiUnmask?TERUI_FACE:TERUI_PAL},team:[['raidenga',64],['ganmogura',64],['makyou',65],['zantetsuryu',66],['uppy',67]],money:150,say:['かめんの おとこ「……こい。」'],lose:['かめんの おとこ「……ここまで\nだな。」'],after:['……'],onWin:()=>teruiFujiWin()},
    {id:'kiyoF',x:11,y:7,dir:'down',spr:'boy',pal:KIYO_PAL,showIf:'fujiKiyo',hideFlag:'endingDone',boss:true,tname:'くろふくの ボス キヨシ',team:[['maobasa',66],['gansekidon',66],['kazandori',67],['lunapowan',67],['bakumu',68],['minezou',70]],money:200,say:['キヨシ「……まだ\nやるか、 こぞう。」','キヨシ「なんど でも\nたたきつぶして やる！」'],lose:['キヨシ「……ばかな……！\nミネゾーウまで……！」'],after:['……'],onWin:()=>kiyoshiFujiWin()},
-   {id:'minezouF',x:11,y:5,dir:'down',spr:'boy',mon:'minezou',glow:'#d8f0ff',role:'mzgod',showIf:'gameClear',hideFlag:'minezouGot'},
+   {id:'minezouF',x:11,y:5,dir:'down',spr:'boy',mon:'minezou',glow:'#d8f0ff',role:'mzgod',showIf:'gameClear',feat:'postgame',hideFlag:'minezouGot'},
    {id:'elderF',x:8,y:6,dir:'down',spr:'old',pal:ELDER_PAL,showIf:'fujiKiyo',hideFlag:'endingDone',text:['……']},
    {id:'fatherF',x:11,y:5,dir:'down',spr:'boy',pal:FATHER_PAL,showIf:'fatherShow',hideFlag:'endingDone',boss:true,last:true,tname:'あのかた',team:[['daiogani',70],['suishouou',71],['hyouen',71],['kokenonushi',72],['mizuchi',72],['soutenryuu',74]],money:0,say:['とうさん「……こい。」'],lose:['あのかた「…………」'],after:['……'],onWin:()=>fatherWin()},
   ]},
@@ -14856,7 +14856,7 @@ Object.assign(MAPS,{
 // いえに かえった あとの ふくそう（くろふくでは ない）
 const FATHER_HOME=['#e0c0a0','#4a4a52','#8a6a4a','#2a2a30'],BRO_HOME=['#f8d0a8','#2a3a5a','#3a8a5a','#3a3040'];
 MAPS.home.npcs.push({id:'fatherH',x:7,y:3,dir:'down',spr:'boy',pal:FATHER_HOME,showIf:'endingDone',text:['とうさん「……ありがとう。\nおまえの おかげだ。」','とうさん「これからは かぞくで\nこの むらを まもって いくよ。」']},
- {id:'brotherH',x:7,y:5,dir:'left',spr:'boy',pal:BRO_HOME,showIf:'endingDone',boss:true,tname:'にいちゃん',team:[['raidenga',74],['ganmogura',74],['makyou',75],['zantetsuryu',76],['uppy',78]],money:200,say:['にいちゃん「おまえ、 ほんとに\nつよく なったな。」','にいちゃん「……なあ。 こんどは\nかめん なしで しょうぶ しようぜ！」','にいちゃん「にいちゃんの ほんきを\nみせて やる！」'],lose:['にいちゃん「……まいった！\nもう かなわないな。」'],after:['にいちゃん「おまえと ウッピーが\nいれば この むらは あんしんだ。」','にいちゃん「また いつでも\nあいてに なるぜ！」']},
+ {id:'brotherH',x:7,y:5,dir:'left',spr:'boy',pal:BRO_HOME,showIf:'endingDone',boss:true,tname:'にいちゃん',get team(){let g=false;try{g=!!S.flags.uppyGot}catch(e){}return g?[['raidenga',74],['ganmogura',74],['makyou',75],['suishouou',76],['zantetsuryu',78]]:[['raidenga',74],['ganmogura',74],['makyou',75],['zantetsuryu',76],['uppy',78]]},onWin:()=>feat('postgame')&&!S.flags.uppyGot?uppyGift():[],money:200,say:['にいちゃん「おまえ、 ほんとに\nつよく なったな。」','にいちゃん「……なあ。 こんどは\nかめん なしで しょうぶ しようぜ！」','にいちゃん「にいちゃんの ほんきを\nみせて やる！」'],lose:['にいちゃん「……まいった！\nもう かなわないな。」'],after:['にいちゃん「おまえと ウッピーが\nいれば この むらは あんしんだ。」','にいちゃん「また いつでも\nあいてに なるぜ！」']},
  {id:'grandpaH',x:6,y:3,dir:'down',spr:'old',pal:ELDER_PAL,showIf:'endScene',text:['おじいちゃん「……よく\nやったのう。」']});
 Object.assign(MAPS.route7,{wildW:()=>[['namigame',40,42,30],['tobiuon',40,42,30],['rakkoole',40,42,20],['daiogani',41,43,15],['uzushion',41,43,2]]});
 Object.assign(MAPS.crag,{wildW:()=>[['daiogani',52,54,30],['namigame',51,54,25],['tobiuon',51,54,25],['fuwakura',51,54,15],['uzushion',52,54,2]]});
@@ -14873,10 +14873,15 @@ const REMATCH={
  wakashio:['わかしお',[['daiogani',67],['tobiuon',67],['uzushion',68],['mizuchi',69],['ootsunoryuu',69],['soutenryuu',70]],'うみの かみに\nみとめられた あなたと\nもう いちど……！']};
 for(const id in MAPS)for(const e of MAPS[id].npcs){const r=REMATCH[e.id];if(!r)continue;
  e.re={team:r[1],say:[`${r[0]}「${r[2]}」`,`${r[0]}「チャンピオンリーグに\nむけた さいせん、\nうけて たつよ！」`],lose:[`${r[0]}「……みごと！\nまた あした おいで。」`],done:[`${r[0]}「きょうの しょうぶは\nもう おわり。 また あした ね。」`],letter:true}}
-MAPS.home.npcs.find(e=>e.id==='brotherH').re={team:MAPS.home.npcs.find(e=>e.id==='brotherH').team,say:['にいちゃん「よう！ きょうも\nしょうぶ するか？」'],lose:['にいちゃん「……まいった！\nまた あした やろうぜ！」'],done:['にいちゃん「きょうは もう\nへとへとだ…… また あしたな！」']};
+MAPS.home.npcs.find(e=>e.id==='brotherH').re={get team(){return MAPS.home.npcs.find(e=>e.id==='brotherH').team},say:['にいちゃん「よう！ きょうも\nしょうぶ するか？」'],lose:['にいちゃん「……まいった！\nまた あした やろうぜ！」'],done:['にいちゃん「きょうは もう\nへとへとだ…… また あしたな！」']};
+// にいちゃんから ウッピーを ゆずりうける（はじめて にいちゃんに かったとき）
+function uppyGift(){const NI='にいちゃん',m=mon('uppy',70);
+ return[delay(20),...T(`${NI}「……なあ。\nおまえに たのみが あるんだ。」`,`${NI}「ウッピーを\nおまえに たくしたい。」`,`${NI}「あのとき ウッピーは\nおれの こころを みとめて\nくれた。」`,`${NI}「おとうとを\nまもりたい…… その ねがいは\nもう かなったからな。」`,`${NI}「ウッピーも おまえの\nそばに いたいって さ。」`,'ウッピー「……ウピィ！」'),
+  F(()=>{S.flags.uppyGot=1;if(!S.seen.includes('uppy'))S.seen.push('uppy');if(!S.caught.includes('uppy'))S.caught.push('uppy');if(S.party.length<6)S.party.push(m);else S.box.push(m);AU.jingle('catch')}),
+  ...T('ウッピーが なかまに なった！'),...(S.party.length>=6?T('ウッピーは クラウドBOXへ\nてんそう された！'):[]),...T(`${NI}「たいせつに\nして やれよ！」`),F(save)]}
 function todayN(){const d=new Date();return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate()}
 function rematch(e){const r=e.re;if(S.flags['rd_'+e.id]===todayN())return say(...r.done);
- Q.push(...T(...r.say),F(()=>{B={trainer:Object.assign({},e,{id:'re_'+e.id,team:r.team,lose:r.lose,money:Math.round(e.money/2),badge:null,hx:undefined,hy:undefined,onWin:()=>rematchWin(e)})};mode='trans';trans=0}))}
+ Q.push(...T(...r.say),F(()=>{B={trainer:Object.assign({},e,{id:'re_'+e.id,team:r.team.slice(),lose:r.lose,money:Math.round(e.money/2),badge:null,hx:undefined,hy:undefined,onWin:()=>rematchWin(e)})};mode='trans';trans=0}))}
 function rematchWin(e){const q=[F(()=>{S.flags['rd_'+e.id]=todayN()})];
  if(e.re.letter&&!S.flags['lt_'+e.id]){q.push(F(()=>{S.flags['lt_'+e.id]=1;S.items.letter=(S.items.letter||0)+1;AU.jingle('item')}),...T('チャンピオンリーグの\nすいせんじょうを もらった！'),
   ...((S.items.letter||0)+1>=8?T('すいせんじょうが 8まい\nそろった！','これで チャンピオンリーグに\nしゅつじょう できる！'):T(`すいせんじょう ${(S.items.letter||0)+1}／8まい`)))}
@@ -14887,7 +14892,9 @@ const canWalk=t=>CUR&&CUR.boat?(t==='W'||t==='n'):WALK.has(t)||!!(CUR&&CUR.gates
 const WALK=new Set(['.','G','F','D','f','m','K','n','s','a','l','z','d','o','x','1','4','5','7','8','3','$','9','=','%']);
 const D={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
 const OPP={up:'down',down:'up',left:'right',right:'left'};
-const hid=e=>!!(S&&S.flags&&((e.hideFlag&&S.flags[e.hideFlag])||(e.showIf&&!S.flags[e.showIf])));
+// こうかい まえの きのう：FEAT を true に するまで いっぱんの プレイヤーには でない（かいはつしゃモードでは でる）
+const FEAT={postgame:false},feat=k=>!!(FEAT[k]||DEV);
+const hid=e=>!!(S&&S.flags&&((e.hideFlag&&S.flags[e.hideFlag])||(e.showIf&&!S.flags[e.showIf])||(e.feat&&!feat(e.feat))));
 const entityAt=(x,y)=>CUR.npcs.find(e=>e.x===x&&e.y===y&&!hid(e));
 
 /* ---------- monster helpers ---------- */
@@ -15102,7 +15109,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.03-1711';
+const BUILD='2026.11.03-1719';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -15906,10 +15913,13 @@ const NEWS=[
  {id:'2026.11.02c',title:'ものがたりの さいごまで！',body:['こんかいの こうしん：','・オオアミシティの さきに\n 8ばんどうろ と ぼうそうむら','・ドラゴンの すむ\n とがった いわの やま','・うみの そこの まち\n カモガワシティ（フェリーで いこう）','・あたらしい ジムが 2つ。\n バッジは ぜんぶで 8こ！','・あたらしい ドラゴンが 5しゅるい','・そして…… ものがたりの さいごまで\n あそべるように なったよ','・かいわの もじが ゆっくり\n でるように なったよ','さいごまで たのしんでね！']},
  {id:'2026.11.02d',title:'あたらしい どうぐと ドラゴン',body:['こんかいの こうしん：','・ショップに あたらしい どうぐ！\n ユノハマシティ から：\n げんきのけっしょう','・オオアミシティ から：\n ボールウルトラ・すげーくすり・\n ふしぎなキャンディ','・ドラゴンの わざが パワーアップ！\n どの タイプにも すこし つよく\n きゅうしょにも あたりやすい','・どうぐは もっている ものだけ\n でるように なったよ','・メニューで うえ・したを ながおし\n すると はやく うごくよ']},
  {id:'2026.11.02e',title:'かいもの が べんりに',body:['こんかいの こうしん：','・ショップで いちどに\n たくさん かえるように！\n （▲▼で 1こ、 ◀▶で 10こ）','・くすりなどを おなじ モンスターに\n つづけて つかえるように','・ボールウルトラが きんいろに！','・みちに おちている どうぐが\n さきへ すすむほど ごうかに','・かんいボートで のれる みずべに\n みずタイプの モンスターが でるよ','・じぶんと おなじ タイプの わざの\n いりょくを ちょうせい したよ']},
- {id:'2026.11.03a',title:'クリアごの おたのしみ',body:['こんかいの こうしん：','・ものがたりを クリアした あと\n ジムリーダーと さいせん\n できるように！（Lv60〜70）','・ひづけが かわると\n また たたかえるよ','・はじめて かつと\n チャンピオンリーグの\n すいせんじょうが もらえる','・8まい あつめると……？','・いえの にいちゃんとも\n まいにち しょうぶ できるよ','・マウントフジの さんちょうに\n なにかが まいおりて いる……？']},
  {id:'2026.11.02f',title:'ものがたりの しあげ',body:['こんかいの こうしん：','・オオアミシティから さいごまでの\n かいわを みなおしたよ','・つぎに どこへ いけば いいか\n わかりやすく なったよ','・エンディングに\n その あとの おはなしを ついか','・クリアした あとにも\n だれかが しょうぶを まってる……？']},
 ];
 let toast=null;
+// こうかい まえの おしらせ：FEAT を true に する ときに NEWS の さいごへ うつす
+const NEWS_HELD=[
+ {id:'2026.11.03a',title:'クリアごの おたのしみ',body:['こんかいの こうしん：','・ものがたりを クリアした あと\n ジムリーダーと さいせん\n できるように！（Lv60〜70）','・ひづけが かわると\n また たたかえるよ','・はじめて かつと\n チャンピオンリーグの\n すいせんじょうが もらえる','・8まい あつめると……？','・いえの にいちゃんとも\n まいにち しょうぶ できるよ','・マウントフジの さんちょうに\n なにかが まいおりて いる……？']}
+];
 function deliverNews(st){st.mail=st.mail||[];const ids=NEWS.map(n=>n.id);let from=st.newsSeen?ids.indexOf(st.newsSeen)+1:Math.max(0,NEWS.length-1);let n=0;
  for(const it of NEWS.slice(from)){if(st.mail.some(m=>m.id===it.id))continue;st.mail.unshift({id:it.id,from:'かいはつしゃ',title:it.title,body:it.body,read:false});n++}
  st.newsSeen=ids[ids.length-1];return n}
@@ -16167,7 +16177,7 @@ function interact(){const[dx,dy]=D[P.dir];let x=P.x+dx,y=P.y+dy,e=entityAt(x,y);
  if(DECO[t])return say(DECO[t]);
  if(t==='W')say('すんだ みずが きらきら ひかっている。');else if(t==='b')say('モンスターの ほんが ならんでいる。');else if(t==='h')say('かいふくマシンが しずかに うごいている。');else if(t==='t')say('テーブルの うえに おかしが ある。')}
 function talk(e){if(e.obj)return objTalk(e);e.dir=OPP[P.dir];
- if(e.trainer){if(!S.flags[e.id])return spot(e,false);if(e.re&&S.flags.gameClear)return rematch(e);return say(...e.after)}
+ if(e.trainer){if(!S.flags[e.id])return spot(e,false);if(e.id==='brotherH'&&feat('postgame')&&!S.flags.uppyGot){Q.push(...uppyGift());return}if(e.re&&S.flags.gameClear&&feat('postgame'))return rematch(e);return say(...e.after)}
  if(e.role==='ferry')return ferryTalk(e);if(e.role==='ferryBack')return ferryBackTalk();if(e.role==='sazanami')return sazanamiTalk();
  if(e.role==='fishgame'){Q.push(...T('つりびと「つりゲームに\nちょうせん してみるかい？」','つりびと「Aボタンで ウキを とめる。\nきいろに とめたら パーフェクト！」','つりびと「3かい しょうぶ。\nさあ いくぞ！」'),F(startFish));return}
  if(e.role==='mzgod'){Q.push(...T('……そらから ひかりが\nふりそそぐ……','そらの かみ ミネゾーウが\nまいおりて きた！','ミネゾーウは こちらを\nじっと みている……','ミネゾーウ「キュオオオ……ン！」','……ちからを ためそうと\nしている みたいだ！'),F(()=>minezouBattle()));return}
