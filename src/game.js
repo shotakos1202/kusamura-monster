@@ -1701,7 +1701,7 @@ for(const[base,...ev]of[['namitama','uzushion'],['homurakon','glencon'],['tsubom
 DEX.push('yadoiwa','umidory','puraguru','hononyan');
 DEX.push('uppy');
 SP.mizutama.evo={lv:15,to:'namitama'};SP.happaru.evo={lv:15,to:'tsubomiru'};
-const WHERE={glencon:'ホムラコンが Lv30で しんか',uzushion:'ナミタマが Lv30で しんか',hanamiru:'ツボミルが Lv30で しんか',kamasamurai:'カマリーフが Lv22で しんか',yamibasa:'カゲバサが Lv20で しんか',maobasa:'ヤミバサが Lv36で しんか',rakkoole:'ラッコロが Lv22で しんか',yoroigani:'ハサガニが Lv20で しんか',daiogani:'ヨロイガニが Lv36で しんか',yadoiwa:'ミナモかいがん',umidory:'ミナモかいがん',puraguru:'4ばんどうろ',hononyan:'4ばんどうろ',rakkoro:'3ばんどうろ',hasagani:'3ばんどうろ（みずべ）',goroiwa:'コロイシが Lv16で しんか',gansekidon:'ゴロイワが Lv32で しんか',raidenga:'デンムシが Lv18で しんか',kamaleaf:'まよいの もり',kagebasa:'まよいの もりの おく（くらい ところ）',uppy:'まよいの もりの ほこら',tsubametto:'ピヨットが Lv10で しんか',kazekirio:'ツバメットが Lv24で しんか',hinokon:'1ばんどうろ きたがわ（まれ）',mizutama:'1ばんどうろ',happaru:'1ばんどうろ',piyotto:'1ばんどうろ（よく でる）',koroishi:'1ばんどうろ きたがわ',denmushi:'1ばんどうろ',
+const WHERE={glencon:'ホムラコンが Lv30で しんか',uzushion:'ナミタマが Lv30で しんか',hanamiru:'ツボミルが Lv30で しんか',kamasamurai:'カマリーフが Lv22で しんか',yamibasa:'カゲバサが Lv20で しんか',maobasa:'ヤミバサが Lv36で しんか',rakkoole:'ラッコロが Lv22で しんか',yoroigani:'ハサガニが Lv20で しんか',daiogani:'ヨロイガニが Lv36で しんか',yadoiwa:'セセラギかいがん',umidory:'セセラギかいがん',puraguru:'4ばんどうろ',hononyan:'4ばんどうろ',rakkoro:'3ばんどうろ',hasagani:'3ばんどうろ（みずべ）',goroiwa:'コロイシが Lv16で しんか',gansekidon:'ゴロイワが Lv32で しんか',raidenga:'デンムシが Lv18で しんか',kamaleaf:'まよいの もり',kagebasa:'まよいの もりの おく（くらい ところ）',uppy:'まよいの もりの ほこら',tsubametto:'ピヨットが Lv10で しんか',kazekirio:'ツバメットが Lv24で しんか',hinokon:'1ばんどうろ きたがわ（まれ）',mizutama:'1ばんどうろ',happaru:'1ばんどうろ',piyotto:'1ばんどうろ（よく でる）',koroishi:'1ばんどうろ きたがわ',denmushi:'1ばんどうろ',
  homurakon:'ヒノコンが Lv15で しんか',namitama:'ミズタマが Lv15で しんか',tsubomiru:'ハッパルが Lv15で しんか'};
 
 
@@ -1961,7 +1961,7 @@ SP.kotarou={name:'コタロー',type:'fire',semi:true,b:{hp:100,atk:122,def:98,s
 SP.sasuke={name:'サスケ',type:'psychic',semi:true,b:{hp:92,atk:118,def:86,spd:129},exp:300,cr:.04,grow:1.2,moves:['psybeam','kyukoka'],learn:{50:'psychokinesis',55:'meisou',60:'geneishuriken',65:'genryuujin',70:'kagenotsubasa'},
  desc:'つきよに すがたを みせる しのびの きつね。 まばたきする あいだに すがたを けして しまう。'};
 DEX.push('koume','kotarou','sasuke');
-Object.assign(WHERE,{koume:'ミナモおきの しま（まれ）',kotarou:'とよっちょ にしの しま（まれ）',sasuke:'こうげんの かくれす（まれ）'});
+Object.assign(WHERE,{koume:'セセラギおきの しま（まれ）',kotarou:'とよっちょ にしの しま（まれ）',sasuke:'こうげんの かくれす（まれ）'});
 const LEGEND=['koume','kotarou','sasuke','hisuiko','hisuiryu','hisuijin','shounon','uppy','minezou','sazanami'];
 for(const id of LEGEND){const k=DEX.indexOf(id);if(k>=0)DEX.splice(k,1)}DEX.push(...LEGEND.filter(id=>SP[id]));
 const STARTERS=['hinokon','mizutama','happaru'];
@@ -2064,24 +2064,24 @@ const MAPS={
    {id:'hayato',x:27,y:33,dir:'left',spr:'boy',pal:['#f8d0a8','#3a5ab0','#2a3c78','#1c1820'],sight:7,tname:'とりつかいの ハヤト',team:[['piyotto',9],['tsubametto',13]],money:24,
     say:['ぼくの とりたちの\nはやさを みせてあげる！'],lose:['はやさだけじゃ だめか……'],after:['ピヨットは Lv10で\nツバメットに しんかするんだ。']},
    {id:'misaki',x:25,y:7,dir:'left',spr:'girl',pal:['#f8d0a8','#d0a060','#5a3a20','#1c1820'],sight:4,tname:'たんけんかの ミサキ',team:[['mizutama',12],['kagebasa',12],['hinokon',13]],money:28,
-    say:['もりの おくまで きたのね。\nうでを みせて！'],lose:['なかなか やるわね！'],after:['きたの つりばしを わたると\nミナモシティよ。']},
-   {x:15,y:3,dir:'down',spr:'old',pal:['#f8d0a8','#c07030','#6a4a30','#2a2a2a'],text:['きこり「つりばしの しゅうりが\nやっと おわったよ！」','きこり「きたへ すすめば\nみずの まち ミナモシティだ。」']},
+    say:['もりの おくまで きたのね。\nうでを みせて！'],lose:['なかなか やるわね！'],after:['きたの つりばしを わたると\nセセラギシティよ。']},
+   {x:15,y:3,dir:'down',spr:'old',pal:['#f8d0a8','#c07030','#6a4a30','#2a2a2a'],text:['きこり「つりばしの しゅうりが\nやっと おわったよ！」','きこり「きたへ すすめば\nみずの まち セセラギシティだ。」']},
    {x:17,y:35,dir:'left',spr:'girl',pal:['#f8d0a8','#e0a0c0','#6a3a2a','#2a1a14'],text:['もりは みちが いりくんでいるわ。\nいきどまりも たくさん あるの。','たまに アイテムが おちているから\nすみずみまで さがしてみて！']},
    {x:5,y:4,dir:'down',spr:'boy',mon:'uppy',role:'god',hideFlag:'uppy'},
   ]},
  route3:{name:'3ばんどうろ',out:true,rows:["TTTTTTTTT..TTTTTTTTT", "T..................T", "T.GGGG.......GGGG..T", "T.GGGG...S...GGGG..T", "T..................T", "T...A..........A...T", "WWWWWWWWWnnWWWWWWWWW", "WWWWWWWWWnnWWWWWWWWW", "WWWWWWWWWnnWWWWWWWWW", "T....F.........F...T", "T.GGGGG....GGGGGG..T", "T.GGGGG....GGGGGG..T", "T.GGGGG....GGGGGG..T", "T..................T", "TTTT....WWWW....TTTT", "T.......WWWW.......T", "T..GGG..........GGGT", "T..GGG.........GGG.T", "T..................T", "TTTTTTTTT..TTTTTTTTT"],
   warps:{'9,19':['forest',14,1,'down'],'10,19':['forest',15,1,'down'],'9,0':['town2',10,16,'up'],'10,0':['town2',11,16,'up']},
-  signs:{'9,3':['3ばんどうろ  かわぞいの みち\nきた：ミナモシティ']},
+  signs:{'9,3':['3ばんどうろ  かわぞいの みち\nきた：セセラギシティ']},
   wild:(x,y)=>[['rakkoro',13,15,20],['hasagani',13,15,20],['tsubametto',13,15,14],['denmushi',13,14,8],['kamaleaf',13,14,8],['hinokon',13,14,2],['mizutama',13,14,2],['happaru',13,14,2]],
   npcs:[
    {id:'taro',x:12,y:4,dir:'left',spr:'old',pal:['#f0c090','#5a8ac0','#e8e0c8','#1c1820'],sight:3,tname:'つりびとの タロウ',team:[['hasagani',13],['rakkoro',14]],money:20,
     say:['おっ、 いい つりびより！\nひとつ しょうぶと いこう！'],lose:['にがした さかなは おおきい……'],after:['かわの ちかくの くさむらには\nみずの モンスターが おおいぞ。']},
    {id:'nana',x:7,y:9,dir:'right',spr:'girl',pal:['#f8d0a8','#60c0e8','#e08040','#1c1820'],sight:4,tname:'みずべの ナナ',team:[['mizutama',13],['rakkoro',14]],money:20,
-    say:['みずべの モンスターは\nかわいいでしょ！ しょうぶよ！'],lose:['かわいいだけじゃ だめかぁ。'],after:['ミナモの ジムリーダーは\nみずの つかいてよ。']},
+    say:['みずべの モンスターは\nかわいいでしょ！ しょうぶよ！'],lose:['かわいいだけじゃ だめかぁ。'],after:['セセラギの ジムリーダーは\nみずの つかいてよ。']},
   ]},
- town2:{name:'ミナモシティ',out:true,rows:["TTTTTTTTTTTTTTTTTTTTTT", "T....................T", "T.eeeeeee....CCCCC...T", "T.eeeeeee....wwDww...T", "T.wwwwDww.....S......T", "T....S...............T", "TWWWWWWWWnnWWWWWWWWWWT", "T....................T", "T.RRRR...I.....MMMM..T", "T.wDww....U....wwDw..T", "T....B.........B.....T", "TWWWW..KKKKKKKK..WWWWT", "TWWWW..KKKKKKKK..WWWWT", "T..N....KKKKKK....N..T", "T.....I........I.....T", "T..F...............F.T", "T.......S............T", "TTTTTTTTTT..TTTTTTTTTT"],
+ town2:{name:'セセラギシティ',out:true,rows:["TTTTTTTTTTTTTTTTTTTTTT", "T....................T", "T.eeeeeee....CCCCC...T", "T.eeeeeee....wwDww...T", "T.wwwwDww.....S......T", "T....S...............T", "TWWWWWWWWnnWWWWWWWWWWT", "T....................T", "T.RRRR...I.....MMMM..T", "T.wDww....U....wwDw..T", "T....B.........B.....T", "TWWWW..KKKKKKKK..WWWWT", "TWWWW..KKKKKKKK..WWWWT", "T..N....KKKKKK....N..T", "T.....I........I.....T", "T..F...............F.T", "T.......S............T", "TTTTTTTTTT..TTTTTTTTTT"],
   warps:{'10,17':['route3',9,1,'down'],'11,17':['route3',10,1,'down'],'6,4':['gym2',5,12,'up'],'15,3':['center2',4,6,'up'],'3,9':['house2',4,6,'up'],'17,9':['shop2',4,6,'up']},
-  signs:{'14,4':['モンスターセンター\nつかれた モンスターを かいふく！'],'5,5':['ミナモジム\nリーダー シズク  みずの つかいて'],'8,16':['ミナモシティ\nみずと はしの まち']},
+  signs:{'14,4':['モンスターセンター\nつかれた モンスターを かいふく！'],'5,5':['セセラギジム\nリーダー シズク  みずの つかいて'],'8,16':['セセラギシティ\nみずと はしの まち']},
   npcs:[
    {x:12,y:7,dir:'down',spr:'boy',pal:['#f8d0a8','#40a0d0','#e0c040','#1c1820'],text:['この まちは うんがが いっぱい！\nはしを わたって いどうするんだ。']},
    {x:5,y:13,dir:'right',spr:'old',pal:['#f0c090','#3a6a9a','#e8e8e8','#2a2a2a'],text:['ジムリーダーの シズクは\nながれる ような たたかいかたじゃ。','くさや でんきの わざを\nもっていくと よいぞ。']},
@@ -2101,7 +2101,7 @@ const MAPS={
   warps:{'5,13':['town2',6,5,'down'],'6,13':['town2',6,5,'down']},
   npcs:[
    {id:'shizuku',x:5,y:1,dir:'down',spr:'girl',pal:['#f8d0a8','#3a86e0','#1c3c90','#1c1820'],tname:'ジムリーダーの シズク',team:[['rakkoro',16],['hasagani',17],['namitama',19]],money:70,
-    say:['ようこそ ミナモジムへ。\nわたしが リーダーの シズク。','みずの ように しなやかな\nわたしの たたかい、 うけてみて！'],lose:['……みごとな ながれ だったわ。'],after:['つよい みずは かたちを かえて\nどこまでも ながれていくのよ。'],
+    say:['ようこそ セセラギジムへ。\nわたしが リーダーの シズク。','みずの ように しなやかな\nわたしの たたかい、 うけてみて！'],lose:['……みごとな ながれ だったわ。'],after:['つよい みずは かたちを かえて\nどこまでも ながれていくのよ。'],
     badge:'アクアバッジ',badgeTalk:['シズク「かった あかしに\nアクアバッジを どうぞ。」']},
    {id:'yuki',x:10,y:10,dir:'left',spr:'girl',pal:['#f8d0a8','#7ad0f0','#3a5a8a','#1c1820'],sight:6,tname:'ジムトレーナーの ユキ',team:[['rakkoro',14],['mizutama',14]],money:26,
     say:['みずの ジムへ ようこそ！\nまずは わたしが あいてよ！'],lose:['つめたい みずを あびた きぶん……'],after:['プールの あいだの みちを\nすすむのよ。']},
@@ -2109,22 +2109,22 @@ const MAPS={
     say:['なみに のまれる かくごは\nいいか！'],lose:['くっ、 ながされた……！'],after:['シズクさんは おくに いるぞ。']},
    {id:'mio',x:1,y:4,dir:'right',spr:'girl',pal:['#f8d0a8','#a0e0f0','#5a3a8a','#1c1820'],sight:8,tname:'ジムトレーナーの ミオ',team:[['mizutama',14],['hasagani',16]],money:28,
     say:['シズクさまの まえに\nわたしを こえてみなさい！'],lose:['あなたなら シズクさまに\nとどくかも……'],after:['シズクさまの ナミタマは\nとても かたいわよ。']},
-   {x:2,y:11,dir:'right',spr:'boy',pal:['#f8d0a8','#40a070','#303030','#1c1820'],text:['ようこそ ミナモジムへ！','ここは みずタイプの ジム。\nくさや でんきの わざが よく きくよ！']},
+   {x:2,y:11,dir:'right',spr:'boy',pal:['#f8d0a8','#40a070','#303030','#1c1820'],text:['ようこそ セセラギジムへ！','ここは みずタイプの ジム。\nくさや でんきの わざが よく きくよ！']},
   ]},
  gym:{rows:["kkkkkkkkkk","kpffffffpk","kffffffffk","krrrffrrrk","kffffffffk","kffffffffk","krrfrrrrrk","kffffffffk","kffffffffk","kffffffffk","kffffffffk","kkkkmmkkkk"],
   warps:{'4,11':['town',5,5,'down'],'5,11':['town',5,5,'down']},
   npcs:[
    {id:'iwao',x:4,y:1,dir:'down',spr:'old',pal:['#f0c090','#8c8478','#3a3632','#1c1820'],tname:'ジムリーダーの イワイ',team:[['koroishi',9],['koroishi',11]],money:60,
-    say:['よく きたな！\nわしが ハナサキジムの イワイだ。','わしの いしのように かたい まもり\nくずせるかな？ いくぞ！'],lose:['みごとだ！ きみの かちだ！'],after:['きみなら もっと とおくへ\nいけるだろう。'],badge:'ゴツゴツバッジ',badgeTalk:['イワイ「かった あかしに\nゴツゴツバッジを やろう！」','イワイ「きたの まよいの もりを\nぬけると ミナモシティじゃ。」']},
+    say:['よく きたな！\nわしが ハナサキジムの イワイだ。','わしの いしのように かたい まもり\nくずせるかな？ いくぞ！'],lose:['みごとだ！ きみの かちだ！'],after:['きみなら もっと とおくへ\nいけるだろう。'],badge:'ゴツゴツバッジ',badgeTalk:['イワイ「かった あかしに\nゴツゴツバッジを やろう！」','イワイ「きたの まよいの もりを\nぬけると セセラギシティじゃ。」']},
    {id:'goro',x:7,y:7,dir:'left',spr:'boy',pal:['#f8d0a8','#8a6040','#a0a0a8','#1c1820'],sight:4,tname:'ジムトレーナーの ゴロウ',team:[['koroishi',7],['koroishi',8]],money:25,
     say:['イワイさんに あいたければ\nおれを たおしてからだ！'],lose:['くっ… かたい いしも くだけたか。'],after:['イワイさんは おくに いるぞ。']},
    {x:7,y:9,dir:'down',spr:'boy',pal:['#f8d0a8','#40a070','#303030','#1c1820'],text:['ようこそ ハナサキジムへ！','ここは いわタイプの ジム。\nみずや くさの わざで いどもう！']}]},
 };
 
 Object.assign(MAPS,{
- coast:{name:'ミナモかいがん',out:true,beach:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTT", "TsssysssssGGGGGsAsssAssT", "TsssssssssGGGGGsAsAAAsAT", "TSsGGGGssssssssyAsssssAT", "sssGGGGsssssssssAAAAsAAT", "TssGGGGssssyssssssssssAT", "TsssssssssssssssssssWWWT", "TsssysssssGGGGsssssWWWWT", "TssssssssGGGGGssssWWWWWT", "TsssssssssGGGsssssWWWWWT", "TssysssssssssssssWWWWWWT", "TssssssnssssssssWWWWWWWT", "WWWWWWWnWWWWWWWWWWWWWWWW", "WWWWWWWnWWWWWWWWWWWWWWWW", "WWWWWWWnWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW"],
+ coast:{name:'セセラギかいがん',out:true,beach:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTT", "TsssysssssGGGGGsAsssAssT", "TsssssssssGGGGGsAsAAAsAT", "TSsGGGGssssssssyAsssssAT", "sssGGGGsssssssssAAAAsAAT", "TssGGGGssssyssssssssssAT", "TsssssssssssssssssssWWWT", "TsssysssssGGGGsssssWWWWT", "TssssssssGGGGGssssWWWWWT", "TsssssssssGGGsssssWWWWWT", "TssysssssssssssssWWWWWWT", "TssssssnssssssssWWWWWWWT", "WWWWWWWnWWWWWWWWWWWWWWWW", "WWWWWWWnWWWWWWWWWWWWWWWW", "WWWWWWWnWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW"],
   warps:{'0,4':['town2',20,7,'left']},
-  signs:{'1,3':['ミナモかいがん\nしおかぜの ふく すなはま']},
+  signs:{'1,3':['セセラギかいがん\nしおかぜの ふく すなはま']},
   items:[{id:'co1',x:17,y:2,k:'rarecandy',amt:1},{id:'co2',x:21,y:2,k:'revive',amt:2},{id:'co3',x:22,y:1,k:'superpotion',amt:2}],
   wild:(x,y)=>[['yadoiwa',16,19,20],['umidory',16,19,20],['rakkoro',16,18,10],['hasagani',16,18,10],['tsubametto',17,19,6]],
   npcs:[
@@ -2163,7 +2163,7 @@ Object.assign(MAPS,{
  center3:{rows:["kkkkkkkkkk","kpfffhffpk","kcccccccck","kfffffffqk","kffffffffk","kttffffffk","kffffffffk","kkkkmmkkkk"],
   warps:{'4,7':['town3',17,13,'down'],'5,7':['town3',17,13,'down']},
   npcs:[{x:4,y:1,dir:'down',spr:'girl',pal:['#f8d0a8','#ffffff','#f080a0','#3a2030'],role:'nurse'},
-   {x:6,y:5,dir:'left',spr:'girl',pal:['#f8d0a8','#e0c060','#5a3a20','#2a1a14'],text:['ミナモの ひがしの かいがんで\nつりゲームが できるのよ。']}]},
+   {x:6,y:5,dir:'left',spr:'girl',pal:['#f8d0a8','#e0c060','#5a3a20','#2a1a14'],text:['セセラギの ひがしの かいがんで\nつりゲームが できるのよ。']}]},
  shop3:{rows:["kkkkkkkkkk","kbbbffbbbk","kffffffffk","kccfffffpk","kffffffffk","kfffttfffk","kffffffffk","kkkkmmkkkk"],
   warps:{'4,7':['town3',23,13,'down'],'5,7':['town3',23,13,'down']},
   npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','potion','superpotion']},
@@ -2172,7 +2172,7 @@ Object.assign(MAPS,{
 {const t=MAPS.town2,r=t.rows;r[0]=r[0].slice(0,10)+'..'+r[0].slice(12);r[7]=r[7].slice(0,21)+'.';
  Object.assign(t.warps,{'10,0':['route4',9,24,'up'],'11,0':['route4',10,24,'up'],'21,7':['coast',1,4,'right']});
  t.npcs.push({x:9,y:1,dir:'right',spr:'old',pal:['#f8d0a8','#3a6a9a','#7a5a3a','#2a2a2a'],text:['みちの ばんにん「この さきは\n4ばんどうろ。 ミライポートへ つづく。」']},
-  {x:19,y:8,dir:'down',spr:'girl',pal:['#f8d0a8','#f8d050','#3a6ab0','#2a1a14'],text:['ひがしへ いくと\nミナモかいがんよ。']});}
+  {x:19,y:8,dir:'down',spr:'girl',pal:['#f8d0a8','#f8d050','#3a6ab0','#2a1a14'],text:['ひがしへ いくと\nセセラギかいがんよ。']});}
 
 Object.assign(MAPS,{
  hill:{name:'ミライの おか',out:true,rows:["TTTTTTTTTTTTTTTTTTTTTT", "T....GGGG.....GGGGG..T", "T.F..GGGG..F..GGGGG..T", "T....GGGG.....GGGGG..T", "T....................T", "TGGGG...GGGGGG...GGG.T", "TGGGG...GGGGGG...GGG.T", "........GGGGGG.......T", "........GGGGGG...S...T", "TGGG...............F.T", "TGGG..GGGGG...GGGGG..T", "TGGG..GGGGG...GGGGG..T", "T.....GGGGG...GGGGG..T", "T..F.........F.......T", "T....................T", "TTTTTTTTTTTTTTTTTTTTTT"],
@@ -2632,7 +2632,7 @@ const LG_GUARD=()=>({x:0,y:0,dir:'down',spr:'boy',pal:['#f8d0a8','#3a4a8a','#e8e
 Object.assign(MAPS,{
  route9:{name:'9ばんどうろ',out:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T....GGGG.....TTTT.....GGGGG...T", "T.F..GGGG..I..TTTT..F..GGGGG...T", "T.........................GG...T", "T..GGGGG.....GGGG....S.........T", "T..GGGGG.....GGGG.......GGGG...T", "T.....................F.GGGG...T", "................................", "T....GGGG....F.........GGG.....T", "T....GGGG.......GGGGG..GGG..F..T", "T..........WWWW.GGGGG..........T", "T.F..GGG...WWWW.......GGGG.....T", "T....GGG.............FGGGG.....T", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"],
   warps:{'0,7':['stadium',28,16,'left'],'31,7':['town2',1,7,'right']},
-  signs:{'21,4':['9ばんどうろ\nひがし：ミナモシティ\nにし：チャンピオンスタジアム']},
+  signs:{'21,4':['9ばんどうろ\nひがし：セセラギシティ\nにし：チャンピオンスタジアム']},
   items:[{id:'r9a',x:29,y:1,k:'kesshou',amt:1},{id:'r9b',x:1,y:12,k:'money',amt:4500}],
   wild:(x,y)=>[['goroneko',56,60,15],['hariden',56,60,15],['yurari',56,59,12],['tanuoyabun',57,60,10],['hibikimimi',57,60,10],['inabikari',57,60,10],['makyou',57,60,8],['kazekirio',56,59,8],['maobasa',57,60,7],['glencon',57,59,1],['uzushion',57,59,1],['hanamiru',57,59,1]],
   npcs:[
@@ -2708,7 +2708,7 @@ function lgChampion(){const n=(S.flags.champN||0)+1,TA='タツヤ';
 const gotMon=id=>{try{return S.caught.includes(id)}catch(e){return false}};
 const semiW=(id,r)=>gotMon(id)?[]:[[id,70,70,r]];
 Object.assign(MAPS,{
- isleA:{name:'ミナモおきの しま',out:true,beach:true,isle:true,rich:true,rows:["WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWsssssssssWWWWWWWW", "WWWWWsssyssGGssssyWWWWWW", "WWWWssGGGsssGGGsssssWWWW", "WWWssGGGGGssssGGGGssWWWW", "WWWsssGGGssyssGGGGsssWWW", "WWWssssssssssssssyssWWWW", "WWWWsyssGGGGssssssssWWWW", "WWWWssssGGGGGsssGGssWWWW", "WWWWWsssssGGsssGGGsWWWWW", "WWWWWWssssssssssssWWWWWW", "WWWWWWWWsssyssssWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW"],
+ isleA:{name:'セセラギおきの しま',out:true,beach:true,isle:true,rich:true,rows:["WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWsssssssssWWWWWWWW", "WWWWWsssyssGGssssyWWWWWW", "WWWWssGGGsssGGGsssssWWWW", "WWWssGGGGGssssGGGGssWWWW", "WWWsssGGGssyssGGGGsssWWW", "WWWssssssssssssssyssWWWW", "WWWWsyssGGGGssssssssWWWW", "WWWWssssGGGGGsssGGssWWWW", "WWWWWsssssGGsssGGGsWWWWW", "WWWWWWssssssssssssWWWWWW", "WWWWWWWWsssyssssWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW"],
   warps:Object.fromEntries([...Array(24)].map((_,x)=>[x+',0',['coast',x===7?8:x,14,'up']])),
   items:[{id:'isA1',x:11,y:9,k:'rarecandy',amt:2},{id:'isA2',x:18,y:4,k:'kesshou',amt:1}],
   wild:(x,y)=>[['inabikari',55,58,18],['raidenga',55,58,18],['puraguru',55,58,15],['hariden',55,58,14],['kazandori',55,58,12],['umidory',55,58,12],['tanuoyabun',55,58,8],...semiW('koume',3)],
@@ -3791,7 +3791,7 @@ let toast=null;
 // こうかい まえの おしらせ：FEAT を true に する ときに NEWS の さいごへ うつす
 const NEWS_HELD=[
  {id:'2026.11.03a',title:'クリアごの おたのしみ',body:['こんかいの こうしん：','・ものがたりを クリアした あと\n ジムリーダーと さいせん\n できるように！（Lv60〜70）','・ひづけが かわると\n また たたかえるよ','・はじめて かつと\n チャンピオンリーグの\n すいせんじょうが もらえる','・8まい あつめると……？','・いえの にいちゃんとも\n まいにち しょうぶ できるよ','・マウントフジの さんちょうに\n なにかが まいおりて いる……？']},
- {id:'2026.11.04a',title:'チャンピオンリーグ かいまく！',body:['こんかいの こうしん：','・ミナモシティ・タカネシティ・\n とがった いわの やまから\n あたらしい みちが ひらいた！','・みちの さきには\n チャンピオンスタジアム！','・すいせんじょうを 8まい\n あつめて リーグに ちょうせん！','・あたらしい モンスターも\n 10しゅ みつかったよ','・かんいボートで うみの むこうへ\n いくと……？']}
+ {id:'2026.11.04a',title:'チャンピオンリーグ かいまく！',body:['こんかいの こうしん：','・セセラギシティ・タカネシティ・\n とがった いわの やまから\n あたらしい みちが ひらいた！','・みちの さきには\n チャンピオンスタジアム！','・すいせんじょうを 8まい\n あつめて リーグに ちょうせん！','・あたらしい モンスターも\n 10しゅ みつかったよ','・かんいボートで うみの むこうへ\n いくと……？']}
 ];
 function deliverNews(st){st.mail=st.mail||[];const ids=NEWS.map(n=>n.id);let from=st.newsSeen?ids.indexOf(st.newsSeen)+1:Math.max(0,NEWS.length-1);let n=0;
  for(const it of NEWS.slice(from)){if(st.mail.some(m=>m.id===it.id))continue;st.mail.unshift({id:it.id,from:'かいはつしゃ',title:it.title,body:it.body,read:false});n++}
@@ -3853,7 +3853,7 @@ const SCN=[
  ['さいしょから',()=>{newGame()}],
  ['おじいちゃんの まえ',()=>{devBase(0,0,{});loadMap('nbr',6,4,'up')}],
  ['ウッピー戦の まえ',()=>{devBase(16,1,{});loadMap('forest',5,6,'up')}],
- ['ミナモジム',()=>{devBase(20,1,{uppy:1});loadMap('gym2',5,12,'up')}],
+ ['セセラギジム',()=>{devBase(20,1,{uppy:1});loadMap('gym2',5,12,'up')}],
  ['4ばんどうろ（くろふくの おとこ）',()=>{devBase(22,2,{uppy:1});loadMap('route4',10,24,'up')}],
   ['ミライジム',()=>{devBase(26,2,{uppy:1});loadMap('gym3',5,12,'up')}],
  ['キヨシ イベントの まえ',()=>{devBase(30,3,{uppy:1});loadMap('town3',2,14,'left')}],
@@ -4016,7 +4016,7 @@ function drawDrops(cx,cy){if(!S)return;const L=[...((S.drops&&S.drops[S.map])||[
 const ENC={grass:0.07,sea:0.045,cave:0.035,rare:0.15};let encSafe=0;const safeSteps=n=>Math.random()<.12?0:n;
 function onStep(){if(P.surf&&at(P.x,P.y)!=='W'){P.surf=false;AU.sfx('fxwater')}if(t3Exit())return;t2Check();if(loStep())return;if(pickUp())return;
  {const lk=CUR.locked&&CUR.locked[P.x+','+P.y];if(lk){Q.push(...T(...lk),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=P.sp=STEP}));return}}
- if(S.map==='town2'&&P.y<=1&&(P.x===10||P.x===11)&&!S.badges.includes('アクアバッジ')){Q.push(...T('みちの ばんにん「まった！\nこの さきは 4ばんどうろだ。」','みちの ばんにん「ミナモジムの バッジが\nない ひとは とおせないよ。」'),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=P.sp=STEP}));return}
+ if(S.map==='town2'&&P.y<=1&&(P.x===10||P.x===11)&&!S.badges.includes('アクアバッジ')){Q.push(...T('みちの ばんにん「まった！\nこの さきは 4ばんどうろだ。」','みちの ばんにん「セセラギジムの\nバッジが ない ひとは\nとおせないよ。」'),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=P.sp=STEP}));return}
  if(S.map==='town5'&&P.y<=0&&(P.x===12||P.x===13)&&!S.badges.includes('ソヨカゼバッジ')){Q.push(...T('この さきの みちは がけくずれで\nふさがっている……'),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=P.sp=STEP}));return}
  if(S.map==='kamoDome'&&P.x===12&&P.y===18&&!S.flags.ruinsOpen){Q.push(...T('この さきは しんかいの いせき。','かってに はいっては\nいけない きまりだ……'),F(()=>{P.dir='up';P.fx=P.x;P.fy=P.y;P.y-=1;P.mv=P.sp=STEP}));return}
  if(S.map==='oami'&&P.x===4&&P.y===15&&!S.flags.towerDone){Q.push(...T('ジムの とびらは しまっている。','「ただいま るすに しています。\nジムリーダー シラサト」'),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=P.sp=STEP}));return}
@@ -4736,8 +4736,8 @@ const WMAP=[{id:'village',n:'とよっちょむら',d:'みどりが いっぱい
  {id:'town',n:'ハナサキタウン',d:'はなと いしの まち。 ジムは いわタイプ',x:180,y:162,k:'town',roof:'#8c8c98'},
  {id:'forest',n:'まよいの もり',d:'みちの いりくんだ ふかい もり',x:168,y:134,k:'forest'},
  {id:'route3',n:'3ばんどうろ',d:'かわぞいの みち。 みずの モンスターが すむ',x:214,y:122,k:'road'},
- {id:'town2',n:'ミナモシティ',d:'うんがと はしの まち。 ジムは みずタイプ',x:256,y:116,k:'town',roof:'#3cb8b0'},
- {id:'coast',n:'ミナモかいがん',d:'すなはまと いりえ。 つりゲームが できる',x:266,y:156,k:'beach'},
+ {id:'town2',n:'セセラギシティ',d:'うんがと はしの まち。 ジムは みずタイプ',x:256,y:116,k:'town',roof:'#3cb8b0'},
+ {id:'coast',n:'セセラギかいがん',d:'すなはまと いりえ。 つりゲームが できる',x:266,y:156,k:'beach'},
  {id:'route4',n:'4ばんどうろ',d:'まちへ つづく せいびされた みち',x:254,y:82,k:'road'},
  {id:'town3',n:'ミライポート',d:'ビルと みなとと こうえんの まち。 ジムは エスパータイプ',x:264,y:50,k:'city'},
  {id:'hill',n:'ミライの おか',d:'エスパーの モンスターが すむ おか',x:222,y:66,k:'hill'},
@@ -4753,7 +4753,7 @@ const WMAP=[{id:'village',n:'とよっちょむら',d:'みどりが いっぱい
  {id:'bousou',n:'ぼうそうむら',d:'りゅうの さと。 ジムは ドラゴンタイプ',x:140,y:190,k:'town',roof:'#7a8a3a'},
  {id:'crag',n:'とがった いわの やま',d:'ドラゴンタイプが おおく すむ けわしい やま',x:128,y:158,k:'crag'},
  {id:'kamogawa',n:'カモガワシティ',d:'くうきの ドームに つつまれた うみの そこの まち。 ジムは みず・ドラゴン',x:296,y:196,k:'deep'},
- {id:'route9',n:'9ばんどうろ',d:'ミナモシティから チャンピオンスタジアムへ つづく みち',x:204,y:100,k:'road',feat:'postgame'},
+ {id:'route9',n:'9ばんどうろ',d:'セセラギシティから チャンピオンスタジアムへ つづく みち',x:204,y:100,k:'road',feat:'postgame'},
  {id:'route10',n:'10ばんどうろ',d:'とがった いわの やまから スタジアムへ のぼる みち',x:142,y:126,k:'road',feat:'postgame'},
  {id:'route11',n:'11ばんどうろ',d:'タカネシティから スタジアムへ つづく みち',x:90,y:98,k:'road',feat:'postgame'},
  {id:'stadium',n:'チャンピオンスタジアム',d:'チャンピオンリーグが ひらかれる きょだいな スタジアム',x:152,y:90,k:'stadium',feat:'postgame'},
