@@ -3940,6 +3940,8 @@ function updWorld(){
  if(S.map==='town3'&&S.flags.matsunagaTold&&!S.flags.tatsu3&&!S.flags.t3Call&&P.y<=5&&P.mv===0&&!menu&&!shop&&!boxui){tatsu3Event();return}
   if(S.map==='kamoDome'&&S.badges.includes('シオサイバッジ')&&!S.flags.ruinsCall&&!S.flags.oosugiR&&P.mv===0&&!menu&&!shop&&!boxui){ruinsEvent();return}
   if(S.map==='fuji2'&&!S.flags.teruiF&&!S.flags.fujiCall&&P.y<=11&&P.mv===0&&!menu&&!shop&&!boxui){summitEvent();return}
+  // さんちょうの イベントの とちゅうで ゲームを とじた ときの つづき（バトルに かった じてんで セーブ されるため）
+  if(S.map==='fuji2'&&!S.flags.endingDone&&P.y<=12&&P.mv===0&&!menu&&!shop&&!boxui){if(S.flags.fatherF){Q.push(...fatherWin());return}if(S.flags.kiyoF&&!S.flags.fatherShow){Q.push(...kiyoshiFujiWin());return}if(S.flags.teruiF&&!S.flags.fujiKiyo){Q.push(...teruiFujiWin());return}}
   if(S.map==='route7'&&!S.flags.r7done&&!S.flags.r7Call&&S.badges.includes('ソヨカゼバッジ')&&P.y<=24&&P.y>=19&&P.mv===0&&!menu&&!shop&&!boxui){r7Event();return}
   if(S.map==='btRoof'&&S.flags.kiyoTGone&&!S.flags.towerDone&&!S.flags.roofCall&&P.mv===0&&!menu&&!shop&&!boxui){roofEvent();return}
   if(S.map==='route4'&&!S.flags.r4tCall&&!S.flags.ev5done&&P.y<=22&&P.y>=17&&P.mv===0&&!menu&&!shop&&!boxui){r4Terui();return}
