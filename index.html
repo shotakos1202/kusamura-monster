@@ -15207,17 +15207,17 @@ Object.assign(MAPS,{
  isleA:{name:'セセラギおきの しま',out:true,beach:true,isle:true,rich:true,rows:["WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWsssssssssWWWWWWWW", "WWWWWsssyssGGssssyWWWWWW", "WWWWssGGGsssGGGsssssWWWW", "WWWssGGGGGssssGGGGssWWWW", "WWWsssGGGssyssGGGGsssWWW", "WWWssssssssssssssyssWWWW", "WWWWsyssGGGGssssssssWWWW", "WWWWssssGGGGGsssGGssWWWW", "WWWWWsssssGGsssGGGsWWWWW", "WWWWWWssssssssssssWWWWWW", "WWWWWWWWsssyssssWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW"],
   warps:Object.fromEntries([...Array(24)].map((_,x)=>[x+',0',['coast',x===7?8:x,14,'up']])),
   items:[{id:'isA1',x:11,y:9,k:'rarecandy',amt:2},{id:'isA2',x:18,y:4,k:'kesshou',amt:1}],
-  wild:(x,y)=>[['inabikari',55,58,18],['raidenga',55,58,18],['puraguru',55,58,15],['hariden',55,58,14],['kazandori',55,58,12],['umidory',55,58,12],['tanuoyabun',55,58,8],...semiW('koume',3)],
+  wild:(x,y)=>[['inabikari',55,58,18],['raidenga',55,58,18],['puraguru',55,58,15],['hariden',55,58,14],['kazandori',55,58,12],['umidory',55,58,12],['tanuoyabun',55,58,8],...semiW('koume',5)],
   wildW:()=>[['tobiuon',55,58,35],['namigame',55,58,30],['daiogani',55,58,20],['fuwakura',55,58,15]],npcs:[]},
  isleB:{name:'こうげんの かくれす',out:true,isle:true,rich:true,rows:["WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWW....TT....WWWWWWWWW", "WWW...GGG..A....WWWWWWWW", "WW..GGGGG....GG...WWWWWW", "WW..GGG..TT..GGGG..WWWWW", "WW.....A.TT....GG...WWWW", "WWW..F........F......WWW", "WWW..GGGG..A.........WWW", "WWW.GGGGGG....GGG...WWWW", "WWWW..GGG....GGGGG.WWWWW", "WWWWW......TT......WWWWW", "WWWWWWW..F.TT..F.WWWWWWW", "WWWWWWWWW.......WWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW"],
   warps:{'23,7':['route7',1,9,'right'],'23,8':['route7',1,10,'right']},
   items:[{id:'isB1',x:3,y:6,k:'rarecandy',amt:2},{id:'isB2',x:16,y:9,k:'kesshou',amt:1}],
-  wild:(x,y)=>[['makyou',55,58,18],['lunapowan',55,58,16],['bakumu',55,58,15],['yurari',55,58,14],['gansekidon',55,58,12],['kokenonushi',55,58,12],['hibikimimi',55,58,10],...semiW('sasuke',3)],
+  wild:(x,y)=>[['makyou',55,58,18],['lunapowan',55,58,16],['bakumu',55,58,15],['yurari',55,58,14],['gansekidon',55,58,12],['kokenonushi',55,58,12],['hibikimimi',55,58,10],...semiW('sasuke',5)],
   wildW:()=>[['namigame',55,58,35],['rakkoole',55,58,30],['daiogani',55,58,20],['fuwakura',55,58,15]],npcs:[]},
  isleC:{name:'とよっちょ にしの しま',out:true,isle:true,rich:true,rows:["WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWW......WWWWWWWWWW", "WWWWW....GGG....WWWWWWWW", "WWW...GGGGGGG.A...WWWWWW", "WWW..GGG...GGG.....WWWWW", "WW...F..TT....F.....WWWW", "WW..GGG.TT..GGGG.....WWW", "WW..GGGG....GGGGG....WWW", "WWW...GG.A....GG.....WWW", "WWWW.F..............WWWW", "WWWWW...GGGG..F...WWWWWW", "WWWWWWW.GGGG....WWWWWWWW", "WWWWWWWWW....WWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW", "WWWWWWWWWWWWWWWWWWWWWWWW"],
   warps:{'23,10':['village',1,10,'right'],'23,11':['village',1,11,'right']},
   items:[{id:'isC1',x:13,y:3,k:'rarecandy',amt:2},{id:'isC2',x:4,y:8,k:'kesshou',amt:1}],
-  wild:(x,y)=>[['hyouen',55,58,18],['kagaribi',55,58,16],['magumajiro',55,58,15],['kazandori',55,58,14],['goroneko',55,58,12],['kokenonushi',55,58,10],['glencon',55,58,2],...semiW('kotarou',3)],
+  wild:(x,y)=>[['hyouen',55,58,18],['kagaribi',55,58,16],['magumajiro',55,58,15],['kazandori',55,58,14],['goroneko',55,58,12],['kokenonushi',55,58,10],['glencon',55,58,2],...semiW('kotarou',5)],
   wildW:()=>[['rakkoole',55,58,35],['daiogani',55,58,20],['namigame',55,58,30],['fuwakura',55,58,15]],npcs:[]},
 });
 // いりぐち（みずの はし）。5ばんめの 'postgame' で クリアご＆こうかいご だけ ひらく
@@ -15226,6 +15226,11 @@ MAPS.route7.rows[9]='W'+MAPS.route7.rows[9].slice(1);MAPS.route7.rows[10]='W'+MA
 Object.assign(MAPS.route7.warps,{'0,9':['isleB',22,7,'left','postgame'],'0,10':['isleB',22,8,'left','postgame']});
 MAPS.village.rows[10]='WWWWWW....TT...T';MAPS.village.rows[11]='WWWWWWA...TT.F.T';MAPS.village.rows[12]='TWWWF..........T';
 Object.assign(MAPS.village.warps,{'0,10':['isleC',22,10,'left','postgame'],'0,11':['isleC',22,11,'left','postgame']});
+// かくし しまの ヒント（クリアご）：いりぐちの ちかくの ひとが うわさを おしえて くれる
+const ISLE_TIP='（たおすと にげて しまう らしい。\nよわらせて ボールを なげよう）';
+MAPS.coast.npcs.push({x:3,y:11,dir:'down',spr:'old',pal:['#f0c090','#3a6a9a','#e8e0d0','#d8d8d8'],showIf:'gameClear',feat:'postgame',text:['みなみの おきを ボートで\nずっと すすむと……','ちいさな しまが あるんじゃ。','そこで いなずまを まとう\nきつねを みた ものが おる。','めったに すがたを みせん\nらしいがのう。',ISLE_TIP]});
+MAPS.village.npcs.push({x:5,y:12,dir:'left',spr:'girl',pal:['#f8d0a8','#b06a9a','#e8e0d0','#8a8a8a'],showIf:'gameClear',feat:'postgame',text:['むらの にしの うみの むこうに\nしまが あるのを しってるかい？','ボートが あれば\nいけるかも しれないね。','ほのおの たてがみの おおかみが\nすんでいる って いいつたえよ。',ISLE_TIP]});
+MAPS.route7.npcs.push({x:1,y:11,dir:'up',spr:'boy',pal:HIKER,showIf:'gameClear',feat:'postgame',text:['この みずべを ボートで\nにしへ わたると……','こうげんの かくれた しまに\nでられるらしい。','つきの しるしを つけた\nしのびの ような けものが いる。',ISLE_TIP]});
 for(const id in MAPS){const m=MAPS[id];m.npcs=m.npcs||[];m.npcs.forEach(e=>{e.hx=e.x;e.hy=e.y;e.hdir=e.dir;e.fx=e.x;e.fy=e.y;e.mv=0;e.alert=0;e.trainer=!!e.team});m.h=m.rows.length;m.w=m.rows[0].length}
 // クリア後：ジムリーダーの さいせん（日付が かわると また たたかえる。はじめて かつと すいせんじょう）・にいちゃんと まいにち バトル
 const REMATCH={
@@ -15476,7 +15481,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.05-1653';
+const BUILD='2026.11.05-1723';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
