@@ -14442,6 +14442,7 @@ DEX.push('hariden','raiharion','yurari','yurameki','kodamame','ookodama','gorone
 Object.assign(WHERE,{hariden:'9ばんどうろ・11ばんどうろ',raiharion:'ハリデンが Lv65で しんか',yurari:'9ばんどうろ・10ばんどうろ',yurameki:'ユラリが Lv65で しんか',kodamame:'10ばんどうろ・11ばんどうろ',ookodama:'コダマメが Lv65で しんか',goroneko:'9ばんどうろ',hakutaku:'10ばんどうろ（まれ）',fukuroujii:'11ばんどうろ',kazamidori:'10ばんどうろ・11ばんどうろ'});
 /* ---------- じゅんでんせつ（クリアご・かくし エリア）：コウメ・コタロー・サスケ ---------- */
 Object.assign(MV,{
+ rekkaissen:{n:'れっかいっせん',t:'dragon',p:100,acc:95,crit:true,hitStat:{stat:'atk',st:-1},d:'ひでんの わざもの で おぼえる。 あいての こうげき↓'},
  shidenryuuga:{n:'しでんりゅうが',t:'dragon',p:95,acc:100,crit:true,hitStat:{stat:'def',st:-1},d:'コウメ せんよう。 あいての ぼうぎょ↓'},
  karyuuzan:{n:'かりゅうざん',t:'dragon',p:95,acc:100,crit:true,hitStat:{stat:'def',st:-1},d:'コタロー せんよう。 あいての ぼうぎょ↓'},
  genryuujin:{n:'げんりゅうじん',t:'dragon',p:95,acc:100,crit:true,hitStat:{stat:'def',st:-1},d:'サスケ せんよう。 あいての ぼうぎょ↓'},
@@ -14480,6 +14481,7 @@ IT.jetpack={n:'ジェットパック',price:50000,once:true,d:'マップで い�
 IT.fuel={n:'ジェットねんりょう',price:800,d:'ジェットパック 1かいぶんの ねんりょう'};
 ITEMS.push('bike','boat','jetpack','fuel');
 IT.flute={n:'ひでんの たてぶえ',price:0,d:'さんしんを よびだす ちょうろうの いえの たてぶえ'};ITEMS.push('flute');
+IT.wazamono={n:'ひでんの わざもの（りゅう）',price:50000,daily:true,d:'ドラゴンタイプ いがいの モンスターが ドラゴンわざ「れっかいっせん」を おぼえる。 1にち 1こ まで'};ITEMS.push('wazamono');
 IT.letter={n:'すいせんじょう',price:0,d:'チャンピオンリーグへの すいせんじょう。 8まい あつめると しゅつじょう できる'};ITEMS.push('letter');
 const KEYIT=['oldmap','cavemap','bike','boat','jetpack','fuel','flute','letter'],visItems=()=>ITEMS.filter(k=>S&&(S.items[k]||0)>0),bItems=()=>BITEMS.filter(k=>S&&(S.items[k]||0)>0);
 
@@ -15039,7 +15041,7 @@ Object.assign(MAPS,{
   ]},
  bousouCenter:{rows:["kkkkkkkkkk","kpfffhffpk","kcccccccck","kfffffffqk","kffffffffk","kttffffffk","kffffffffk","kkkkmmkkkk"],warps:{'4,7':['bousou',4,5,'down'],'5,7':['bousou',4,5,'down']},
   npcs:[{x:4,y:1,dir:'down',spr:'girl',pal:['#f8d0a8','#ffffff','#f080a0','#3a2030'],role:'nurse'},{x:6,y:5,dir:'left',spr:'boy',pal:HIKER,text:['とがった いわの やまの りゅうは\nかたくて つよいぞ。','いわや こおり…… いや、\nドラゴンには ドラゴンが きくんだ！']}]},
- bousouShop:{rows:["kkkkkkkkkk","kbbbffbbbk","kffffffffk","kccfffffpk","kffffffffk","kfffttfffk","kffffffffk","kkkkmmkkkk"],warps:{'4,7':['bousou',19,5,'down'],'5,7':['bousou',19,5,'down']},npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','ballultra','potion','superpotion','sugoikusuri','revive','kesshou','rarecandy']}]},
+ bousouShop:{rows:["kkkkkkkkkk","kbbbffbbbk","kffffffffk","kccfffffpk","kffffffffk","kfffttfffk","kffffffffk","kkkkmmkkkk"],warps:{'4,7':['bousou',19,5,'down'],'5,7':['bousou',19,5,'down']},npcs:[{x:1,y:2,dir:'down',spr:'boy',pal:['#f8d0a8','#4878d8','#4878d8','#1c1820'],role:'shop',stock:['ball','ballplus','ballultra','potion','superpotion','sugoikusuri','revive','kesshou','rarecandy','wazamono']}]},
  bhouse:{rows:room(),warps:{'4,7':['bousou',4,14,'down'],'5,7':['bousou',4,14,'down']},
   npcs:[{x:2,y:3,dir:'right',spr:'old',pal:['#f8d0a8','#a05a8a','#d8d8d8','#2a2a2a'],text:['むかしむかし…… マウントフジの\nそらが まっくらに なった。','そんな ひが あったそうな。','その ひから さんしんの すがたを\nみた ものは いないと いう。','……おおきな こえでは いえんがの。']}]},
  crag:{name:'とがった いわの やま',out:true,crag:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTT", "T..TT.....WWWW.....TT..T", "T..T.GGG..WWWW..GGG.T..T", "T....GGG........GGG....T", "TT...GGG..TTTT..GGG...TT", "T.........TTTT.........T", "T..GGGG..........GGGG..T", "T..GGGG...A..A...GGGG..T", "TTT.GG............GG.TTT", "T.....TTT......TTT.....T", "T.GGG.TTT..GG..TTT.GGG.T", "T.GGG.....GGGG.....GGG.T", "T.GGG.....GGGG.....GGG.T", "T......TT......TT......T", "TTTT...TT..GG..TT...TTTT", "T.........GGGG.........T", "T..GGGG...GGGG...GGGG..T", "T..GGGG..........GGGG..T", "T.......TTTTTTTT.......T", "T..A....TTTTTTTT....A..T", "T......................T", "TTTTT..GGGG..GGGG..TTTTT", "T......GGGG..GGGG......T", "T..TT..........S...TT..T", "T..TT..................T", "T.......GG....GG.......T", "T.......GG....GG.......T", "TTTTTTTTTTT..TTTTTTTTTTT"],
@@ -15257,7 +15259,7 @@ const WALK=new Set(['H','.','G','F','D','f','m','K','n','s','a','l','z','d','o',
 const D={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]};
 const OPP={up:'down',down:'up',left:'right',right:'left'};
 // こうかい まえの きのう：FEAT を true に するまで いっぱんの プレイヤーには でない（かいはつしゃモードでは でる）
-const FEAT={postgame:false},feat=k=>!!(FEAT[k]||DEV);
+const FEAT={postgame:true},feat=k=>!!(FEAT[k]||DEV);
 const hid=e=>!!(S&&S.flags&&((e.hideFlag&&S.flags[e.hideFlag])||(e.showIf&&!S.flags[e.showIf])||(e.feat&&!feat(e.feat))||(e.hideFn&&e.hideFn())));
 const entityAt=(x,y)=>CUR.npcs.find(e=>e.x===x&&e.y===y&&!hid(e));
 
@@ -15474,7 +15476,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.04-2042';
+const BUILD='2026.11.05-1259';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -16280,12 +16282,14 @@ const NEWS=[
  {id:'2026.11.02d',title:'あたらしい どうぐと ドラゴン',body:['こんかいの こうしん：','・ショップに あたらしい どうぐ！\n ユノハマシティ から：\n げんきのけっしょう','・オオアミシティ から：\n ボールウルトラ・すげーくすり・\n ふしぎなキャンディ','・ドラゴンの わざが パワーアップ！\n どの タイプにも すこし つよく\n きゅうしょにも あたりやすい','・どうぐは もっている ものだけ\n でるように なったよ','・メニューで うえ・したを ながおし\n すると はやく うごくよ']},
  {id:'2026.11.02e',title:'かいもの が べんりに',body:['こんかいの こうしん：','・ショップで いちどに\n たくさん かえるように！\n （▲▼で 1こ、 ◀▶で 10こ）','・くすりなどを おなじ モンスターに\n つづけて つかえるように','・ボールウルトラが きんいろに！','・みちに おちている どうぐが\n さきへ すすむほど ごうかに','・かんいボートで のれる みずべに\n みずタイプの モンスターが でるよ','・じぶんと おなじ タイプの わざの\n いりょくを ちょうせい したよ']},
  {id:'2026.11.02f',title:'ものがたりの しあげ',body:['こんかいの こうしん：','・オオアミシティから さいごまでの\n かいわを みなおしたよ','・つぎに どこへ いけば いいか\n わかりやすく なったよ','・エンディングに\n その あとの おはなしを ついか','・クリアした あとにも\n だれかが しょうぶを まってる……？']},
+ {id:'2026.11.03a',title:'クリアごの おたのしみ',body:['こんかいの こうしん：','・ものがたりを クリアした あと\n ジムリーダーと さいせん\n できるように！（Lv60〜70）','・ひづけが かわると\n また たたかえるよ','・はじめて かつと\n チャンピオンリーグの\n すいせんじょうが もらえる','・8まい あつめると……？','・いえの にいちゃんとも\n まいにち しょうぶ できるよ','・マウントフジの さんちょうに\n なにかが まいおりて いる……？']},
+ {id:'2026.11.04a',title:'チャンピオンリーグ かいまく！',body:['こんかいの こうしん：','・セセラギシティ・タカネシティ・\n とがった いわの やまから\n あたらしい みちが ひらいた！','・みちの さきには\n チャンピオンスタジアム！','・すいせんじょうを 8まい\n あつめて リーグに ちょうせん！','・あたらしい モンスターも\n 10しゅ みつかったよ','・かんいボートで うみの むこうへ\n いくと……？']},
+ {id:'2026.11.05a',title:'ひでんの わざもの',body:['こんかいの こうしん：','・ぼうそうむらの ショップに\n「ひでんの わざもの（りゅう）」\n（1にち 1こ まで）','・ドラゴンタイプ いがいの\n モンスターが ドラゴンわざを\n おぼえられるよ','・クラウドBOXで モンスターの\n つよさを みられるように！']}
 ];
 let toast=null;
 // こうかい まえの おしらせ：FEAT を true に する ときに NEWS の さいごへ うつす
 const NEWS_HELD=[
- {id:'2026.11.03a',title:'クリアごの おたのしみ',body:['こんかいの こうしん：','・ものがたりを クリアした あと\n ジムリーダーと さいせん\n できるように！（Lv60〜70）','・ひづけが かわると\n また たたかえるよ','・はじめて かつと\n チャンピオンリーグの\n すいせんじょうが もらえる','・8まい あつめると……？','・いえの にいちゃんとも\n まいにち しょうぶ できるよ','・マウントフジの さんちょうに\n なにかが まいおりて いる……？']},
- {id:'2026.11.04a',title:'チャンピオンリーグ かいまく！',body:['こんかいの こうしん：','・セセラギシティ・タカネシティ・\n とがった いわの やまから\n あたらしい みちが ひらいた！','・みちの さきには\n チャンピオンスタジアム！','・すいせんじょうを 8まい\n あつめて リーグに ちょうせん！','・あたらしい モンスターも\n 10しゅ みつかったよ','・かんいボートで うみの むこうへ\n いくと……？']}
+
 ];
 function deliverNews(st){st.mail=st.mail||[];const ids=NEWS.map(n=>n.id);let from=st.newsSeen?ids.indexOf(st.newsSeen)+1:Math.max(0,NEWS.length-1);let n=0;
  for(const it of NEWS.slice(from)){if(st.mail.some(m=>m.id===it.id))continue;st.mail.unshift({id:it.id,from:'かいはつしゃ',title:it.title,body:it.body,read:false});n++}
@@ -16572,7 +16576,7 @@ function updShop(){const ST=shop.stock,n=ST.length+1,a=btnp('a'),b=btnp('b');
   if(b){shop.qty=null;return}if(a)buyQty();return}
  if(btnp('up'))shop.i=(shop.i+n-1)%n;if(btnp('down'))shop.i=(shop.i+1)%n;
  if(b||(a&&shop.i===n-1)){shop=null;say('ありがとう ございました！');return}
- if(a){const k=ST[shop.i],it=IT[k];if(it.once&&S.items[k]){say(`${it.n}は もう もっている！`);return}if(S.money<it.price)say('おかねが たりない ようです…');else if(!it.once){shop.qty={k,n:1}}else{S.money-=it.price;S.items[k]=(S.items[k]||0)+1;AU.sfx('buy');say(`${it.n}を かった！`,...(k==='bike'?['Aボタンを 2かい れんだ すると\nのったり おりたり できるよ！']:k==='boat'?['みずの ほうを むいて\nAボタンで のれるよ！']:k==='jetpack'?['マップで まちを えらぶと\nとんで いけるよ！','ねんりょうは ショップで\nかってね。']:[]));save()}}}
+ if(a){const k=ST[shop.i],it=IT[k];if(it.once&&S.items[k]){say(`${it.n}は もう もっている！`);return}if(it.daily&&S.flags['buy_'+k]===todayN()){say('もうしわけ ありません。\nきょうの ぶんは うりきれです。','また あした おこしください。');return}if(S.money<it.price)say('おかねが たりない ようです…');else if(it.daily){S.money-=it.price;S.items[k]=(S.items[k]||0)+1;S.flags['buy_'+k]=todayN();AU.sfx('buy');say(`${it.n}を かった！`,'ドラゴンタイプ いがいの モンスターに\nつかうと わざを おしえられるよ。');save()}else if(!it.once){shop.qty={k,n:1}}else{S.money-=it.price;S.items[k]=(S.items[k]||0)+1;AU.sfx('buy');say(`${it.n}を かった！`,...(k==='bike'?['Aボタンを 2かい れんだ すると\nのったり おりたり できるよ！']:k==='boat'?['みずの ほうを むいて\nAボタンで のれるよ！']:k==='jetpack'?['マップで まちを えらぶと\nとんで いけるよ！','ねんりょうは ショップで\nかってね。']:[]));save()}}}
 const ROOT=['てもち','どうぐ','ずかん','マップ','メール','レポート','タイトルへ','とじる'];
 function updMenu(){const m=menu;
  if(m.pg==='root'){const RT=DEV?['かいはつしゃ',...ROOT]:ROOT,n=RT.length;if(btnp('up'))m.i=(m.i+n-1)%n;if(btnp('down'))m.i=(m.i+1)%n;
@@ -16612,6 +16616,9 @@ function updMenu(){const m=menu;
     if(k==='potion'||k==='superpotion'){const amt=k==='potion'?20:60;if(t.hp<=0||t.hp>=t.mhp)say('つかっても こうかが ないよ。');else{const h=Math.min(amt,t.mhp-t.hp);t.hp+=h;S.items[k]--;say(`${nm(t)}の HPが ${h} かいふくした！`);ok=true}}
     else if(k==='sugoikusuri'){if(t.hp<=0||(t.hp>=t.mhp&&!t.status))say('つかっても こうかが ないよ。');else{t.hp=t.mhp;t.status=null;S.items[k]--;AU.jingle('heal');say(`${nm(t)}は すっかり げんきに なった！`);ok=true}}
     else if(k==='revive'||k==='kesshou'){if(t.hp>0)say('つかっても こうかが ないよ。');else{t.hp=k==='kesshou'?t.mhp:Math.max(1,Math.floor(t.mhp/2));t.status=null;S.items[k]--;AU.jingle('heal');say(`${nm(t)}は げんきを とりもどした！`);ok=true}}
+    else if(k==='wazamono'){const ID='rekkaissen';if(typesOf(t.id).includes('dragon'))say('ドラゴンタイプの モンスターには\nつかえない！');else if(t.moves.includes(ID))say(`${nm(t)}は もう\n${MV[ID].n}を おぼえている！`);
+      else if(t.moves.length<4){t.moves.push(ID);S.items[k]--;AU.jingle('item');say(`${nm(t)}は ${MV[ID].n}を\nおぼえた！`);ok=true}
+      else{Q.push(...T(`${nm(t)}は ${MV[ID].n}を\nおぼえたい……！`,'しかし わざを 4つ\nおぼえている……'),{learn:{m:t,id:ID,stage:'ask',cur:0,item:k}})}}
     else if(k==='rarecandy'){if(t.lv>=LVMAX)say('これいじょう レベルは あがらない。');else{S.items[k]--;Q.push(...candyUp(t));ok=true}}
     if(ok){save();if((S.items[k]||0)<=0){m.pg='items';m.use=null;m.k=Math.max(0,Math.min(m.k,visItems().length-1))}}}
    else{m.pg='pmenu';m.sub=0}}}}
@@ -16724,7 +16731,7 @@ function updLearn(L){const giveUp=()=>L.tutor?tutorBye():T(`${nm(L.m)}は ${MV[L
   if(btnp('a')){if(L.cur===0){L.stage='pick';L.pc=0;return null}return giveUp()}return null}
  if(btnp('up')){L.pc=(L.pc+4)%5;AU.sfx('cur')}if(btnp('down')){L.pc=(L.pc+1)%5;AU.sfx('cur')}
  if(btnp('b')){if(L.tutor)return giveUp();L.stage='ask';return null}
- if(btnp('a')){if(L.pc===4)return giveUp();const old=L.m.moves[L.pc];L.m.moves[L.pc]=L.id;if(L.tutor)return tutorPaid(L.m,L.id,old);
+ if(btnp('a')){if(L.pc===4)return giveUp();const old=L.m.moves[L.pc];L.m.moves[L.pc]=L.id;if(L.tutor)return tutorPaid(L.m,L.id,old);if(L.item){S.items[L.item]--;save()}
   return T('1、 2の… ポカン！',`${nm(L.m)}は ${MV[old].n}の\nつかいかたを きれいに わすれた！`,`そして… ${nm(L.m)}は あたらしく\n${MV[L.id].n}を おぼえた！`)}
  return null}
 /* ---------- わざの たつじん：むかし おぼえた わざを おもいだす（1かい 1000えん、いまの わざを 1つ わすれる） ----------
@@ -17201,17 +17208,21 @@ function tile(ch,x,y,gx,gy){const v=(((gx*7+gy*13)%4)+4)%4;let key=ch+v,fn;
 let boxui=null;
 function openBox(){boxui={col:0,i:0,j:0}}
 function updBox(){const P0=S.party,BX=S.box,u=boxui;u.i=Math.max(0,Math.min(u.i,P0.length-1));u.j=Math.max(0,Math.min(u.j,BX.length-1));
+ // つよさを みる：◀▶で となりの モンスター、A／Bで もどる
+ if(u.view){const L=u.col===0?P0:BX,k=u.col===0?'i':'j',n=L.length;if(n>1){if(btnp('left')){u[k]=(u[k]+n-1)%n;AU.sfx('cur')}if(btnp('right')){u[k]=(u[k]+1)%n;AU.sfx('cur')}}if(btnp('a')||btnp('b'))u.view=false;return}
+ if(u.menu){if(btnp('up'))u.menu.sub=(u.menu.sub+2)%3;if(btnp('down'))u.menu.sub=(u.menu.sub+1)%3;if(btnp('b')){u.menu=null;return}
+  if(!btnp('a'))return;const sb=u.menu.sub;u.menu=null;if(sb===1){u.view=true;return}if(sb===2)return;u.go=true}
  if(btnp('left')||btnp('right')){u.col^=1;AU.sfx('cur')}
  const L=u.col===0?P0:BX,k=u.col===0?'i':'j',n=L.length;
  if(n){if(btnp('up')){u[k]=(u[k]+n-1)%n;AU.sfx('cur')}if(btnp('down')){u[k]=(u[k]+1)%n;AU.sfx('cur')}}
  if(btnp('b')){boxui=null;save();say('クラウドたんまつを とじた。');return}
- if(!btnp('a')||!n)return;
+ if(!u.go){if(btnp('a')&&n)u.menu={sub:0};return}u.go=false;if(!n)return;
  if(u.col===0){if(!P0.some((x,idx)=>idx!==u.i&&x.hp>0)){say('たたかえる モンスターが\nいなくなって しまう！');return}
   if(BX.length>=120){say('クラウドBOXが いっぱいだ！');return}
   const m=P0.splice(u.i,1)[0];m.hp=m.mhp;m.status=null;m.slp=0;BX.push(m);u.i=Math.max(0,Math.min(u.i,P0.length-1));AU.sfx('buy');save();say(`${nm(m)}を クラウドBOXに\nあずけた！`)}
  else{if(P0.length>=6){say('てもちが いっぱいだ！\nさきに だれかを あずけよう。');return}
   const m=BX.splice(u.j,1)[0];P0.push(m);u.j=Math.max(0,Math.min(u.j,BX.length-1));AU.sfx('buy');save();say(`${nm(m)}を\nてもちに ひきだした！`)}}
-function drawBox(){const P0=S.party,BX=S.box,u=boxui;box(8,8,304,272);txt('クラウドBOX',24,18,3,14);txt(`てもち ${P0.length}/6　BOX ${BX.length}`,296,20,2,11,'right');
+function drawBox(){const P0=S.party,BX=S.box,u=boxui;if(u.view){const L=u.col===0?P0:BX,m=L[u.col===0?u.i:u.j];if(m){drawStatus(0,-1,-1,m);return}u.view=false}box(8,8,304,272);txt('クラウドBOX',24,18,3,14);txt(`てもち ${P0.length}/6　BOX ${BX.length}`,296,20,2,11,'right');
  const col=(x,title,list,sel,active,top)=>{R(x,38,140,18,active?'#5870b0':'#dde4ee');txt(title,x+70,40,active?'#ffffff':'#5870b0',12,'center');
   if(!list.length)txt('だれも いない',x+70,120,2,11,'center');
   for(let r=0;r<6&&top+r<list.length;r++){const i=top+r,m=list[i],y=60+r*27;{const ci=x>100?1:0;hit(x,y-2,140,27,()=>{u.col=ci;u[ci?'j':'i']=i})}if(active&&i===sel)R(x,y-2,140,26,'#fff2b8');
@@ -17220,7 +17231,8 @@ function drawBox(){const P0=S.party,BX=S.box,u=boxui;box(8,8,304,272);txt('ク�
  col(16,'てもち',P0,u.i,u.col===0,0);col(164,'クラウドBOX',BX,u.j,u.col===1,Math.max(0,Math.min(BX.length-6,u.j-2)));
  const L=u.col===0?P0:BX,m=L[u.col===0?u.i:u.j];R(16,226,288,2,'#dde4ee');
  if(m){const sp=SP[m.id];if(sp.type2){R(20,234,23,14,TCOL[sp.type]||'#888');R(43,234,23,14,TCOL[sp.type2]||'#888');txt(TN[sp.type].slice(0,2),31,236,'#ffffff',8,'center');txt(TN[sp.type2].slice(0,2),55,236,'#ffffff',8,'center')}else{R(20,234,46,14,TCOL[sp.type]||'#888');txt(TN[sp.type],43,236,'#ffffff',9,'center')}txt(`${nm(m)}　Lv${m.lv}　HP ${m.hp}/${m.mhp}`,74,234,3,12)}
- txt(u.col===0?'A：BOXに あずける　◀▶：きりかえ　B：おわる':'A：てもちに ひきだす　◀▶：きりかえ　B：おわる',160,258,2,10,'center')}
+ txt('A：えらぶ　◀▶：きりかえ　B：おわる',160,258,2,10,'center');
+ if(u.menu){box(168,150,144,104);[u.col===0?'あずける':'ひきだす','つよさを みる','もどる'].forEach((t,i)=>{hit(168,156+i*28,144,28,()=>{u.menu.sub=i});txt(t,192,164+i*28,3,14);if(i===u.menu.sub)txt('▶',176,164+i*28,3,14)})}}
 function termT(g,v){floorT(g,v);pr(g,1,9,14,7,'#8a6a4a');pr(g,1,9,14,1,'#b08860');pr(g,2,15,12,1,'#5a3a20');pr(g,7,8,2,1,'#3a3a44');
  pr(g,3,1,10,8,'#2a2a36');pr(g,4,2,8,5,'#46c8d8');pr(g,4,2,8,1,'#8ae8f0');pr(g,6,4,4,2,'#ffffff');pp(g,7,3,'#ffffff');pp(g,8,3,'#ffffff');pr(g,4,11,8,2,'#c8c8d0');pr(g,4,11,8,1,'#e8e8f0')}
 
@@ -17329,17 +17341,17 @@ function drawMini(){const g=MG;const gr=c.createLinearGradient(0,0,0,H);gr.addCo
  if(g.phase==='aim')txt('Aで ウキを とめよう！',160,250,3,13,'center');else{const p2=g.res[g.res.length-1];txt(p2===3?'パーフェクト！ +3':p2?'いいかんじ！ +1':'にげられた……',160,250,p2===3?'#d08000':3,15,'center')}
  txt(`${g.cast+1}／3かいめ　とくてん ${g.score}`,160,206,2,11,'center')}
 function drawPMenu(){HITS.length=0;box(168,150,144,104);['つよさを みる','せんとうに だす','もどる'].forEach((t,i)=>{hit(168,156+i*28,144,28,()=>{menu.sub=i});txt(t,192,164+i*28,3,14);if(i===menu.sub)txt('▶',176,164+i*28,3,14)})}
-function drawStatus(j,mvc,pick){const m=S.party[j],sp=SP[m.id];box(8,8,304,272);
+function drawStatus(j,mvc,pick,mo){const m=mo||S.party[j],sp=SP[m.id];box(8,8,304,272);
  c.fillStyle='#eef4fb';c.fillRect(20,22,92,92);c.imageSmoothingEnabled=false;c.drawImage(ART[m.id].img,26,28,80,80);
  txt(nm(m),124,24);txt(`Lv${m.lv}`,296,24,3,16,'right');
  if(sp.type2){typePills(m.id,124,46,118,16,11);stPill(m,248,47)}else{R(124,46,62,16,TCOL[sp.type]||'#5870b0');txt(TN[sp.type],155,48,'#ffffff',12,'center');stPill(m,192,47)}
  const r=m.hp/m.mhp;txt('HP',124,70,3,12);R(148,71,148,9,3);R(150,73,144,5,'#e8f0f8');R(150,73,Math.round(144*r),5,hpc(r));txt(m.hp>0?`${m.hp}／${m.mhp}`:'ひんし',296,84,3,12,'right');
  const need=m.lv>=LVMAX?0:expAt(m,m.lv+1)-m.exp;txt('つぎの レベルまで',124,102,2,11);txt(m.lv>=LVMAX?'―':String(need),296,102,3,12,'right');
  [['こうげき',m.atk],['ぼうぎょ',m.def],['すばやさ',m.spd]].forEach(([l,v],i)=>{const x=22+i*96;R(x,124,88,34,'#eef2f8');txt(l,x+44,128,2,11,'center');txt(String(v),x+44,141,3,14,'center')});
- txt('わざ',22,166,2,11);txt(pick>=0?'いれかえる わざを えらんでね':'Aで わざを ならびかえ',296,166,2,10,'right');
- m.moves.forEach((id,i)=>{const v=MV[id],y=180+i*21;hit(20,y-3,280,21,()=>{menu.mv=i});if(i===pick)R(20,y-3,280,20,'#fff2b8');
+ txt('わざ',22,166,2,11);if(!mo)txt(pick>=0?'いれかえる わざを えらんでね':'Aで わざを ならびかえ',296,166,2,10,'right');
+ m.moves.forEach((id,i)=>{const v=MV[id],y=180+i*21;if(!mo)hit(20,y-3,280,21,()=>{menu.mv=i});if(i===pick)R(20,y-3,280,20,'#fff2b8');
   R(38,y+1,46,14,TCOL[v.t]||'#888');txt(TN[v.t],61,y+3,'#ffffff',9,'center');txt(v.n,92,y,3,14);txt(v.p?`いりょく ${v.p}`:'へんか',296,y+2,2,11,'right');if(i===mvc)txt('▶',24,y,3,14)});
- txt('◀▶：ほかの モンスター　B：もどる',160,266,2,10,'center')}
+ txt(mo?'◀▶：ほかの モンスター　A／B：もどる':'◀▶：ほかの モンスター　B：もどる',160,266,2,10,'center')}
 function drawParty(sel,title,hint,setSel){HITS.length=0;box(8,8,304,272);txt(title,24,20);txt(`おかね ${S.money}えん`,296,24,3,12,'right');
  S.party.forEach((m,i)=>{const y=48+i*36;if(setSel)hit(16,y-8,288,36,()=>setSel(i));c.imageSmoothingEnabled=false;c.drawImage(ART[m.id].img,30,y-6,40,40);txt(nm(m),76,y);txt(`Lv${m.lv}`,200,y);
   R(76,y+22,124,8,3);R(78,y+24,120,4,0);R(78,y+24,Math.round(120*m.hp/m.mhp),4,hpc(m.hp/m.mhp));
@@ -17360,7 +17372,7 @@ function drawQuit(){HITS.length=0;box(0,200,320,88);txt(DEV?'かいはつしゃ�
 function drawShop(){box(8,8,92,58);txt('おかね',20,19,3,12);txt(`${S.money}えん`,90,38,3,S.money>=10000?12:14,'right');
  // 8ぎょう より おおい ときは スクロール（カーソルが みえる いちに）
  const ST=shop.stock,LS=[...ST.map(k=>IT[k].n),'やめる'],VIS=Math.min(8,LS.length),rh=Math.min(30,Math.floor(170/VIS)),top=Math.max(0,Math.min(LS.length-VIS,shop.i-3));box(104,8,208,22+VIS*rh);
- for(let r=0;r<VIS;r++){const i=top+r,s=LS[i],y=20+r*rh,fs=s.length>=9?11:s.length>=8?12:14;if(!shop.qty)hit(104,y-6,208,rh,()=>{shop.i=i});txt(s,130,y+(14-fs)/2,3,fs);if(i<ST.length){const it=IT[ST[i]];txt(it.once&&S.items[ST[i]]?'かった':`${it.price}えん`,300,y+2,it.once&&S.items[ST[i]]?'#a0aab8':2,12,'right')}if(i===shop.i)txt('▶',114,y,3,14)}
+ for(let r=0;r<VIS;r++){const i=top+r,s=LS[i],y=20+r*rh,fs=s.length>=9?11:s.length>=8?12:14;if(!shop.qty)hit(104,y-6,208,rh,()=>{shop.i=i});txt(s,130,y+(14-fs)/2,3,fs);if(i<ST.length){const it=IT[ST[i]];{const so=(it.once&&S.items[ST[i]])||(it.daily&&S.flags['buy_'+ST[i]]===todayN());txt(it.once&&S.items[ST[i]]?'かった':it.daily&&so?'うりきれ':`${it.price}えん`,300,y+2,so?'#a0aab8':2,12,'right')}}if(i===shop.i)txt('▶',114,y,3,14)}
  if(top>0)txt('▲',306,12,2,9,'right');if(top+VIS<LS.length)txt('▼',306,18+VIS*rh,2,9,'right');
  if(!Q.length&&shop.qty){const q=shop.qty,it=IT[q.k],mx=shopMax(q.k),bt=(x,l,fn)=>{box(x,226,40,32);txt(l,x+20,234,3,16,'center');hit(x,226,40,32,fn,false,true)};box(0,200,320,88);
   txt(it.n.length>=7?`${it.n}を かう`:`${it.n}を いくつ かう？`,18,210,3,13);bt(18,'−',()=>{q.n=q.n<=1?mx:q.n-1});txt(`×${q.n}`,104,233,3,16,'center');bt(150,'＋',()=>{q.n=q.n>=mx?1:q.n+1});
@@ -17568,11 +17580,37 @@ const MFX={
  suishounokabe:{d:30,lay:[['aura',0,1,{c:'crystal',n:14,shape:'hex',s:4}]]},gansekiyoroi:{d:30,lay:[['aura',0,1,{c:'rock',n:14,shape:'hex',s:4}]]},
 };
 for(const k in MV)MV[k].id=k;
+// れっかいっせん：りゅうの ほのおを まとった いっせん（とくべつな アニメーション）
+MFX.rekkaissen={d:84,big:true,hit:.42,draw:(G,p,f)=>{const{tx,ty,ax,ay}=G,cl=v=>Math.max(0,Math.min(1,v)),seg=(a,b)=>cl((p-a)/(b-a)),R2=(x,y,w,h,col,al)=>{c.globalAlpha=al;c.fillStyle=col;c.fillRect(x,y,w,h);c.globalAlpha=1};
+ // 1. くらく なり、 りゅうの ほのおが まきあがる
+ const d1=seg(0,.18),dk=p<.86?Math.min(1,d1*1.6)*.55:(1-seg(.86,1))*.55;R2(0,0,W,H,'#0a0204',dk);
+ if(p<.34){const q=seg(0,.32);for(let i=0;i<22;i++){const a=i/22*Math.PI*2+q*9,r=34-q*24+Math.sin(i*1.7+q*12)*4,x=ax+Math.cos(a)*r,y=ay+8+Math.sin(a)*r*.55-q*10;c.globalAlpha=.85*Math.sin(q*Math.PI);ell(x,y,3.2,3.2,i%3===0?'#fff2a0':i%3===1?'#ff8a20':'#e0301a');c.globalAlpha=1}
+  c.globalAlpha=.5*Math.sin(q*Math.PI);ell(ax,ay+6,30,22,'#ff6a20');c.globalAlpha=1;
+  // りゅうの め
+  if(q>.5){c.globalAlpha=(q-.5)*2;ell(ax-8,ay-6,3,1.2,'#ffe060');ell(ax+8,ay-6,3,1.2,'#ffe060');c.globalAlpha=1}}
+ // 2. いっしゅんの とっしん（スピードせん と ざんぞう）
+ if(p>=.3&&p<.44){const q=seg(.3,.42);c.globalAlpha=.8;for(let i=0;i<18;i++){const y=(i*37)%H,x=((i*71+q*900)%(W+120))-60;R2(x,y,60+i%3*30,2,i%2?'#ffd060':'#ffffff',.7)}c.globalAlpha=1;
+  for(let k=0;k<5;k++){const qq=cl(q-k*.08),x=ax+(tx-ax)*qq,y=ay+(ty-ay)*qq;c.globalAlpha=.6-k*.1;ell(x,y+8,16,10,k?'#ff8a20':'#fff6c0');c.globalAlpha=1}}
+ // 3. ひかり と いっせん
+ if(p>=.4&&p<.5){R2(0,0,W,H,'#ffffff',1-seg(.4,.5))}
+ const sl=seg(.4,.48),fade=1-seg(.62,.9);
+ if(p>=.4&&fade>0){const x0=tx-70,y0=ty+44,x1=tx+70,y1=ty-36,xe=x0+(x1-x0)*sl,ye=y0+(y1-y0)*sl;
+  c.save();c.lineCap='round';for(const[w,col,al]of[[22,'#e0301a',.35],[12,'#ff8a20',.7],[6,'#ffe070',.95],[2.4,'#ffffff',1]]){c.globalAlpha=al*fade;c.strokeStyle=col;c.lineWidth=w;c.beginPath();c.moveTo(x0,y0);c.lineTo(xe,ye);c.stroke()}c.restore();c.globalAlpha=1;
+  // こうさする 2の たち
+  const s2=seg(.5,.58);if(s2>0){const a0=[tx-58,ty-30],a1=[tx+56,ty+40],xe2=a0[0]+(a1[0]-a0[0])*s2,ye2=a0[1]+(a1[1]-a0[1])*s2;c.save();c.lineCap='round';for(const[w,col,al]of[[14,'#e0301a',.35],[6,'#ffb040',.8],[2,'#ffffff',1]]){c.globalAlpha=al*fade;c.strokeStyle=col;c.lineWidth=w;c.beginPath();c.moveTo(a0[0],a0[1]);c.lineTo(xe2,ye2);c.stroke()}c.restore();c.globalAlpha=1}}
+ // 4. いっせんから ほのおが ふきあがり、 りゅうが まいあがる
+ if(p>=.46&&p<.95){const q=seg(.46,.95);for(let i=0;i<30;i++){const t0=i/30,x=tx-70+140*t0,y=ty+44-80*t0,rise=((q*1.6+t0*.7)%1),fx=x+Math.sin(i*2.3+q*8)*6,fy=y-rise*46,r=(1-rise)*5+1;c.globalAlpha=(1-rise)*(1-seg(.85,.95));ell(fx,fy,r,r*1.3,rise<.3?'#fff2a0':rise<.6?'#ff8a20':'#c0201a');c.globalAlpha=1}
+  const dq=seg(.5,.9);if(dq>0&&dq<1){c.globalAlpha=Math.sin(dq*Math.PI)*.9;for(let i=0;i<26;i++){const u=i/26,a=u*Math.PI*3+dq*6,x=tx-40+u*90+Math.sin(a)*14,y=ty+30-u*70-dq*30+Math.cos(a)*10,r=(1-u)*6+2;ell(x,y,r,r,i%2?'#ff6a20':'#ffd040')}
+   const hx=tx+50,hy=ty-40-dq*30;ell(hx,hy,8,6,'#ff8a20');PG2(hx+4,hy-4,hx+14,hy-14,hx+8,hy-2,'#ffe060');PG2(hx-2,hy-5,hx+2,hy-16,hx+3,hy-4,'#ffe060');ell(hx+3,hy-1,1.6,1,'#ffffff');c.globalAlpha=1}}
+ // 5. ひのこが ふる
+ if(p>=.7){const q=seg(.7,1);for(let i=0;i<20;i++){const x=(i*53)%W,y=((i*41)%120)+q*120;c.globalAlpha=(1-q)*.8;R2(x,y,2,2,i%2?'#ffd040':'#ff6a20',(1-q)*.8)}c.globalAlpha=1}
+}};
+function PG2(x1,y1,x2,y2,x3,y3,col){c.fillStyle=col;c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.lineTo(x3,y3);c.closePath();c.fill()}
 Object.assign(MFX,{shidenryuuga:MFX.zantetsu,karyuuzan:MFX.zantetsu,genryuujin:MFX.zantetsu,baikasenkou:MFX.raimei,shakunetsumai:MFX.inferno,geneishuriken:MFX.psychoburst});
 const fxDur=id=>(MFX[id]&&MFX[id].d)||24;
 function drawMoveFx(f){const M=MFX[f.id];if(!M)return false;const p=clamp01(f.t/(f.d||M.d)),[tx,ty]=f.to==='foe'?[236,58]:[76,152],[ax,ay]=f.to==='foe'?[76,152]:[236,58];
  const G=f.self?{tx,ty,ax:tx,ay:ty}:{tx,ty,ax,ay};
- for(const[nm,a,b,o]of M.lay){if(p<a||p>b)continue;const q=(p-a)/Math.max(.001,b-a);FXP[nm](G,q,o||{})}
+ if(M.draw)M.draw(G,p,f);else for(const[nm,a,b,o]of M.lay){if(p<a||p>b)continue;const q=(p-a)/Math.max(.001,b-a);FXP[nm](G,q,o||{})}
  if(M.big&&!f.hitDone&&p>=M.hit){f.hitDone=1;B.shake=16;AU.sfx('super')}
  return true}
 function drawFx(){const f=B.fx;if(!f)return;if(f.id&&drawMoveFx(f))return;const p=Math.min(1,f.t/24),[tx,ty]=f.to==='foe'?[236,58]:[76,152],[ax,ay]=f.to==='foe'?[90,140]:[230,60];

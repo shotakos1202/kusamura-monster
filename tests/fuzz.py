@@ -10,7 +10,7 @@ async def main():
           r=await pg.evaluate("""([seed,start])=>{window.requestAnimationFrame=()=>0;const t=__t;let s=seed;const r=()=>{s=(s*1103515245+12345)%2147483648;return s/2147483648};
            const step=()=>{t.update();t.draw();for(const x in t.pressed)t.pressed[x]=false};
            if(t.mode==='title'){t.pressed.a=true;step();t.pressed.a=true;step()}
-           t.Q.length=0;t.menu=null;t.S.party=[t.mon('tsubomiru',20),t.mon('raidenga',19),t.mon('namitama',18)];t.S.badges=['ゴツゴツバッジ','アクアバッジ'];t.S.flags.ev5done=1;t.S.flags.uppy=1;t.S.flags.t1done=1;t.loadMap(...eval('['+start+']'),'up');
+           t.Q.length=0;t.menu=null;t.B=null;t.mode='world';t.S.party=[t.mon('tsubomiru',20),t.mon('raidenga',19),t.mon('namitama',18)];t.S.badges=['ゴツゴツバッジ','アクアバッジ'];t.S.flags.ev5done=1;t.S.flags.uppy=1;t.S.flags.t1done=1;t.loadMap(...eval('['+start+']'),'up');
            let dir='up',stuck=0,last=null,maps=new Set(),battles=0,wasB=false;
            for(let f=0;f<15000;f++){if(f%16===0){t.setKey(dir,false);dir=['up','up','left','right','down'][r()*5|0];t.setKey(dir,true)}
              if(t.Q.length||t.mode!=='world'){if(f%3===0)t.pressed[r()<.85?'a':['b','up','down','left','right'][r()*5|0]]=true}else if(r()<.03)t.pressed.a=true;
