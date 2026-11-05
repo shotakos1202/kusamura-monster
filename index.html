@@ -15471,12 +15471,12 @@ try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persisted(
 let mode='title',frame=0,tsel=0,ssel=0,trans=0,fade=null,nameT=0;
 let S=null,P={x:4,y:4,dir:'down',mv:0,fx:4,fy:4},menu=null,shop=null,B=null;
 function save(){TMAIL=null;if(!S||DEV)return;S.pos={map:S.map,x:P.x,y:P.y,dir:P.dir};try{localStorage.setItem(KEY,JSON.stringify(S));saved=true}catch(e){}}
-function loadMap(id,x,y,dir){if(!S.visited){const f=S.flags||{},V={village:1};if(f.kenta||f.takumi||f.miho||S.badges.length){V.route=1;V.town=1}if(f.yuta||f.aya||f.gonzo||f.hayato||f.misaki||f.uppy)V.forest=1;S.visited=V}S.visited[REGION[id]||id]=1;S.items=S.items||{};for(const k of ITEMS)S.items[k]=S.items[k]||0;if(id==='trial3'&&S.map!=='trial3')S.flags.t3step=0;S.map=id;CUR=MAPS[id];for(const e of CUR.npcs){if(e.hx!==undefined){e.x=e.fx=e.hx;e.y=e.fy=e.hy;e.dir=e.hdir;e.mv=0;e.alert=0}}P={x,y,dir,mv:0,fx:x,fy:y};if(!CUR.out||CUR.boat)onBike=false;if(!CUR.boat&&at(x,y)==='W')P.surf=true;encSafe=safeSteps(3);if(CUR.name)nameT=110;if(CUR.out&&Math.random()<(CUR.rich?1:.25)){spawnDrop();if(CUR.rich)spawnDrop()}}
+function loadMap(id,x,y,dir){if(!S.visited){const f=S.flags||{},V={village:1};if(f.kenta||f.takumi||f.miho||S.badges.length){V.route=1;V.town=1}if(f.yuta||f.aya||f.gonzo||f.hayato||f.misaki||f.uppy)V.forest=1;S.visited=V}S.visited[REGION[id]||id]=1;S.items=S.items||{};for(const k of ITEMS)S.items[k]=S.items[k]||0;if(id==='trial3'&&S.map!=='trial3')S.flags.t3step=0;S.map=id;CUR=MAPS[id];for(const e of CUR.npcs){if(e.hx!==undefined){e.x=e.fx=e.hx;e.y=e.fy=e.hy;e.dir=e.hdir;e.mv=0;e.alert=0}}P={x,y,dir,mv:0,fx:x,fy:y};if(!CUR.out||CUR.boat)onBike=false;if(!CUR.boat&&at(x,y)==='W')P.surf=true;encSafe=safeSteps(3);if(CUR.name)nameT=110;if(CUR.out&&Math.random()<(CUR.rich?.5:DROP_LOAD[dropTier()]))spawnDrop()}
 function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.05-1259';
+const BUILD='2026.11.05-1320';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -16488,11 +16488,17 @@ function useTool(k,m){if(k==='bike'){menu=null;toggleBike();return true}
  if(k==='flute'){menu=null;AU.jingle('flute');say('……たてぶえの しらべが\nやさしく ひびいた。');return true}
  return false}
 function reachSet(){const seen=new Set([P.x+','+P.y]),st=[[P.x,P.y]];while(st.length){const[x,y]=st.pop();for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy,k=nx+','+ny;if(seen.has(k)||!canWalk(at(nx,ny))||entityAt(nx,ny))continue;seen.add(k);st.push([nx,ny])}}return seen}
-function spawnDrop(){if(!S||!CUR.out)return;S.drops=S.drops||{};const RS=reachSet();const L=S.drops[S.map]=(S.drops[S.map]||[]).filter(o=>RS.has(o.x+','+o.y));if(L.length>=(CUR.rich?3:2))return;
+// みちに おちる どうぐ：じょばん（バッジ 0〜2）は いままで どおり。ちゅうばん（3〜5）・しゅうばん（6〜）は でにくく、よい どうぐほど まれ
+const dropTier=()=>{const b=(S&&S.badges||[]).length;return b>=6?2:b>=3?1:0},DROP_LOAD=[.25,.15,.1],DROP_STEP=[1/200,1/300,1/450];
+const DROP_TBL=[null,[['money',50,5,40],['potion',20],['ball',10],['superpotion',10],['ballplus',7],['sugoikusuri',2],['revive',1]],
+ [['money',45,10,60],['superpotion',18],['ballplus',12],['sugoikusuri',10],['ballultra',7],['revive',5],['kesshou',2],['rarecandy',1]]],
+ DROP_RICH=[['money',35,100,300],['sugoikusuri',30],['ballultra',20],['kesshou',10],['rarecandy',5]];
+function rollDrop(tbl){let r=Math.random()*tbl.reduce((a,x)=>a+x[1],0);for(const x of tbl){r-=x[1];if(r<0)return{k:x[0],amt:x[0]==='money'?(x[2]+(Math.random()*(x[3]-x[2]+1)|0))*10:1}}const x=tbl[0];return{k:x[0],amt:1}}
+function spawnDrop(){if(!S||!CUR.out)return;S.drops=S.drops||{};const RS=reachSet();const L=S.drops[S.map]=(S.drops[S.map]||[]).filter(o=>RS.has(o.x+','+o.y));if(L.length>=2)return;
  for(let n=0;n<40;n++){const x=1+(Math.random()*(CUR.w-2)|0),y=1+(Math.random()*(CUR.h-2)|0),t=at(x,y);
   if(t!=='.'&&t!=='K'&&t!=='s'||!RS.has(x+','+y))continue;if(Math.abs(x-P.x)+Math.abs(y-P.y)<3||entityAt(x,y)||(CUR.warps&&CUR.warps[x+','+y])||L.some(o=>o.x===x&&o.y===y))continue;
-  const r=Math.random();if(CUR.rich){const k=r<.25?'rarecandy':r<.45?'kesshou':r<.7?'sugoikusuri':r<.85?'ballultra':'money';L.push({x,y,k,amt:k==='money'?(20+(Math.random()*31|0))*100:1});return}
-  const k=r<.55?'money':r<.8?'potion':'ball';L.push({x,y,k,amt:k==='money'?(3+(Math.random()*18|0))*10:1});return}}
+  if(CUR.rich){L.push({x,y,...rollDrop(DROP_RICH)});return}const tr=dropTier();if(tr){L.push({x,y,...rollDrop(DROP_TBL[tr])});return}
+  const r=Math.random(),k=r<.55?'money':r<.8?'potion':'ball';L.push({x,y,k,amt:k==='money'?(3+(Math.random()*18|0))*10:1});return}}
 function pickUp(){const FI=CUR.items&&CUR.items.find(d=>d.x===P.x&&d.y===P.y&&!S.flags['it_'+d.id]&&!(d.showIf&&!S.flags[d.showIf]));
  if(FI&&FI.k==='cavemap'){S.flags['it_'+FI.id]=1;S.items.cavemap=1;AU.jingle('item');Q.push(...T('どうくつの ちずを ひろった！','ちずには この どうくつの\nみちが こまかく かかれている。','……この へやの きたの かべに\nしるしが ついている！','かくし つうろが\nあるのかも しれない……！'),F(save));return true}
  if(FI){S.flags['it_'+FI.id]=1;AU.jingle('item');if(FI.k==='money')S.money+=FI.amt;else S.items[FI.k]=(S.items[FI.k]||0)+FI.amt;say('なにか おちている！',FI.k==='money'?`${FI.amt}えん ひろった！`:`${IT[FI.k].n}を ${FI.amt}こ ひろった！`);save();return true}
@@ -16521,7 +16527,7 @@ function onStep(){if(P.surf&&at(P.x,P.y)!=='W'){P.surf=false;AU.sfx('fxwater')}i
  if(S.map==='town'&&P.y<=1&&(P.x===9||P.x===10)&&!S.badges.length){Q.push(...T('もりの ばんにん「まった！\nこの さきは まよいの もりだ。」','もりの ばんにん「ジムの バッジが\nない ひとは とおせないよ。」'),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=P.sp=STEP}));return}
  if(S.map==='village'&&P.y<=1&&S.flags.ev5raid){Q.push(...T('（いまは むらを はなれられない……\nなぞの おとこと はなしを つけなきゃ！）'),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=P.sp=STEP}));return}
  if(S.map==='village'&&P.y<=1&&!hasStarter()){Q.push(...T('むらの ひと「まって！ モンスターを\nつれずに そとへ でては だめ！」'),F(()=>{P.dir='down';P.fx=P.x;P.fy=P.y;P.y+=1;P.mv=P.sp=STEP}));return}const w=CUR.warps&&CUR.warps[P.x+','+P.y];if(w&&!(w[4]&&!(feat(w[4])&&S.flags.gameClear))){fadeTo(w[0],w[1],w[2],w[3]);return}
- if(CUR.out&&Math.random()<1/200)spawnDrop();
+ if(CUR.out&&Math.random()<DROP_STEP[dropTier()])spawnDrop();
  if(checkSight())return;
  const encRoll=(encSafe>0?(encSafe--,ENC.rare):1)*(onBike?.6:1),wf=P.surf?CUR.wildW:CUR.wild;if((at(P.x,P.y)==='G'||((CUR.boat||P.surf)&&at(P.x,P.y)==='W')||(CUR.cave&&at(P.x,P.y)==='.'))&&wf&&!(DEV&&DEV.noenc)&&Math.random()<encRoll*((CUR.boat||P.surf)?ENC.sea:CUR.cave?ENC.cave:ENC.grass)){const tb=wf(P.x,P.y);let tw=tb.reduce((s2,e)=>s2+(e[3]||10),0)*Math.random(),pick=tb[0];for(const e of tb){tw-=(e[3]||10);if(tw<=0){pick=e;break}}const[id,a,b]=pick;B={foe:mon(id,a+(Math.random()*(b-a+1)|0))};mode='trans';trans=0}}
 function checkSight(){for(const e of CUR.npcs){if(!e.trainer||S.flags[e.id]||!e.sight)continue;const[dx,dy]=D[e.dir];
@@ -16882,10 +16888,12 @@ function checkFaint(){const foe=B.foe,m=me();if(B.god){if(m.hp<=0)m.hp=1;if(foe.
  return[]}
 // early foes (up to Lv25) give +10%, fading out by Lv35; stronger foes give more (Lv55 +40%, Lv65 +80%, Lv70 +100%) so the last areas need less grinding
 const lateExp=lv=>1+.1*Math.max(0,Math.min(1,(35-lv)/10))+Math.max(0,lv-45)/25;
-function gainExp(m,foe,mult){const diff=foe.lv-m.lv,bonus=diff>0?1+diff*.15:1,g=Math.max(1,Math.floor((SP[foe.id].exp||300)*foe.lv/4.5*mult*bonus*lateExp(foe.lv)));
- return[...T(`${nm(m)}は ${g}けいけんちを\nもらった！`),F(()=>{m.exp+=g}),...expSteps(m),F(()=>shareExp(m,g))]}
-function shareExp(m,g){const others=S.party.filter(o=>o!==m&&o.hp>0&&o.lv<LVMAX);if(!others.length)return[];const sh=Math.max(1,Math.floor(g/3));const r=[...T(`なかまも ${sh}けいけんちを\nもらった！`)];
- for(const o of others){o.exp+=sh;while(o.lv<LVMAX&&o.exp>=expAt(o,o.lv+1)){const om=o.mhp;o.lv++;calc(o);o.hp+=o.mhp-om;r.push(...T(`${nm(o)}は\nレベル ${o.lv}に あがった！`));
+// しゅうばんの けいけんち ボーナス（lateExp）は、もらう モンスターが Lv70を こえたら なし（ふつうに もどす）
+const expMul=(m,lv)=>m.lv>70?1:lateExp(lv);
+function gainExp(m,foe,mult){const diff=foe.lv-m.lv,bonus=diff>0?1+diff*.15:1,base=(SP[foe.id].exp||300)*foe.lv/4.5*mult*bonus,g=Math.max(1,Math.floor(base*expMul(m,foe.lv)));
+ return[...T(`${nm(m)}は ${g}けいけんちを\nもらった！`),F(()=>{m.exp+=g}),...expSteps(m),F(()=>shareExp(m,g,base,foe.lv))]}
+function shareExp(m,g,base,flv){const others=S.party.filter(o=>o!==m&&o.hp>0&&o.lv<LVMAX);if(!others.length)return[];const shOf=o=>base?Math.max(1,Math.floor(base*expMul(o,flv)/3)):Math.max(1,Math.floor(g/3)),sh=shOf(others[0]);const r=[...T(`なかまも ${sh}けいけんちを\nもらった！`)];
+ for(const o of others){o.exp+=shOf(o);while(o.lv<LVMAX&&o.exp>=expAt(o,o.lv+1)){const om=o.mhp;o.lv++;calc(o);o.hp+=o.mhp-om;r.push(...T(`${nm(o)}は\nレベル ${o.lv}に あがった！`));
   r.push(...learnSteps(o,SP[o.id].learn[o.lv]));if(SP[o.id].evo&&o.lv>=SP[o.id].evo.lv)o.evoPending=true}}
  return r}
 function expSteps(m){return[Wt(()=>{if(m.lv>=LVMAX)return true;const b0=expAt(m,m.lv),b1=expAt(m,m.lv+1);if(B.dExp>=b1||B.dExp>=m.exp)return true;B.dExp=Math.min(m.exp,b1,B.dExp+Math.max(.5,(b1-b0)/32));return false}),
