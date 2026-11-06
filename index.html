@@ -12530,8 +12530,10 @@ const hpc=r=>r>.5?'#40b848':r>.2?'#e8b820':'#e03030';
 const rnd=a=>a[Math.random()*a.length|0];
 
 /* ---------- monsters & moves ---------- */
-const TN={fire:'ほのお',water:'みず',grass:'くさ',rock:'いわ',elec:'でんき',normal:'ノーマル',flying:'ひこう',psychic:'エスパー',dragon:'ドラゴン'};
+const TN={fire:'ほのお',water:'みず',grass:'くさ',rock:'いわ',elec:'でんき',normal:'ノーマル',flying:'ひこう',psychic:'エスパー',dragon:'ドラゴン',ghost:'おばけ'};
 const TC={fire:{grass:2,water:.5,rock:.5},water:{fire:2,rock:2,grass:.5},grass:{water:2,rock:2,fire:.5,flying:.5},rock:{fire:2,elec:2,flying:2},elec:{water:2,grass:.5,rock:.5,flying:2},normal:{rock:.5},flying:{grass:2,elec:.5,rock:.5,psychic:2},psychic:{rock:2,psychic:.5}};TC.elec.psychic=2;TC.dragon={dragon:2};for(const t of['fire','water','grass','elec'])TC[t].dragon=.5;
+// おばけタイプ（2026-11）：エスパー・おばけに つよい、ノーマルと おたがいに いまひとつ、ほのおと おばけが にがて。 エスパーは ドラゴンの じゃくてん
+TC.ghost={psychic:2,ghost:2,normal:.5};TC.fire.ghost=2;TC.normal.ghost=.5;TC.psychic.dragon=2;
 const eff=(a,d)=>(TC[a]&&TC[a][d])||1;
 // ダブルタイプ（さんしんだけ）：SP.type2 が あれば あいしょうは 2つの かけざん、タイプいっちも どちらかで OK
 const typesOf=id=>{const s=SP[id];return s&&s.type2?[s.type,s.type2]:[s&&s.type]},effOn=(t,id)=>typesOf(id).reduce((m,x)=>m*eff(t,x),1),stabOf=(t,id)=>typesOf(id).includes(t),STAB=1.08;
@@ -14021,6 +14023,59 @@ Object.assign(ARTDEF,{
   for(const[x,y]of[[33,6],[3,30],[36,33]]){PG(g,[x,y-2,x+.6,y-.6,x+2,y,x+.6,y+.6,x,y+2,x-.6,y+.6,x-2,y,x-.6,y-.6],'#d090ff')}
  },['#2a2a2a','#2a2050','#4a3a8a','#ff6ae0','#ffe0ff','#1a1438','#241c48','#a050e0','#d090ff','#0a0620','#ffd040','#ffffff'],'#06041a',{'#2a2050':['#4a3a8a','#1a1438']}],
 });
+// おばけタイプの え
+Object.assign(ARTDEF,{
+ chouchinko:[g=>{
+  LN(g,[20,6,20,2.5],'#3a2a2a',1.4);E(g,20,2.5,2.2,1.6,'#3a2a2a');E(g,20,2.5,1,0.7,'#f2a040');
+  SE(g,20,20,10.5,12.5,'#c87020','#f2a040','#ffd890');
+  for(const y of[12,16,24,28])LN(g,[11.5,y,28.5,y],'#c87020',1);
+  E(g,13.5,25,2.6,3.2,'#5a2a8a');E(g,13.5,25.5,1.6,2,'#9a5ad8');E(g,13.2,26,0.7,0.9,'#d0a0ff');
+  PG(g,[13,6,27,6,26,9,14,9],'#3a2a2a');PG(g,[14,31,26,31,25,34,15,34],'#3a2a2a');
+  E(g,21,17,5,4.4,'#ffffff');E(g,22,17.6,2.6,2.6,'#5a2a8a');E(g,21,16.4,1,1,'#ffffff');
+  LN(g,[16,24,26,24],'#3a2a2a',1.4);PG(g,[21,24,25,24,25.5,29,23.5,31.5,22,29],'#e86080');LN(g,[23.3,25,23.6,29],'#b8406a',0.8);
+  LN(g,[20,34,21,37,23.5,38.5],'#3a2a2a',1.2);
+ },['#3a2a2a','#c87020','#f2a040','#ffd890','#ffffff','#5a2a8a','#9a5ad8','#d0a0ff','#e86080','#b8406a'],'#2a1810'],
+ oochouchin:[g=>{
+  for(const[x,y,s]of[[5.5,11,1],[34.5,30,1]]){PG(g,[x-2.6*s,y,x,y-6*s,x+2.6*s,y],'#a0d8ff');E(g,x,y+0.6,2.8*s,2.8*s,'#a0d8ff');E(g,x-0.6,y,1.2,1.2,'#e8f8ff')}
+  LN(g,[20,4,20,1],'#3a2a2a',1.4);
+  SE(g,20,21,11.5,15.5,'#c86020','#f29a3a','#ffd890');
+  for(const y of[10,14,29,33])LN(g,[10,y,30,y],'#c86020',1);
+  PG(g,[8.6,19,31.4,19,31.4,22,8.6,22],'#d04848');LN(g,[9,19,31,19],'#a83030',0.8);LN(g,[9,22,31,22],'#a83030',0.8);E(g,20,20.5,2.4,2.4,'#ffd890');E(g,20,20.5,1.2,1.2,'#d04848');
+  PG(g,[11,4,29,4,28,7,12,7],'#3a2a2a');PG(g,[12,35,28,35,27,38.5,13,38.5],'#3a2a2a');
+  PG(g,[11.5,12,15,9.5,18.5,12.5,17,15.5,13,15.5],'#2a1840');PG(g,[12.8,12.6,15,10.8,17.2,12.8,16.2,14.6,13.6,14.6],'#7a3ac8');E(g,15,13,1,1,'#c890ff');
+  PG(g,[21.5,12.5,25,9.5,28.5,12,27,15.5,23,15.5],'#2a1840');PG(g,[22.8,12.8,25,10.8,27.2,12.6,26.4,14.6,23.8,14.6],'#7a3ac8');E(g,25,13,1,1,'#c890ff');
+  PG(g,[12.5,25,15.5,23.5,17.5,25.5,20,23.5,22.5,25.5,24.5,23.5,27.5,25,26,30.5,14,30.5],'#2a1840');PG(g,[14.5,26,16.5,25,18.8,26.6,20,25.2,21.2,26.6,23.5,25,25.5,26,24,29.5,16,29.5],'#7a3ac8');E(g,20,28.2,2.2,1,'#c890ff');
+ },['#3a2a2a','#c86020','#f29a3a','#ffd890','#d04848','#a83030','#2a1840','#7a3ac8','#c890ff','#a0d8ff','#e8f8ff'],'#2a1810'],
+ katashiro:[g=>{
+  E(g,20,37.5,7,1.4,'#5a5048');g.save();g.translate(20,22);g.rotate(-0.22);g.translate(-20,-22);
+  PG(g,[14,15,26,15,28.5,30,22,30,20,26,18,30,11.5,30],'#d8d0c0');PG(g,[14.8,15.5,25.2,15.5,27,28.8,22.4,28.8,20,24.6,17.6,28.8,13,28.8],'#f8f6f0');
+  PG(g,[14.5,16.5,5,13,4,15.5,13.6,20],'#d8d0c0');PG(g,[14.3,17.2,6,14.3,5.4,15.6,13.8,19.2],'#f8f6f0');
+  PG(g,[25.5,16.5,35,20.5,34,23,26.4,20],'#d8d0c0');PG(g,[25.7,17.2,34.2,21,33.6,22.2,26.2,19.2],'#f8f6f0');
+  PG(g,[12,29.5,18,29.5,14,35.5],'#d8d0c0');PG(g,[22,29.5,28,29.5,26,35.5],'#d8d0c0');PG(g,[13.4,29.8,17,29.8,14.4,33.6],'#f8f6f0');PG(g,[23.2,29.8,26.8,29.8,25.8,33.6],'#f8f6f0');
+  E(g,20,9.5,5.6,5.6,'#d8d0c0');E(g,19.6,9.1,5,5,'#f8f6f0');
+  LN(g,[17,9,22.6,8],'#d02030',1.6);E(g,22.6,8,1,1,'#d02030');
+  LN(g,[15,20,25,20],'#a89c88',0.7);LN(g,[20,15.5,20,24],'#a89c88',0.7);PG(g,[24.5,15,26,15,25.7,17],'#a89c88');g.restore();
+ },['#f8f6f0','#d8d0c0','#a89c88','#d02030','#5a5048'],'#4a4238'],
+ kamikakushi:[g=>{
+  PG(g,[11,12,29,12,34,38,6,38],'#3a2a4a');PG(g,[13,13,27,13,31,37,9,37],'#6a5a7a');
+  for(const[x,d]of[[9,-1],[31,1]]){PG(g,[x,11,x+d*3,15,x,18,x+d*3,22,x,25,x+d*3,29,x,32,x+d*5,32,x+d*8,28,x+d*5,25,x+d*8,22,x+d*5,18,x+d*8,15,x+d*5,11],'#f8f6f0');LN(g,[x+d*2.5,12,x+d*2.5,31],'#d8d0c0',0.8)}
+  PG(g,[12,13,28,13,30,24,20,21,10,24],'#f8f6f0');PG(g,[11,22,20,19,29,22,31,33,20,30,9,33],'#d8d0c0');PG(g,[12,24,20,21.6,28,24,29.5,31,20,28.4,10.5,31],'#f8f6f0');
+  PG(g,[10,32,20,29,30,32,32,38,8,38],'#d8d0c0');PG(g,[11,33.5,20,30.6,29,33.5,30.5,37,9.5,37],'#f8f6f0');LN(g,[9.5,24,20,21,30.5,24],'#a89c88',0.8);LN(g,[9,33,20,30,31,33],'#a89c88',0.8);E(g,20,37.6,7,0.9,'#3a2a4a');LN(g,[20,13,20,38],'#a89c88',0.8);
+  E(g,20,8,6,6.8,'#d8d0c0');E(g,19.6,7.6,5.4,6.2,'#f8f6f0');
+  E(g,20,8.4,3,3,'#d02030');E(g,20,8.4,1.6,1.6,'#f8f6f0');E(g,20,8.4,0.8,0.8,'#d02030');
+  LN(g,[14,3,20,1.2,26,3],'#d02030',1.2);
+ },['#f8f6f0','#d8d0c0','#a89c88','#d02030','#3a2a4a','#6a5a7a'],'#2a2030'],
+ umibouzu:[g=>{
+  SE(g,20,19,15,16,'#121a30','#1e2a4a','#34457a');E(g,20,30,15,7,'#121a30');
+  E(g,14,6.5,4,2,'#4a5c94');
+  PG(g,[9,17,17,18.5,16.5,21.5,9.5,20],'#e8f0a0');PG(g,[31,17,23,18.5,23.5,21.5,30.5,20],'#e8f0a0');E(g,13,19.2,1.2,0.9,'#ffffff');E(g,27,19.2,1.2,0.9,'#ffffff');
+  LN(g,[16,26,20,27.2,24,26],'#0a0e1a',1.3);
+  for(const[x,y]of[[7,10],[33,12],[6,24]])PG(g,[x,y,x-1,y+3,x+1,y+3],'#7ab8e8');
+  PG(g,[0,31,4,27,7,30,11,26,15,30,20,27,25,30,29,26,33,30,36,27,40,31,40,40,0,40],'#2a68b8');
+  PG(g,[0,31,4,27,7,30,11,26,15,30,20,27,25,30,29,26,33,30,36,27,40,31,40,33,36,30,33,32.5,29,29,25,32.5,20,30,15,32.5,11,29,7,32.5,4,30,0,33.5],'#e8f8ff');
+  PG(g,[0,36,6,34,12,36.5,18,34.4,24,36.5,30,34.4,36,36.5,40,35,40,40,0,40],'#4a90d8');
+ },['#121a30','#1e2a4a','#34457a','#4a5c94','#e8f0a0','#ffffff','#0a0e1a','#7ab8e8','#2a68b8','#e8f8ff','#4a90d8'],'#060a14'],
+});
 const ART={};for(const k in ARTDEF){const[fn,cols,o,bv]=ARTDEF[k];ART[k]=bake(fn,cols,o,bv)}
 function drawMon(id,x,y,flip,white){const a=(id==='minezou'&&typeof B!=='undefined'&&B&&B.trainer&&B.trainer.id==='kiyoF')?ART.minezouDark:ART[id],img=white?a.white:a.img;c.imageSmoothingEnabled=false;
  if(flip){c.save();c.translate(Math.round(x)+80,Math.round(y));c.scale(-1,1);c.drawImage(img,0,0,80,80);c.restore()}else c.drawImage(img,Math.round(x),Math.round(y),80,80)}
@@ -14097,7 +14152,7 @@ Object.assign(MV,{
 });
 SP.kamaleaf={name:'カマリーフ',type:'grass',b:{hp:45,atk:64,def:46,spd:70},exp:70,cr:.45,moves:['happa','niramitsukeru'],learn:{9:'happagiri',12:'shibirekafun',15:'kirisaku',18:'tsuruuchi'},
  desc:'はっぱの かまを ふりかざす もりの むし。 くさに まぎれて えものを まつ。'};
-SP.kagebasa={name:'カゲバサ',type:'flying',b:{hp:48,atk:58,def:44,spd:78},exp:72,cr:.4,moves:['kuchibashi','sunakake'],learn:{9:'kyuketsu',12:'kowaikao',14:'ayashiikaze',17:'kamitsuku'},
+SP.kagebasa={name:'カゲバサ',type:'ghost',b:{hp:48,atk:58,def:44,spd:78},exp:72,cr:.4,moves:['hiyaritouch','sunakake'],learn:{9:'kyuketsu',12:'kowaikao',14:'mayoibi',17:'kamitsuku'},
  desc:'くらい もりの おくに すむ。 あかい めが ひかったら にげたほうが いい。'};
 DEX.splice(DEX.indexOf('denmushi')+1,0,'kamaleaf','kagebasa');
 Object.assign(MV,{
@@ -14127,7 +14182,7 @@ SP.denmushi.learn={5:'shibiredenpa',9:'kamitsuku',12:'denkiito',15:'biritackle'}
 SP.raidenga={name:'ライデンガ',type:'elec',b:{hp:62,atk:82,def:58,spd:98},exp:150,cr:.2,moves:['butsukaru','biribiri'],learn:{...SP.denmushi.learn,18:'rinpun',22:'denkounohane',26:'ayashiikaze',30:'kaminarinohane',36:'raimei'},
  desc:'はねの りんぷんに でんきが ながれている。 よるの もりを ひかりながら とぶ。'};
 DEX.splice(DEX.indexOf('koroishi')+1,0,'goroiwa','gansekidon');DEX.splice(DEX.indexOf('denmushi')+1,0,'raidenga');
-const TCOL={fire:'#e8623a',water:'#3a86e0',grass:'#46a844',rock:'#a08a5a',elec:'#d0a818',normal:'#8a8a7c',flying:'#6e86d8',psychic:'#e0509a',dragon:'#5a6ad8'};
+const TCOL={fire:'#e8623a',water:'#3a86e0',grass:'#46a844',rock:'#a08a5a',elec:'#d0a818',normal:'#8a8a7c',flying:'#6e86d8',psychic:'#e0509a',dragon:'#5a6ad8',ghost:'#7a5aa8'};
 MV.hasamu={n:'はさむ',t:'normal',p:45,d:''};MV.kanibasami={n:'カニばさみ',t:'water',p:75,crit:true,d:'きゅうしょに あたりやすい'};
 SP.rakkoro={name:'ラッコロ',type:'water',b:{hp:52,atk:56,def:48,spd:68},exp:80,cr:.4,moves:['butsukaru','mizushibuki'],learn:{12:'aquatackle',14:'kamitsuku',16:'shizukudama',20:'honryu'},
  desc:'おなかの うえで かいがらを わって たべる。 なかまおもいで よく あそぶ。'};
@@ -14155,8 +14210,8 @@ Object.assign(MV,{
  midoriissen:{n:'みどりいっせん',t:'grass',p:85,crit:true,d:'きゅうしょに あたりやすい'},
  kamae:{n:'かまえ',t:'normal',p:0,self:true,stat:'atk',st:2,d:'こうげき ぐーんと↑'},
  senbagiri:{n:'せんばぎり',t:'grass',p:110,acc:85,d:''},
- kagenotsubasa:{n:'かげのつばさ',t:'flying',p:70,d:''},
- yaminohado:{n:'やみのはどう',t:'normal',p:85,flinch:.2,d:'たまに ひるませる'},
+ kagenotsubasa:{n:'かげのつばさ',t:'ghost',p:70,d:''},
+ yaminohado:{n:'やみのはどう',t:'ghost',p:85,flinch:.2,d:'たまに ひるませる'},
  maounotsume:{n:'まおうのつめ',t:'normal',p:100,crit:true,d:'きゅうしょに あたりやすい'},
  shinennohane:{n:'しんえんのはね',t:'flying',p:120,acc:85,d:''},
  kaigaragiri:{n:'かいがらぎり',t:'water',p:80,crit:true,d:'きゅうしょに あたりやすい'},
@@ -14175,9 +14230,9 @@ SP.kamaleaf.evo={lv:22,to:'kamasamurai'};
 SP.kamasamurai={name:'カマサムライ',type:'grass',b:{hp:65,atk:98,def:70,spd:92},exp:170,cr:.15,moves:['happa','niramitsukeru'],learn:{...SP.kamaleaf.learn,22:'midoriissen',26:'kamae',30:'kazenoyaiba',36:'senbagiri'},
  desc:'はっぱの かたなを ふたふり もつ もりの さむらい。 いっせんで おおきな きも たおす。'};
 SP.kagebasa.evo={lv:20,to:'yamibasa'};
-SP.yamibasa={name:'ヤミバサ',type:'flying',b:{hp:62,atk:74,def:58,spd:96},exp:150,cr:.2,moves:['kuchibashi','sunakake'],learn:{...SP.kagebasa.learn,20:'kagenotsubasa',24:'yaminohado',30:'kyukoka',33:'kazenoyaiba'},evo:{lv:36,to:'maobasa'},
+SP.yamibasa={name:'ヤミバサ',type:'ghost',b:{hp:62,atk:74,def:58,spd:96},exp:150,cr:.2,moves:['hiyaritouch','sunakake'],learn:{...SP.kagebasa.learn,20:'kagenotsubasa',24:'yaminohado',27:'urameshiya',30:'kyukoka',33:'ayakashinote'},evo:{lv:36,to:'maobasa'},
  desc:'マントの ような つばさで よるの そらを おおう。 むねの しるしが ひかると ふきつ。'};
-SP.maobasa={name:'マオバサ',type:'flying',b:{hp:82,atk:96,def:76,spd:112},exp:230,cr:.05,moves:['kuchibashi','sunakake'],learn:{...SP.yamibasa.learn,36:'maounotsume',42:'hanefubuki',48:'shinennohane'},
+SP.maobasa={name:'マオバサ',type:'ghost',b:{hp:82,atk:96,def:76,spd:112},exp:230,cr:.05,moves:['hiyaritouch','sunakake'],learn:{...SP.yamibasa.learn,36:'maounotsume',42:'yominokaze',48:'tamayura'},
  desc:'ツノと おうかんを もつ やみの おう。 その なきごえで もりが しずまりかえる。'};
 SP.rakkoro.evo={lv:22,to:'rakkoole'};
 SP.rakkoole={name:'ラッコール',type:'water',b:{hp:78,atk:84,def:72,spd:88},exp:170,cr:.15,moves:['butsukaru','mizushibuki'],learn:{...SP.rakkoro.learn,22:'kaigaragiri',26:'iyashi',32:'tsunami'},
@@ -14287,7 +14342,7 @@ Object.assign(MV,{
  psychoburst:{n:'サイコバースト',t:'psychic',p:110,acc:85,d:'めいちゅうが すこし ひくい'},
  hisuinokakusei:{n:'ひすいのかくせい',t:'dragon',p:0,self:true,stats:[['atk',1],['def',1],['spd',1]],d:'こうげき・ぼうぎょ・すばやさ↑'},
 });
-const LATE_LEARN={"kazekirio": {"61": "tenkuuzan"}, "gansekidon": {"56": "daichiware"}, "raidenga": {"57": "ikazuchi"}, "glencon": {"54": "yougantackle", "58": "inferno"}, "uzushion": {"62": "daikaishou"}, "hanamiru": {"55": "midoriissen", "60": "shinrinnoikari"}, "kamasamurai": {"44": "oosuitori", "47": "sakurafubuki", "52": "daichinomegumi", "59": "shinrinnoikari"}, "maobasa": {"52": "toppu", "57": "ootatsumaki", "65": "tenkuuzan"}, "rakkoole": {"44": "mizunohado", "47": "oouzushio", "53": "daikaishou"}, "daiogani": {"52": "honryu", "54": "tsunami", "57": "oouzushio", "61": "daikaishou"}, "yadoiwa": {"44": "gansekiho", "48": "daichiware"}, "umidory": {"44": "ootatsumaki", "47": "tenkuuzan"}, "puraguru": {"44": "ikazuchi", "50": "inazumanoya"}, "bakumu": {"68": "psychoburst"}, "lunapowan": {"44": "yumekui", "48": "psychoburst"}, "fuwakura": {"44": "oouzushio", "48": "daikaishou"}, "namigame": {"44": "mizunohado", "49": "oouzushio", "57": "daikaishou"}, "tobiuon": {"44": "mizunohado", "48": "tsunami", "55": "oouzushio", "64": "daikaishou"}, "kagaribi": {"45": "yougantackle", "50": "kaenguruma", "58": "inferno"}, "magumajiro": {"44": "kaenguruma", "47": "atsukaze", "52": "inferno"}, "hyouen": {"45": "yougantackle", "49": "inferno"}, "kazandori": {"47": "kaenguruma", "52": "inferno"}, "hisuijin": {"66": "hisuinokakusei"}};
+const LATE_LEARN={"kazekirio": {"61": "tenkuuzan"}, "gansekidon": {"56": "daichiware"}, "raidenga": {"57": "ikazuchi"}, "glencon": {"54": "yougantackle", "58": "inferno"}, "uzushion": {"62": "daikaishou"}, "hanamiru": {"55": "midoriissen", "60": "shinrinnoikari"}, "kamasamurai": {"44": "oosuitori", "47": "sakurafubuki", "52": "daichinomegumi", "59": "shinrinnoikari"}, "maobasa": {"52": "shinennohane", "57": "hyakkiyakou", "65": "tenkuuzan"}, "rakkoole": {"44": "mizunohado", "47": "oouzushio", "53": "daikaishou"}, "daiogani": {"52": "honryu", "54": "tsunami", "57": "oouzushio", "61": "daikaishou"}, "yadoiwa": {"44": "gansekiho", "48": "daichiware"}, "umidory": {"44": "ootatsumaki", "47": "tenkuuzan"}, "puraguru": {"44": "ikazuchi", "50": "inazumanoya"}, "bakumu": {"68": "psychoburst"}, "lunapowan": {"44": "yumekui", "48": "psychoburst"}, "fuwakura": {"44": "oouzushio", "48": "daikaishou"}, "namigame": {"44": "mizunohado", "49": "oouzushio", "57": "daikaishou"}, "tobiuon": {"44": "mizunohado", "48": "tsunami", "55": "oouzushio", "64": "daikaishou"}, "kagaribi": {"45": "yougantackle", "50": "kaenguruma", "58": "inferno"}, "magumajiro": {"44": "kaenguruma", "47": "atsukaze", "52": "inferno"}, "hyouen": {"45": "yougantackle", "49": "inferno"}, "kazandori": {"47": "kaenguruma", "52": "inferno"}, "hisuijin": {"66": "hisuinokakusei"}};
 for(const id in LATE_LEARN)if(SP[id])SP[id].learn=Object.assign({...SP[id].learn},LATE_LEARN[id]);
 
 /* ---------- ひびきの どうくつ: rock x4 lines, normal x2 lines ---------- */
@@ -14440,6 +14495,30 @@ SP.kazamidori={name:'カザミドリ',type:'flying',b:{hp:84,atk:104,def:76,spd:
  desc:'やねの うえで かぜを よむ はがねいろの とり。 かぜの むきが かわる まえに なきだす。'};
 DEX.push('hariden','raiharion','yurari','yurameki','kodamame','ookodama','goroneko','hakutaku','fukuroujii','kazamidori');
 Object.assign(WHERE,{hariden:'9ばんどうろ・11ばんどうろ',raiharion:'ハリデンが Lv65で しんか',yurari:'9ばんどうろ・10ばんどうろ',yurameki:'ユラリが Lv65で しんか',kodamame:'10ばんどうろ・11ばんどうろ',ookodama:'コダマメが Lv65で しんか',goroneko:'9ばんどうろ',hakutaku:'10ばんどうろ（まれ）',fukuroujii:'11ばんどうろ',kazamidori:'10ばんどうろ・11ばんどうろ'});
+/* ---------- おばけタイプ（2026-11）：カゲバサけい ＋ チョウチンコけい・カタシロけい・ウミボウズ ---------- */
+Object.assign(MV,{
+ hiyaritouch:{n:'ひやりタッチ',t:'ghost',p:35,d:''},
+ mayoibi:{n:'まよいび',t:'ghost',p:45,status:'brn',chance:.1,d:'たまに やけど'},
+ urameshiya:{n:'うらめしや',t:'ghost',p:0,stat:'atk',st:-1,d:'あいての こうげき↓'},
+ kagetsunagi:{n:'かげつなぎ',t:'ghost',p:60,hitStat:{stat:'spd',st:-1,chance:.5},d:'たまに あいての すばやさ↓'},
+ ayakashinote:{n:'あやかしのて',t:'ghost',p:75,crit:true,d:'きゅうしょに あたりやすい'},
+ yominokaze:{n:'よみのかぜ',t:'ghost',p:90,d:''},
+ tamayura:{n:'たまゆら',t:'ghost',p:100,acc:95,d:''},
+ hyakkiyakou:{n:'ひゃっきやこう',t:'ghost',p:120,acc:85,d:''},
+ yamishio:{n:'やみしお',t:'ghost',p:50,selfHit:{stat:'atk',st:1},d:'ウミボウズ せんよう。 あてると じぶんの こうげき↑'}});
+for(const k of['hiyaritouch','mayoibi','urameshiya','kagetsunagi','ayakashinote','yominokaze','tamayura','hyakkiyakou','yamishio'])MV[k].id=k;
+SP.chouchinko={name:'チョウチンコ',type:'ghost',b:{hp:45,atk:58,def:42,spd:75},exp:70,cr:.35,moves:['hiyaritouch','sunakake'],learn:{14:'mayoibi',17:'urameshiya',20:'kagetsunagi',23:'kamitsuku'},evo:{lv:24,to:'oochouchin'},
+ desc:'ふるい ちょうちんに たましいが やどった。 よるの もりで ぺろりと したを だして おどかす。'};
+SP.oochouchin={name:'オオチョウチン',type:'ghost',b:{hp:70,atk:92,def:62,spd:100},exp:160,cr:.12,moves:['hiyaritouch','sunakake'],learn:{...SP.chouchinko.learn,24:'kitsunebi',28:'ayakashinote',32:'yominokaze',37:'tomoshibi',45:'tamayura',52:'hyakkiyakou'},
+ desc:'まつりの よるに あらわれる おおちょうちん。 やぶれめから のぞく ほのおを みると まよって しまう。'};
+SP.katashiro={name:'カタシロ',type:'ghost',b:{hp:50,atk:62,def:58,spd:68},exp:105,cr:.35,moves:['hiyaritouch','urameshiya'],learn:{31:'mayoibi',34:'kagetsunagi',37:'ayakashinote'},evo:{lv:40,to:'kamikakushi'},
+ desc:'ひとの かたちに きった かみに たましいが やどった。 かぜが ふくと ひらひら まいあがる。'};
+SP.kamikakushi={name:'カミカクシ',type:'ghost',b:{hp:78,atk:100,def:82,spd:96},exp:195,cr:.1,moves:['hiyaritouch','urameshiya'],learn:{...SP.katashiro.learn,40:'yominokaze',44:'meisou',48:'tamayura',54:'hyakkiyakou'},
+ desc:'なんまいもの かみが かさなった ひとかげ。 ゆうぐれに であうと どこかへ つれて いかれる と いう。'};
+SP.umibouzu={name:'ウミボウズ',type:'ghost',b:{hp:120,atk:75,def:130,spd:18},exp:220,cr:.1,moves:['yamishio','shiomichi'],learn:{50:'urameshiya',53:'yominokaze',57:'tamayura',62:'hyakkiyakou'},
+ desc:'よるの うみから ぬっと あらわれる おおぼうず。 おそいが かたく、 しおが みちるほど ちからを ます。'};
+DEX.push('chouchinko','oochouchin','katashiro','kamikakushi','umibouzu');
+Object.assign(WHERE,{chouchinko:'まよいの もりの おく（くらい ところ）',oochouchin:'チョウチンコが Lv24で しんか',katashiro:'6ばんどうろ・ひびきの どうくつ',kamikakushi:'カタシロが Lv40で しんか',umibouzu:'8ばんどうろの うみ（まれ）'});
 /* ---------- じゅんでんせつ（クリアご・かくし エリア）：コウメ・コタロー・サスケ ---------- */
 Object.assign(MV,{
  rekkaissen:{n:'れっかいっせん',t:'dragon',p:100,acc:95,crit:true,hitStat:{stat:'atk',st:-1},d:'ひでんの わざもの で おぼえる。 あいての こうげき↓'},
@@ -14548,7 +14627,7 @@ const MAPS={
   warps:{'14,39':['town',9,1,'down'],'15,39':['town',10,1,'down'],'14,0':['route3',9,18,'up'],'15,0':['route3',10,18,'up']},
   signs:{'11,36':['2ばんどうろ まよいの もり\nみちが まよいやすいので ちゅうい！'],'5,10':['この さき もりの ほこら\nしずかに すすむべし']},
   items:[{id:'fo1',x:1,y:32,k:'potion',amt:2},{id:'fo2',x:17,y:9,k:'ball',amt:3},{id:'fo3',x:27,y:35,k:'money',amt:500}],
-  wild:(x,y)=>y<20?[['kagebasa',11,13,25],['kamaleaf',11,13,20],['denmushi',11,13,10],['koroishi',12,13,10],['tsubametto',12,13,10],['hinokon',11,13,2],['mizutama',11,13,2],['happaru',11,13,2]]
+  wild:(x,y)=>y<20?[['kagebasa',11,13,25],['chouchinko',11,13,5],['kamaleaf',11,13,20],['denmushi',11,13,10],['koroishi',12,13,10],['tsubametto',12,13,10],['hinokon',11,13,2],['mizutama',11,13,2],['happaru',11,13,2]]
    :[['kamaleaf',10,12,20],['piyotto',9,9,14],['tsubametto',10,11,6],['denmushi',9,11,10],['koroishi',10,12,10],['kagebasa',10,11,5],['hinokon',10,11,2],['mizutama',10,11,2],['happaru',10,11,2]],
   npcs:[
    {id:'yuta',x:11,y:34,dir:'right',spr:'boy',pal:['#f8d0a8','#78b048','#e8c040','#1c1820'],sight:4,tname:'むしとりの ユウタ',team:[['denmushi',10],['kamaleaf',10],['kamaleaf',11]],money:18,
@@ -14817,7 +14896,7 @@ Object.assign(MAPS,{
   warps:{'9,19':['town4',25,1,'down'],'10,19':['town4',26,1,'down'],'9,2':['cave1',14,20,'up'],'10,2':['cave1',15,20,'up']},
   signs:{'12,3':['ひびきの どうくつ\nぬけた さきは タカネシティ']},
   items:[{id:'r6a',x:18,y:10,k:'money',amt:1500},{id:'r6b',x:5,y:17,k:'revive',amt:1}],
-  wild:(x,y)=>[['hotaden',31,33,14],['kokedama',30,33,14],['miminaga',31,33,14],['mofutanu',31,33,12],['ishigaeru',31,33,10],['kazekirio',31,33,8],['umidory',31,33,6],['goroiwa',30,31,5],['gansekidon',32,33,4],['kamasamurai',31,33,5],['raidenga',31,33,5],['hononyan',30,31,6],['hyouen',32,33,3],['kazandori',32,33,3]],
+  wild:(x,y)=>[['hotaden',31,33,14],['katashiro',31,33,9],['kokedama',30,33,14],['miminaga',31,33,14],['mofutanu',31,33,12],['ishigaeru',31,33,10],['kazekirio',31,33,8],['umidory',31,33,6],['goroiwa',30,31,5],['gansekidon',32,33,4],['kamasamurai',31,33,5],['raidenga',31,33,5],['hononyan',30,31,6],['hyouen',32,33,3],['kazandori',32,33,3]],
   npcs:[
    {x:6,y:3,dir:'down',spr:'old',pal:HIKER,text:['この さきの どうくつは\nこえが よく ひびくんじゃ。','なかは ひろくて まよいやすい。\nきを つけて いくんじゃぞ。']},
    {id:'r6t1',x:13,y:4,dir:'down',spr:'boy',pal:HIKER,sight:3,tname:'やまおとこの ゴウ',team:[['goroiwa',31],['ishigaeru',33]],money:30,say:['やまの おとこは\nいわより かたい！'],lose:['くずれた……'],after:['どうくつの なかは いわの\nモンスターで いっぱいだ。']},
@@ -14827,7 +14906,7 @@ Object.assign(MAPS,{
  cave1:{name:'ひびきの どうくつ',out:true,cave:true,rows:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T....TTTTTTT2...A....TTTT4..2T", "T....TTTTTTT.........TTTT....T", "TT.A...TTTTT..TTTTT..TTTT.A..T", "TTT....TTTTT..TTTTT.......TTTT", "TTTTT..TTT2...TTTTT.......TTTT", "T......TTT....TTTTTTTTT...TTTT", "T.A....TTT.A..TTTTTTTTT...A..T", "T....TTTTT....TTTT..........2T", "TT...TTTTTTT..TTTT..TTTTTTTTTT", "TT...TTTTTTT......A.TTTTTTTTTT", "T2...TTTTTTT........TTTT.....T", "T....TTTTTTTTT.TTT..TTTT..A..T", "T................T..TTTT.....T", "TTTT...TTTTTTTT..T.......TT..T", "TTTT...TTTTTTTT..TTTTTT..TT..T", "T2.....TTTTTTTT..TTTTTT.....2T", "T...A..TTTTTTTT..TTTTTTTTTTTTT", "TTTTTTTTTTTTT.....TTTTTTTTTTTT", "TTTTTTTTTTTTT..A..TTTTTTTTTTTT", "TTTTTTTTTTTTTT....TTTTTTTTTTTT", "TTTTTTTTTTTTTT77TTTTTTTTTTTTTT"],
   warps:{'14,21':['route6',9,3,'down'],'15,21':['route6',10,3,'down'],'25,1':['cave2',2,2,'down']},
   items:[{id:'c1a',x:1,y:1,k:'sugoikusuri',amt:1},{id:'c1b',x:28,y:11,k:'revive',amt:1},{id:'c1c',x:2,y:16,k:'ballplus',amt:5},{id:'c1d',x:20,y:1,k:'money',amt:1800}],
-  wild:(x,y)=>[['iwamogu',32,35,20],['tsuraran',32,35,20],['kirakoro',32,35,14],['miminaga',32,34,12],['mofutanu',32,34,8],['yamibasa',32,35,8],['gansekidon',32,35,6],['ishigaeru',32,34,6],['hotaden',32,34,6],['kokedama',32,34,6]],
+  wild:(x,y)=>[['iwamogu',32,35,20],['katashiro',32,34,8],['tsuraran',32,35,20],['kirakoro',32,35,14],['miminaga',32,34,12],['mofutanu',32,34,8],['yamibasa',32,35,8],['gansekidon',32,35,6],['ishigaeru',32,34,6],['hotaden',32,34,6],['kokedama',32,34,6]],
   npcs:[
    {id:'c1t1',x:5,y:14,dir:'up',spr:'boy',pal:HIKER,sight:2,tname:'やまおとこの ダイチ',team:[['goroiwa',31],['iwamogu',34]],money:30,say:['こんな おくまで\nよく きたな！'],lose:['まいった！'],after:['イワモグは どうくつの\nみちを ほる モンスターだ。']},
    {id:'c1t2',x:16,y:10,dir:'left',spr:'girl',pal:['#f8d0a8','#d8a040','#5a4a2a','#2a1a14'],sight:4,tname:'たんけんかの ミオ',team:[['miminaga',33],['hotaden',33],['kirakoro',34]],money:32,say:['この どうくつは わたしの\nけんきゅうの ばしょ！'],lose:['きろくして おかなくちゃ……'],after:['キラコロの すいしょうは\nくらやみで ひかるの。']},
@@ -14873,11 +14952,11 @@ Object.assign(MAPS,{
  gym5:{sky:true,rows:["kkkkkkkkkkkk", "kpJffffffJpk", "kJJffffffJJk", "kJJJJffJJJJk", "kJJffffffffk", "kJJffffffffk", "kJJffJJJJJJk", "kJJffJJJJJJk", "kffffffffJJk", "kffffffffJJk", "kJJJJJJffJJk", "kJJJJJJffJJk", "kffffffffffk", "kkkkkmmkkkkk"],
   warps:{'5,13':['town5',5,5,'down'],'6,13':['town5',5,5,'down']},
   npcs:[
-   {id:'fuuka',x:5,y:1,dir:'down',spr:'girl',pal:['#f8d0a8','#78c8f0','#f4f4f4','#3a5a8a'],tname:'ジムリーダーの フウカ',team:[['umidory',40],['kazandori',41],['maobasa',42],['kazekirio',43]],money:100,
+   {id:'fuuka',x:5,y:1,dir:'down',spr:'girl',pal:['#f8d0a8','#78c8f0','#f4f4f4','#3a5a8a'],tname:'ジムリーダーの フウカ',team:[['umidory',40],['kazandori',41],['umidory',42],['kazekirio',43]],money:100,
     say:['ようこそ タカネジムへ。\nわたしは フウカ。','かぜを よみ そらを かける……\nわたしたちに ついて こられる？'],lose:['……いい かぜが ふいたわ。'],after:['かぜは いつも\nまえへ すすむ ものの みかた。'],
     badge:'ソヨカゼバッジ',badgeTalk:['フウカ「その つよさの あかしに\nソヨカゼバッジを あげる。」','フウカ「そらの くろい かげ……\nわたしも きに なっているの。」','フウカ「きを つけて。\nかぜが ざわついているわ。」']},
    {id:'g5t1',x:8,y:9,dir:'left',spr:'boy',pal:['#f8d0a8','#78c8f0','#f4f4f4','#1c1820'],sight:4,tname:'ジムトレーナーの カイト',team:[['kazekirio',38],['umidory',38]],money:32,say:['くもの うえで\nしょうぶだ！'],lose:['ふきとばされた……'],after:['くもから おちない ように\nきを つけてね。']},
-   {id:'g5t2',x:10,y:4,dir:'left',spr:'girl',pal:['#f8d0a8','#78c8f0','#f4f4f4','#2a1a14'],sight:4,tname:'ジムトレーナーの アオイ',team:[['maobasa',38],['kazandori',39]],money:32,say:['そらは わたしたちの\nにわ なのよ！'],lose:['かぜが やんだ……'],after:['フウカさんの カゼキリオーは\nとっても はやいの。']},
+   {id:'g5t2',x:10,y:4,dir:'left',spr:'girl',pal:['#f8d0a8','#78c8f0','#f4f4f4','#2a1a14'],sight:4,tname:'ジムトレーナーの アオイ',team:[['kazekirio',38],['kazandori',39]],money:32,say:['そらは わたしたちの\nにわ なのよ！'],lose:['かぜが やんだ……'],after:['フウカさんの カゼキリオーは\nとっても はやいの。']},
    {id:'g5t3',x:3,y:2,dir:'right',spr:'boy',pal:['#f8d0a8','#78c8f0','#f4f4f4','#1c1820'],sight:3,tname:'ジムトレーナーの ハルト',team:[['kazekirio',39],['tsuraragi',39]],money:34,say:['フウカさんの まえに\nおれが あいてだ！'],lose:['まけた……！'],after:['いけ！ フウカさんは\nすぐ そこだ！']},
    {x:2,y:12,dir:'right',spr:'boy',pal:['#f8d0a8','#40a070','#303030','#1c1820'],text:['ようこそ タカネジムへ！','ここは ひこうタイプの ジム。\nいわや でんきの わざが きくよ！','くもの みちから おちない ように\nきを つけてね！']},
   ]},
@@ -14986,7 +15065,7 @@ Object.assign(MAPS,{
   npcs:[
    {id:'b52g1',x:3,y:2,dir:'left',spr:'boy',pal:GRUNT_PAL,sight:2,tname:'くろふくの おとこ',team:[['gamaiwa',45],['kazandori',45]],money:40,say:['かいだんは この さきだ。\nとおれる ものなら な！'],lose:['ぐっ……'],after:['53Fには オオスギさまが いる。\nあの ひとは ばけものだぞ。']},
    {id:'b52g2',x:8,y:5,dir:'up',spr:'girl',pal:GRUNT_PAL,sight:1,tname:'くろふくの おんな',team:[['lunapowan',45],['ganmogura',45]],money:40,say:['まちなさい！'],lose:['きゃあっ！'],after:['……あのかたの ことは\nわたしたちも しらないの。']},
-   {id:'b52g3',x:2,y:9,dir:'right',spr:'boy',pal:GRUNT_PAL,sight:6,tname:'くろふくの おとこ',team:[['hibikimimi',45],['maobasa',46]],money:42,say:['ここで おわりだ！'],lose:['まけた……'],after:['この ビルの うえの ほうは\nかんぶしか はいれないんだ。']}]},
+   {id:'b52g3',x:2,y:9,dir:'right',spr:'boy',pal:GRUNT_PAL,sight:6,tname:'くろふくの おとこ',team:[['kamikakushi',45],['maobasa',46]],money:42,say:['ここで おわりだ！'],lose:['まけた……'],after:['この ビルの うえの ほうは\nかんぶしか はいれないんだ。']}]},
  bt53:{name:'ブラックタワー 53F',tower:true,rows:["TTTTTTTTTTTT", "T3T........T", "T.T........T", "T.TTTT.TTT.T", "T.....T....T", "T.TTT.T.TT.T", "T...T...T..T", "TTT.T.T.T.TT", "T...T.T....T", "T.TTT.TTTT.T", "T.........$T", "TTTTTTTTTTTT"],
   warps:{'10,10':['bt52',1,1,'down'],'1,1':['bt54',1,10,'up']},
   npcs:[
@@ -15025,7 +15104,7 @@ Object.assign(MAPS,{
   signs:{'18,7':['8ばんどうろ\nひがし：ぼうそうむら']},
   items:[{id:'r8a',x:29,y:2,k:'sugoikusuri',amt:3},{id:'r8b',x:2,y:8,k:'money',amt:4000}],
   wild:(x,y)=>[['hibikimimi',49,52,15],['tanuoyabun',49,52,15],['kazandori',49,52,12],['maobasa',49,52,12],['inabikari',49,52,12],['umidory',49,52,12],['kokenonushi',49,52,10],['magumajiro',49,52,8],['hanetokage',49,50,3]],
-  wildW:()=>[['tobiuon',49,52,30],['namigame',49,52,30],['rakkoole',49,52,25],['daiogani',50,52,15]],
+  wildW:()=>[['tobiuon',49,52,30],['namigame',49,52,30],['rakkoole',49,52,25],['daiogani',50,52,15],['umibouzu',49,52,6]],
   npcs:[
    {id:'r8t1',x:14,y:8,dir:'up',spr:'boy',pal:['#f8d0a8','#3a8ad8','#f4f4f4','#1c1820'],sight:2,tname:'つりびとの シオン',team:[['daiogani',50],['tobiuon',51]],money:46,say:['つりの じゃまを する きか？'],lose:['にがした……'],after:['この うみは ぼうそうむらまで\nつづいているんだ。']},
    {id:'r8t2',x:22,y:3,dir:'down',spr:'girl',pal:['#f8d0a8','#f0a020','#3aa0d0','#2a1a14'],sight:3,tname:'サーファーの ナギサ',team:[['umidory',50],['rakkoole',51]],money:46,say:['なみに のって しょうぶよ！'],lose:['ワイプアウト……'],after:['ぼうそうむらの きたの やまには\nりゅうが いっぱい いるらしいわ。']},
@@ -15170,7 +15249,7 @@ const LEAGUE=[
  {map:'lg2',name:'だい2の へや',tint:'#3a8ae0',id:'lgE2',tname:'リーグせんしの ガンダ',spr:'boy',pal:['#e8b888','#3a6ad0','#2a2a3a','#1c1820'],lv:[71,73],say:['ガンダ「おれは ガンダ！ どんな\nタイプが きても うけて たつ！」'],lose:['ガンダ「くっ……\nおまえ ほんものだな！」']},
  {map:'lg3',name:'だい3の へや',tint:'#8a5ad0',id:'lgE3',tname:'リーグせんしの トモコ',spr:'girl',pal:['#f8d0a8','#6a4ab0','#2a2a3a','#2a1a14'],lv:[73,75],say:['トモコ「……あなたの こころ\nもう みえて いるわ。」','トモコ「でも わたしの てもちは\nよめない でしょう？」'],lose:['トモコ「……よそくを こえたわ。」']},
  {map:'lg4',name:'だい4の へや',tint:'#e8b820',id:'lgE4',tname:'リーグせんしの イイダ',spr:'old',pal:['#f0c090','#c89818','#5a3a20','#1c1820'],lv:[75,77],say:['イイダ「わしが\nさいごの とりでじゃ。」','イイダ「この さきに すすみたければ\nわしを こえて ゆけ！」'],lose:['イイダ「……ほっほっ。 けっしょうで\nまって いる ものが おるぞ。」']}];
-const LG_TYPES=['normal','fire','water','grass','elec','rock','flying','psychic','dragon'];
+const LG_TYPES=['normal','fire','water','grass','elec','rock','flying','psychic','dragon','ghost'];
 // リーグの てもち：ぜんタイプから 6タイプ（おなじ タイプは 1たい）、しんか しない モンスター（でんせつ・まぼろし のぞく）
 // こうかい まえの モンスターは ずかんに ださない
 const POSTMON=new Set(['koume','kotarou','sasuke','hariden','raiharion','yurari','yurameki','kodamame','ookodama','goroneko','hakutaku','fukuroujii','kazamidori']),dexList=()=>DEX.filter(id=>!POSTMON.has(id)||feat('postgame'));
@@ -15238,7 +15317,7 @@ const REMATCH={
  shizuku:['シズク',[['fuwakura',61],['rakkoole',61],['namigame',62],['tobiuon',62],['daiogani',64]],'わたしの みずも\nもっと ふかく なったのよ。'],
  satori:['サトリ',[['bakumu',63],['lunapowan',63],['hanamiru',64],['makyou',65]],'あなたが くる みらいは\nみえて いたわ。'],
  hibana:['ヒバナ',[['kagaribi',63],['magumajiro',64],['hyouen',64],['kazandori',65],['glencon',66]],'まってたよ！ もっと あつい\nしょうぶを しよう！'],
- fuuka:['フウカ',[['umidory',65],['kazekirio',66],['kazandori',66],['maobasa',67]],'かぜが おしえて くれたの。\nあなたが くるって。'],
+ fuuka:['フウカ',[['umidory',65],['kazekirio',66],['kazandori',66],['fukuroujii',67]],'かぜが おしえて くれたの。\nあなたが くるって。'],
  shirasato:['シラサト',[['hibikimimi',65],['tanuoyabun',66],['puraguru',66],['raidenga',67],['inabikari',68]],'おじいさんも ぶじで よかった。\nさあ、 ほんきで いくよ！'],
  matsunaga:['マツナガ',[['zantetsuryu',66],['mizuchi',67],['ootsunoryuu',68],['soutenryuu',69]],'ドラゴンの ちから\nもう いちど ためして みろ！'],
  wakashio:['わかしお',[['daiogani',67],['tobiuon',67],['uzushion',68],['mizuchi',69],['ootsunoryuu',69],['soutenryuu',70]],'うみの かみに みとめられた\nあなたと もう いちど……！']};
@@ -15428,6 +15507,7 @@ const AU={ctx:null,master:null,on:true,song:null,i:0,next:0,hold:0,
    case'pop':this.tone(900,t,.04,'square',.05);this.noise(t,.1,.1,2500);break;
    case'statup':for(let i=0;i<5;i++)this.tone(500+i*160,t+i*.04,.05,'square',.03);break;
    case'statdown':for(let i=0;i<5;i++)this.tone(1100-i*160,t+i*.04,.05,'square',.03);break;
+   case'fxghost':for(let i=0;i<5;i++)this.tone(300-i*30+Math.sin(i*2)*40,t+i*.07,.12,'triangle',.06);break;
    case'fxstatus':for(let i=0;i<4;i++)this.tone(1400+i*200,t+i*.06,.06,'sine',.05);break;
    case'evo':for(let i=0;i<16;i++)this.tone(330*Math.pow(2,(i%8)/12),t+i*.18,.16,'triangle',.06);break;
    case'buy':this.tone(1319,t,.06,'square',.04);this.tone(1760,t+.07,.1,'square',.04);break;
@@ -15483,7 +15563,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.05-1725';
+const BUILD='2026.11.06-2050';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -16291,7 +16371,8 @@ const NEWS=[
  {id:'2026.11.02f',title:'ものがたりの しあげ',body:['こんかいの こうしん：','・オオアミシティから さいごまでの\n かいわを みなおしたよ','・つぎに どこへ いけば いいか\n わかりやすく なったよ','・エンディングに\n その あとの おはなしを ついか','・クリアした あとにも\n だれかが しょうぶを まってる……？']},
  {id:'2026.11.03a',title:'クリアごの おたのしみ',body:['こんかいの こうしん：','・ものがたりを クリアした あと\n ジムリーダーと さいせん\n できるように！（Lv60〜70）','・ひづけが かわると\n また たたかえるよ','・はじめて かつと\n チャンピオンリーグの\n すいせんじょうが もらえる','・8まい あつめると……？','・いえの にいちゃんとも\n まいにち しょうぶ できるよ','・マウントフジの さんちょうに\n なにかが まいおりて いる……？']},
  {id:'2026.11.04a',title:'チャンピオンリーグ かいまく！',body:['こんかいの こうしん：','・セセラギシティ・タカネシティ・\n とがった いわの やまから\n あたらしい みちが ひらいた！','・みちの さきには\n チャンピオンスタジアム！','・すいせんじょうを 8まい\n あつめて リーグに ちょうせん！','・あたらしい モンスターも\n 10しゅ みつかったよ','・かんいボートで うみの むこうへ\n いくと……？']},
- {id:'2026.11.05a',title:'ひでんの わざもの',body:['こんかいの こうしん：','・ぼうそうむらの ショップに\n「ひでんの わざもの（りゅう）」\n（1にち 1こ まで）','・ドラゴンタイプ いがいの\n モンスターが ドラゴンわざを\n おぼえられるよ','・クラウドBOXで モンスターの\n つよさを みられるように！']}
+ {id:'2026.11.05a',title:'ひでんの わざもの',body:['こんかいの こうしん：','・ぼうそうむらの ショップに\n「ひでんの わざもの（りゅう）」\n（1にち 1こ まで）','・ドラゴンタイプ いがいの\n モンスターが ドラゴンわざを\n おぼえられるよ','・クラウドBOXで モンスターの\n つよさを みられるように！']},
+ {id:'2026.11.06a',title:'あたらしい タイプ「おばけ」！',body:['こんかいの こうしん：','・あたらしい タイプ「おばけ」が\n とうじょう！','・おばけは エスパーと おばけに\n つよく、 ほのおが にがて','・エスパーの わざが\n ドラゴンに よく きくように なったよ','・カゲバサたちが おばけタイプに\n なったよ','・あたらしい おばけの モンスターも\n どこかに かくれて いるよ……']},
 ];
 let toast=null;
 // こうかい まえの おしらせ：FEAT を true に する ときに NEWS の さいごへ うつす
@@ -16684,6 +16765,7 @@ function resolve(att,def,mv,isP,who){const sd=side(isP),od=side(!isP),dwho=lab(d
   if(mv.status&&alive&&Math.random()<(mv.chance||1))r.push(...inflict(def,mv.status,dwho,true));
   if(mv.flinch&&alive&&Math.random()<mv.flinch)B.flinch[od]=true;
   if(mv.hitStat&&alive&&Math.random()<(mv.hitStat.chance||1))r.push(...statChange(od,dwho,mv.hitStat.stat,mv.hitStat.st));
+  if(mv.selfHit&&att.hp>0)r.push(...statChange(sd,who,mv.selfHit.stat,mv.selfHit.st));
   if(mv.recharge)B.rech[sd]=true;
   if(mv.trap&&alive&&!B.dot[od])r.push(F(()=>{B.dot[od]={kind:'trap',turns:2+(Math.random()*3|0),nm:mv.trapNm||'うずまき'}}),...T(`${dwho}は ${mv.trapNm||'うずまき'}に\nとじこめられた！`));
  }else{
@@ -17648,6 +17730,9 @@ function drawFx(){const f=B.fx;if(!f)return;if(f.id&&drawMoveFx(f))return;const 
   else{c.globalAlpha=.6;ell(x,y+4,8+i,3,'#d8d0c0');c.globalAlpha=1}}break;
  case 'elec':if(f.t%4<2){c.lineJoin='miter';for(let k=0;k<3;k++){let x=tx-16+k*16+(Math.random()*8-4),y=ty-44;const pts=[[x,y]];for(let s=0;s<5;s++){x+=Math.random()*14-7;y+=11;pts.push([x,y])}
    for(const[w,cl]of[[5,'#c08a10'],[3,'#ffe040'],[1,'#ffffff']]){c.strokeStyle=cl;c.lineWidth=w;c.beginPath();pts.forEach(([px,py],i)=>i?c.lineTo(px,py):c.moveTo(px,py));c.stroke()}}}break;
+ case 'ghost':{for(let i=0;i<6;i++){const q=clamp01(p*1.5-i*.08);if(q<=0||q>=1)continue;const x=lerp(ax,tx,q)+Math.sin(q*10+i*1.7)*14,y=lerp(ay,ty,q)+Math.cos(q*8+i)*10-Math.sin(q*Math.PI)*16;
+   c.globalAlpha=.85*(1-q*.4);ell(x,y,6,7,'#4a2a7a');ell(x,y-1,4.4,5.4,'#9a6ad8');ell(x-1,y-2,2,2.4,'#e8d8ff');c.globalAlpha=1}
+  if(p>.6){c.globalAlpha=(1-p)*2.5;ell(tx,ty+4,16+(p-.6)*40,12+(p-.6)*30,'#7a5aa8');c.globalAlpha=1}break}
  case 'status':{const cl=f.up?'#8fd8ff':'#c49cff';for(let i=0;i<10;i++){const a=i/10*Math.PI*2+p*5,r=26-p*14,x=tx+Math.cos(a)*r,y=ty+Math.sin(a)*r*.8-p*10;R(x-1,y-4,2,8,cl);R(x-4,y-1,8,2,cl);R(x-1,y-1,2,2,'#ffffff')}break}
  case 'flying':{for(let i=0;i<3;i++){const q=clamp01(p*1.5-i*.18);if(q<=0||q>=1)continue;const y=ty-26+i*18,x0=tx+40-q*80;
    for(const[w,cl]of[[5,'#5a7ab0'],[2.5,'#e8f4ff']]){c.strokeStyle=cl;c.lineWidth=w;c.beginPath();c.moveTo(x0+30,y-6);c.quadraticCurveTo(x0,y+8,x0-30,y-2);c.stroke()}}break}
