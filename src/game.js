@@ -2011,7 +2011,7 @@ Object.assign(MV,{
  yominokaze:{n:'よみのかぜ',t:'ghost',p:90,d:''},
  tamayura:{n:'たまゆら',t:'ghost',p:100,acc:95,d:''},
  hyakkiyakou:{n:'ひゃっきやこう',t:'ghost',p:120,acc:85,d:''},
- yamishio:{n:'やみしお',t:'ghost',p:50,selfHit:{stat:'atk',st:1},d:'ウミボウズ せんよう。 あてると じぶんの こうげき↑'}});
+ yamishio:{n:'やみしお',t:'ghost',p:50,stackP:20,selfHit:{stat:'atk',st:1},d:'ウミボウズ せんよう。 じぶんの こうげき↑・こうげきが あがって いるほど いりょく↑'}});
 for(const k of['hiyaritouch','mayoibi','urameshiya','kagetsunagi','ayakashinote','yominokaze','tamayura','hyakkiyakou','yamishio'])MV[k].id=k;
 SP.chouchinko={name:'チョウチンコ',type:'ghost',b:{hp:45,atk:58,def:42,spd:75},exp:70,cr:.35,moves:['hiyaritouch','sunakake'],learn:{14:'mayoibi',17:'urameshiya',20:'kagetsunagi',23:'kamitsuku'},evo:{lv:24,to:'oochouchin'},
  desc:'ふるい ちょうちんに たましいが やどった。 よるの もりで ぺろりと したを だして おどかす。'};
@@ -2021,7 +2021,7 @@ SP.katashiro={name:'カタシロ',type:'ghost',b:{hp:50,atk:62,def:58,spd:68},ex
  desc:'ひとの かたちに きった かみに たましいが やどった。 かぜが ふくと ひらひら まいあがる。'};
 SP.kamikakushi={name:'カミカクシ',type:'ghost',b:{hp:78,atk:100,def:82,spd:96},exp:195,cr:.1,moves:['hiyaritouch','urameshiya'],learn:{...SP.katashiro.learn,40:'yominokaze',44:'meisou',48:'tamayura',54:'hyakkiyakou'},
  desc:'なんまいもの かみが かさなった ひとかげ。 ゆうぐれに であうと どこかへ つれて いかれる と いう。'};
-SP.umibouzu={name:'ウミボウズ',type:'ghost',b:{hp:120,atk:75,def:130,spd:18},exp:220,cr:.1,moves:['yamishio','shiomichi'],learn:{50:'urameshiya',53:'yominokaze',57:'tamayura',62:'hyakkiyakou'},
+SP.umibouzu={name:'ウミボウズ',type:'ghost',b:{hp:120,atk:85,def:130,spd:18},exp:220,cr:.1,moves:['yamishio','shiomichi'],learn:{50:'urameshiya',53:'yominokaze',57:'tamayura',62:'hyakkiyakou'},
  desc:'よるの うみから ぬっと あらわれる おおぼうず。 おそいが かたく、 しおが みちるほど ちからを ます。'};
 DEX.push('chouchinko','oochouchin','katashiro','kamikakushi','umibouzu');
 Object.assign(WHERE,{chouchinko:'まよいの もりの おく（くらい ところ）',oochouchin:'チョウチンコが Lv24で しんか',katashiro:'6ばんどうろ・ひびきの どうくつ',kamikakushi:'カタシロが Lv40で しんか',umibouzu:'8ばんどうろの うみ（まれ）'});
@@ -4259,7 +4259,7 @@ function resolve(att,def,mv,isP,who){const sd=side(isP),od=side(!isP),dwho=lab(d
  if(mv.p){const hits=mv.hits?mv.hits[0]+(Math.random()*(mv.hits[1]-mv.hits[0]+1)|0):1,e=effOn(mv.t,def.id),stab=stabOf(mv.t,att.id)?STAB:1;let total=0,n=0,crit1=false,hp=def.hp;const dm=[];
   for(let h=0;h<hits&&hp>0;h++){const crit=Math.random()<(mv.crit||mv.t==='dragon'?1/4:1/16)?1.5:1;if(crit>1)crit1=true;
    const A=att.atk*smul(B.st[sd].atk)*(att.status==='brn'?.5:1),Df=def.def*smul(B.st[od].def);
-   let d=Math.max(1,Math.floor((((2*att.lv/5+2)*mv.p*A/Df)/50+2)*stab*e*(mv.t==='dragon'?DRAGON_BONUS:1)*crit*(0.85+Math.random()*0.15)));if(DEV&&DEV.ohko&&isP)d=Math.max(d,hp);hp=Math.max(B.god?1:0,hp-d);dm.push(d);total+=d;n++}
+   let d=Math.max(1,Math.floor((((2*att.lv/5+2)*(mv.p+(mv.stackP?mv.stackP*Math.max(0,B.st[sd].atk):0))*A/Df)/50+2)*stab*e*(mv.t==='dragon'?DRAGON_BONUS:1)*crit*(0.85+Math.random()*0.15)));if(DEV&&DEV.ohko&&isP)d=Math.max(d,hp);hp=Math.max(B.god?1:0,hp-d);dm.push(d);total+=d;n++}
   const alive=hp>0;
   // each hit of a multi-hit move gets its own lunge + effect + damage animation
   dm.forEach((d,k)=>{if(k>0)r.push(F(()=>{B.lunge={who:sd,t:0,d:10};AU.sfx('swing')}),Wt(()=>B.lunge.t>=10),F(()=>{B.lunge=null;B.fx={type:mv.t,id:mv.id,t:0,to:od,d:Math.min(22,fxDur(mv.id))};AU.sfx('fx'+mv.t)}),Wt(()=>B.fx.t>=B.fx.d),F(()=>{B.fx=null}));
