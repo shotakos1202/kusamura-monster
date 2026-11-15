@@ -4009,6 +4009,8 @@ function devMenu(){const push=L=>menu.dev.push(L),onoff=v=>v?'ON':'OFF';
   {t:'アイテムを 99こ ずつ',a:()=>{for(const k of ITEMS)S.items[k]=99;AU.jingle('item')}},
   {t:'おかね ＋10000',a:()=>{S.money+=10000;AU.sfx('buy')}},
   {t:'わざの たつじん',a:()=>{menu=null;tutorTalk()}},
+  {t:'ずかん コンプリート',v:()=>dexDone()?'ずみ':'',a:()=>{for(const id of dexList()){if(!S.seen.includes(id))S.seen.push(id);if(!S.caught.includes(id))S.caught.push(id)}delete S.flags.dexMovie;AU.jingle('catch');toast={text:'ずかんを コンプリート した！',t:120}}},
+  {t:'コンプリートムービーを みる',a:()=>{menu=null;startDexMovie(false)}},
   {t:'バッジ',a:()=>push(badge)},
   {t:'イベントの じょうたい',a:()=>push(events)},
   {t:'かべぬけ',v:()=>onoff(DEV.noclip),a:()=>{DEV.noclip=!DEV.noclip}},

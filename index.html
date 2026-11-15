@@ -15563,7 +15563,7 @@ function fadeTo(map,x,y,dir){fade={t:0,to:[map,x,y,dir]};AU.sfx('door')}
 function healAll(){S.party.forEach(m=>{m.hp=m.mhp;m.status=null;m.slp=0})}
 
 /* ---------- title / starter ---------- */
-const BUILD='2026.11.15-1939';
+const BUILD='2026.11.15-1953';
 let TT={pg:'main',i:0},TMAIL=null;
 function tmail(){if(TMAIL)return TMAIL;let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}if(!d||!d.party)return null;if(deliverNews(d)){try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}}return TMAIL=d}
 const isStandalone=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
@@ -16503,6 +16503,8 @@ function devMenu(){const push=L=>menu.dev.push(L),onoff=v=>v?'ON':'OFF';
   {t:'アイテムを 99こ ずつ',a:()=>{for(const k of ITEMS)S.items[k]=99;AU.jingle('item')}},
   {t:'おかね ＋10000',a:()=>{S.money+=10000;AU.sfx('buy')}},
   {t:'わざの たつじん',a:()=>{menu=null;tutorTalk()}},
+  {t:'ずかん コンプリート',v:()=>dexDone()?'ずみ':'',a:()=>{for(const id of dexList()){if(!S.seen.includes(id))S.seen.push(id);if(!S.caught.includes(id))S.caught.push(id)}delete S.flags.dexMovie;AU.jingle('catch');toast={text:'ずかんを コンプリート した！',t:120}}},
+  {t:'コンプリートムービーを みる',a:()=>{menu=null;startDexMovie(false)}},
   {t:'バッジ',a:()=>push(badge)},
   {t:'イベントの じょうたい',a:()=>push(events)},
   {t:'かべぬけ',v:()=>onoff(DEV.noclip),a:()=>{DEV.noclip=!DEV.noclip}},
