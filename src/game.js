@@ -3879,6 +3879,7 @@ const NEWS=[
  {id:'2026.11.04a',title:'チャンピオンリーグ かいまく！',body:['こんかいの こうしん：','・セセラギシティ・タカネシティ・\n とがった いわの やまから\n あたらしい みちが ひらいた！','・みちの さきには\n チャンピオンスタジアム！','・すいせんじょうを 8まい\n あつめて リーグに ちょうせん！','・あたらしい モンスターも\n 10しゅ みつかったよ','・かんいボートで うみの むこうへ\n いくと……？']},
  {id:'2026.11.05a',title:'ひでんの わざもの',body:['こんかいの こうしん：','・ぼうそうむらの ショップに\n「ひでんの わざもの（りゅう）」\n（1にち 1こ まで）','・ドラゴンタイプ いがいの\n モンスターが ドラゴンわざを\n おぼえられるよ','・クラウドBOXで モンスターの\n つよさを みられるように！']},
  {id:'2026.11.06a',title:'あたらしい タイプ「おばけ」！',body:['こんかいの こうしん：','・あたらしい タイプ「おばけ」が\n とうじょう！','・おばけは エスパーと おばけに\n つよく、 ほのおが にがて','・エスパーの わざが\n ドラゴンに よく きくように なったよ','・カゲバサたちが おばけタイプに\n なったよ','・あたらしい おばけの モンスターも\n どこかに かくれて いるよ……']},
+ {id:'2026.11.15a',title:'ずかん コンプリートの おたのしみ',body:['こんかいの こうしん：','・ずかんの モンスターを\n ぜんぶ つかまえると……？','・コンプリートした ひとには\n とくべつな ごほうびが あるよ！','・もう コンプリートして いる ひとは\n つぎに あそぶ ときに みてね']}
 ];
 let toast=null;
 // こうかい まえの おしらせ：FEAT を true に する ときに NEWS の さいごへ うつす
@@ -4187,6 +4188,8 @@ function updMenu(){const m=menu;
  if(m.pg==='mail'){updMailUI(m.mu,S.mail||(S.mail=[]),()=>{m.pg='root'},null);return}
  if(m.pg==='quit'){if(btnp('up')||btnp('down'))m.q^=1;if(btnp('b')){m.pg='root';return}
   if(btnp('a')){if(m.q===0){save();DEV=null;menu=null;shop=null;boxui=null;Q.length=0;mode='title';TT={pg:'main',i:0};if(updNote)checkUpdate()}else m.pg='root'}return}
+ if(m.pg==='dex'&&dexDone()){if(m.dx===-1){if(btnp('a')){startDexMovie(false);return}if(btnp('b')){m.pg='root';m.dx=0;return}if(btnr('down')){m.dx=0;AU.sfx('cur')}return}if(m.dx===0&&btnp('up')){m.dx=-1;AU.sfx('cur');return}}
+ if(m.pg==='dexd'&&m.dx<0)m.dx=0;
  if(m.pg==='dex'||m.pg==='dexd'){const n=dexList().length;m.dx=m.dx||0;{const u=btnr('up'),d=btnr('down');if(u===1)m.dx=(m.dx+n-1)%n;else if(u===2&&m.dx>0){m.dx--;AU.sfx('cur')}if(d===1)m.dx=(m.dx+1)%n;else if(d===2&&m.dx<n-1){m.dx++;AU.sfx('cur')}}if(m.pg==='dex'&&btnp('left'))m.dx=Math.max(0,m.dx-5);if(m.pg==='dex'&&btnp('right'))m.dx=Math.min(n-1,m.dx+5);
   if(btnp('b')){m.pg=m.pg==='dexd'?'dex':'root';return}
   if(m.pg==='dex'&&btnp('a')){if(S.seen.includes(dexList()[m.dx]))m.pg='dexd';else AU.sfx('bump')}return}
@@ -4425,16 +4428,61 @@ function evoChain(id){let base=id;for(let g=0;g<5;g++){const p=Object.keys(SP).f
  const ch=[base];while(SP[ch[ch.length-1]].evo&&ch.length<5)ch.push(SP[ch[ch.length-1]].evo.to);return ch}
 // list: 5 rows, a scrollbar and a caught mark
 function drawDex(sel){HITS.length=0;box(8,8,304,272);panelHead('ずかん','#d84848',`みつけた ${S.seen.length}　つかまえた ${S.caught.length}／${dexList().length}`);
- const N=5,RH=42,top=Math.max(0,Math.min(dexList().length-N,sel-2));
- for(let k=0;k<N&&top+k<dexList().length;k++){const i=top+k,id=dexList()[i],sp=SP[id],y=42+k*RH,seen=S.seen.includes(id),cg=S.caught.includes(id),on=i===sel;
+ const done=dexDone(),Y0=done?76:42,N=done?4:5,RH=42,top=Math.max(0,Math.min(dexList().length-N,sel-2));
+ if(done){const on=sel<0,gr=c.createLinearGradient(0,40,0,72);gr.addColorStop(0,on?'#fff2a8':'#ffe680');gr.addColorStop(1,on?'#f8c840':'#f0b830');rrect(18,40,278,32,8,null);c.fillStyle=gr;c.fill();if(on){c.strokeStyle='#c0801a';c.lineWidth=2;c.stroke()}
+  trophy(38,52,.62);txt('ずかん コンプリート おめでとう！',58,44,'#6a4006',13);txt('タップ／A で コンプリートムービー',58,60,'#8a5a10',9);
+  for(let i=0;i<3;i++){const tw=Math.abs(Math.sin(frame/14+i*2));c.globalAlpha=tw;R(260+i*11,46+(i%2)*10,2,2,'#ffffff');c.globalAlpha=1}
+  hit(18,40,278,32,()=>{if(menu.dx===-1)startDexMovie(false);menu.dx=-1})}
+ for(let k=0;k<N&&top+k<dexList().length;k++){const i=top+k,id=dexList()[i],sp=SP[id],y=Y0+k*RH,seen=S.seen.includes(id),cg=S.caught.includes(id),on=i===sel;
   hit(16,y,282,RH-4,()=>{if(menu.dx===i&&seen)menu.pg='dexd';menu.dx=i});
   rrect(18,y,278,RH-4,6,on?'#fff4cc':(k%2?'#eef3f9':'#f7f9fc'),on?'#e0a820':null,2);
   txt(dexNo(i),26,y+13,on?'#a06a10':'#8090a8',10);
   if(seen){c.imageSmoothingEnabled=false;c.drawImage(cg?ART[id].img:ART[id].dark,64,y,38,38);txt(sp.name,108,y+4,3,14);if(cg)typePills(id,108,y+21,sp.type2?90:48,13,9);else txt('みつけた',108,y+22,2,10)}
   else{rrect(68,y+5,28,28,6,'#dde4ee');txt('？',82,y+11,'#a0aab8',14,'center');txt('？？？？？',108,y+11,'#a0aab8',14)}
   if(cg)ballIcon(282,y+19,6)}
- const th=Math.max(16,(N/dexList().length)*206),ty=42+(206-th)*(top/Math.max(1,dexList().length-N));R(300,42,4,206,'#dde4ee');R(300,ty,4,th,'#d84848');
+ const SH=N*RH-4,th=Math.max(16,(N/dexList().length)*SH),ty=Y0+(SH-th)*(top/Math.max(1,dexList().length-N));R(300,Y0,4,SH,'#dde4ee');R(300,ty,4,th,'#d84848');
  txt('▲▼：えらぶ　◀▶：ページ　A：くわしく　B：もどる',160,256,2,10,'center')}
+/* ---------- ずかん コンプリート：トロフィーと コンプリートムービー ---------- */
+// ぜんぶ つかまえたら：ずかんの いちばん うえに おいわいと トロフィー。 はじめて コンプリートした とき（すでに コンプリートずみの ひとは つぎの きどう）に じどうで ムービー
+const dexDone=()=>!!S&&dexList().every(id=>S.caught.includes(id));
+let DMOV=null;
+const DM_PER=34,DM_MSG=['くさモンを あそんで くれて\nありがとう！','AIに かきんして たくさん\nおこられたけど……','つくって よかったよ。','あたらしい ゲームが できたら\nまた あそんでね。'];
+function startDexMovie(auto){DMOV={t:0,ph:'intro',i:0,k:0,ch:0,list:dexList(),auto};if(auto&&S){S.flags.dexMovie=1;save()}}
+function trophy(x,y,s=1){const g='#f2c230',d='#b8861a',l='#fff1a8';c.save();c.translate(x,y);c.scale(s,s);
+ c.globalAlpha=.25;ell(0,22,15,3,'#000');c.globalAlpha=1;
+ c.strokeStyle=d;c.lineWidth=3;c.beginPath();c.arc(-12,-6,6,Math.PI*.5,Math.PI*1.5);c.stroke();c.beginPath();c.arc(12,-6,6,-Math.PI*.5,Math.PI*.5);c.stroke();
+ c.fillStyle=g;c.beginPath();c.moveTo(-12,-14);c.lineTo(12,-14);c.quadraticCurveTo(12,6,2,9);c.lineTo(-2,9);c.quadraticCurveTo(-12,6,-12,-14);c.fill();
+ R(-12,-15,24,3,d);R(-2,8,4,6,d);R(-9,14,18,4,g);R(-11,18,22,3,d);
+ c.fillStyle=l;c.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,r=i%2?2.4:5.6;c.lineTo(Math.cos(a)*r,-4+Math.sin(a)*r)}c.fill();
+ R(-8,-12,2,8,'rgba(255,255,255,.55)');c.restore()}
+function dmStars(){for(let i=0;i<40;i++){const x=hsh(i,7,3)*W,y=hsh(i,9,5)*H,tw=.4+.6*Math.abs(Math.sin(frame/20+i));c.globalAlpha=tw*.8;R(x,y,i%5?1:2,i%5?1:2,'#ffffff')}c.globalAlpha=1}
+function dmConfetti(t){const cl=['#ff6a6a','#ffd23a','#5ad0ff','#7ae07a','#e07aff'];for(let i=0;i<46;i++){const x=(hsh(i,3,1)*W+Math.sin(t/30+i)*12+W)%W,y=((hsh(i,5,2)*H+t*(0.8+hsh(i,1,9)))%(H+20))-10;R(x,y,3,5,cl[i%5])}}
+function updMovie(){const M=DMOV;M.t++;const A=btnp('a'),Bk=btnp('b'),fast=held.a?3:1;
+ if(M.ph==='intro'){if(M.t>=100||(A&&M.t>20)){M.ph='parade';M.t=0;M.i=0}return}
+ if(M.ph==='parade'){if(Bk){M.ph='grid';M.t=0;return}M.k+=fast;if(A)M.k=DM_PER;if(M.k>=DM_PER){M.k=0;M.i++;if(M.i>=M.list.length){M.ph='grid';M.t=0}else AU.sfx('cur')}return}
+ if(M.ph==='grid'){if(M.t>=200||(A&&M.t>40)){M.ph='msg';M.t=0;M.i=0;M.ch=0}return}
+ if(M.ph==='msg'){const s=DM_MSG[M.i];if(M.ch<s.length){M.ch+=1;if(A||Bk)M.ch=s.length;return}if(A||Bk){M.i++;M.ch=0;if(M.i>=DM_MSG.length){M.ph='end';M.t=0}}return}
+ if(M.ph==='end'&&M.t>40&&(A||Bk)){DMOV=null;AU.sfx('back')}}
+function drawMovie(){const M=DMOV;hit(0,0,W,H,()=>{},true);
+ const bg=c.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#141a3a');bg.addColorStop(1,'#2a1a40');c.fillStyle=bg;c.fillRect(0,0,W,H);dmStars();
+ if(M.ph==='intro'){const a=Math.min(1,M.t/30);c.globalAlpha=a;dmConfetti(M.t);trophy(W/2,108,2.2+Math.sin(M.t/12)*.08);
+  logo('ずかん コンプリート！',W/2,170,22,'#ffd23a','#5a3a08');txt(`${M.list.length}ひき ぜんぶ つかまえた！`,W/2,206,'#ffffff',13,'center');c.globalAlpha=1;return}
+ if(M.ph==='parade'){const id=M.list[M.i],sp=SP[id],col=TCOL[sp.type]||'#5870b0',e=Math.min(1,M.k/10),x=W/2+(1-e)*(1-e)*180;
+  c.globalAlpha=.35;ell(W/2,112,120,80,col);c.globalAlpha=1;
+  const pulse=1+Math.max(0,1-M.k/8)*.15,sz=112*pulse;c.globalAlpha=.3;ell(x,170,46,8,'#000');c.globalAlpha=1;c.imageSmoothingEnabled=false;c.drawImage(ART[id].img,x-sz/2,112-sz/2,sz,sz);
+  txt(dexNo(DEX.indexOf(id)),W/2,186,'#c8d0f0',11,'center');logo(sp.name,W/2,212,18,'#ffffff',col);typePills(id,W/2-(sp.type2?45:24),232,sp.type2?90:48,13,9);
+  // これまでの モンスターが したに ならぶ
+  const n0=Math.max(0,M.i-11);for(let j=n0;j<M.i;j++){c.globalAlpha=.55+.45*(j-n0)/11;c.drawImage(ART[M.list[j]].img,8+(j-n0)*25,256,24,24)}c.globalAlpha=1;
+  txt(`${M.i+1}／${M.list.length}`,W-8,8,'#c8d0f0',10,'right');txt('A：つぎへ　B：とばす',8,8,'#8890b8',9);return}
+ // grid（まとめ）と さいごの メッセージ
+ const cols=13,ts=22,gx=(W-cols*ts)/2,gy=44;const show=M.ph==='grid'?Math.min(M.list.length,Math.floor(M.t*1.2)):M.list.length;
+ if(M.ph!=='grid')c.globalAlpha=.35;M.list.slice(0,show).forEach((id,j)=>{c.drawImage(ART[id].img,gx+(j%cols)*ts,gy+Math.floor(j/cols)*ts,ts,ts)});c.globalAlpha=1;
+ if(M.ph==='grid'){dmConfetti(M.t);trophy(30,22,.8);trophy(W-30,22,.8);logo('コンプリート おめでとう！',W/2,24,16,'#ffd23a','#5a3a08');return}
+ trophy(W/2,90,1.6);
+ if(M.ph==='msg'){box(0,200,320,88);const s=DM_MSG[M.i].slice(0,M.ch).split('\n');s.forEach((l,k)=>txt(l,18,214+k*28,3,16));txt('かいはつしゃ より',W-12,186,'#c8d0f0',10,'right');
+  if(M.ch>=DM_MSG[M.i].length&&(frame>>4)%2)txt('▼',296,262,3,12);return}
+ box(0,200,320,88);txt('おしまい',18,214,2,14);txt('―― たこより',W-18,246,3,16,'right');
+ if(M.t>40&&(frame>>5)%2)txt('Aで とじる',W/2,186,'#c8d0f0',10,'center')}
 // detail: big picture, type, stats, description, habitat and the evolution chain
 function drawDexDetail(i){HITS.length=0;const id=dexList()[i],sp=SP[id],cg=S.caught.includes(id),col=TCOL[sp.type]||'#5870b0';box(8,8,304,272);
  panelHead(dexNo(i)+'　'+sp.name,cg?col:'#8a96a8',cg?'つかまえた':'みつけた');if(cg)ballIcon(240,25,5);
@@ -5306,16 +5354,19 @@ function drawTrans(){drawWorld();
  else{for(let i=0;i<9;i++){const w=easeIO((trans-24-i*1.3)/16)*W;if(i%2)R(0,i*32,w,32,'#181828');else R(W-w,i*32,w,32,'#181828')}}}
 
 /* ---------- loop ---------- */
-function bgmFor(){if(mode==='evolve')return null;if(mode==='mini')return'minamo';if(mode==='trans'||mode==='battle')return B&&B.over?null:(B&&B.trainer&&B.trainer.last?'last':B&&B.trainer&&B.trainer.rival?'rival':B&&(B.legend||(B.trainer&&B.trainer.boss))?'boss':'battle');if(mode==='title'&&TT.pg==='bye')return null;if(mode==='title'||mode==='starter')return'field';
+function bgmFor(){if(DMOV)return'ending';if(mode==='evolve')return null;if(mode==='mini')return'minamo';if(mode==='trans'||mode==='battle')return B&&B.over?null:(B&&B.trainer&&B.trainer.last?'last':B&&B.trainer&&B.trainer.rival?'rival':B&&(B.legend||(B.trainer&&B.trainer.boss))?'boss':'battle');if(mode==='title'&&TT.pg==='bye')return null;if(mode==='title'||mode==='starter')return'field';
  if(ENDSCR||GODS||(S&&S.flags&&S.flags.endScene))return'ending';if(FLY)return'fuji';if(MZ)return'danger';if(S&&S.map==='kamoRuins')return'shinpi';if(S&&/^lg/.test(S.map||''))return'shinpi';if(S&&/^fuji/.test(S.map||''))return S.flags.fujiCalm?'ending':'fuji';if(S&&S.flags.ev6call)return SKY?'danger':'shinpi';if(S&&/^bt/.test(S.map||''))return'tower';if(S&&S.map==='cave4')return'shinpi';if(S&&['trial2','trial3','grove'].includes(S.map))return'shinpi';const rg=S&&(REGION[S.map]||S.map);if(rg==='village'&&S.flags.ev5raid)return'danger';const MUS={stadium:'mirai',village:'village',town:'town',town2:'minamo',town3:'mirai',town4:'yunohama',sea5:'umi',cave:'doukutsu',town5:'takane',oami:'oami',bousou:'town',crag:'takane',kamogawa:'kaitei',route8:'umi'};if(mode==='world'&&P.surf)return'umi';if(mode==='world'&&onBike)return'bike';return MUS[rg]||'field'}
 function update(){frame++;keyRepeat();
  const ui=Q.length||menu||shop||mode!=='world';
  if(pressed.a&&ui)AU.sfx('sel');else if(pressed.b&&(menu||shop||(mode==='battle'&&!Q.length&&B&&B.menu!=='main')))AU.sfx('back');
  if(DIRS.some(k=>pressed[k])&&!Q.length&&(menu||shop||mode==='title'||mode==='starter'||mode==='battle'))AU.sfx('cur');
  AU.play(bgmFor());
+ if(DMOV){updMovie();return}
+ if(!DMOV&&mode==='world'&&S&&S.flags&&!S.flags.dexMovie&&!Q.length&&!menu&&!shop&&!fade&&dexDone())startDexMovie(true);
  if(mode==='title')updTitle();else if(mode==='starter')updStarter();else if(mode==='world')updWorld();
  else if(mode==='trans'){for(const e of CUR.npcs)if(e.alert>0)e.alert--;if(++trans>=52)initBattle()}else if(mode==='battle')updBattle();else if(mode==='evolve')updEvolve();else if(mode==='mini')updMini()}
 function draw(){c.imageSmoothingEnabled=false;HITS.length=0;
+ if(DMOV){drawMovie();return}
  if(mode==='title')drawTitle();else if(mode==='starter')drawStarter();else if(mode==='world')drawWorld();else if(mode==='trans')drawTrans();else if(mode==='battle'&&B)drawBattle();else if(mode==='evolve')drawEvolve();else if(mode==='mini'&&MG)drawMini();drawDevInfo()}
 let last=0,acc=0;
 function loop(t){if(!last)last=t;acc+=Math.min(100,t-last);last=t;
